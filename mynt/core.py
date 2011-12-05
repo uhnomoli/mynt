@@ -255,7 +255,7 @@ class Mynt(object):
         logger.debug('..  pages')
         
         for f in self.src:
-            if f.extension not in ('html', 'htm', 'xml'):
+            if f.extension not in ('.html', '.htm', '.xml'):
                 continue
             
             template = f.path.replace(self.src.path, '')
