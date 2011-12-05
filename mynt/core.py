@@ -227,7 +227,7 @@ class Mynt(object):
             self.tags.clear()
             
             for tag in sorting:
-                self.tags[tag.pop('name')] = tag
+                self.tags[tag['name']] = tag
         else:
             logger.debug('..  no posts found')
     
