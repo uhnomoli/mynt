@@ -63,7 +63,7 @@ class File(object):
     def __init__(self, path, content = None):
         self.path = abspath(path)
         self.root = Directory(op.dirname(self.path))
-        self.name, self.extension = op.basename(self.path).rsplit('.', 1)
+        self.name, self.extension = op.splitext(op.basename(self.path))
         self.content = content
     
     
