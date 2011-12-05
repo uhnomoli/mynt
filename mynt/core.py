@@ -95,8 +95,8 @@ class Mynt(object):
         level = parser.add_mutually_exclusive_group()
         
         level.add_argument('-l', '--level', default = b'INFO', type = str.upper, choices = ['DEBUG', 'INFO', 'WARNING', 'ERROR'], help = 'Sets %(prog)s\'s log level.')
-        level.add_argument('-q', '--quiet', action = 'store_const', const = 'error', dest = 'level', help = 'Sets %(prog)s\'s log level to ERROR.')
-        level.add_argument('-v', '--verbose', action = 'store_const', const = 'debug', dest = 'level', help = 'Sets %(prog)s\'s log level to DEBUG.')
+        level.add_argument('-q', '--quiet', action = 'store_const', const = 'ERROR', dest = 'level', help = 'Sets %(prog)s\'s log level to ERROR.')
+        level.add_argument('-v', '--verbose', action = 'store_const', const = 'DEBUG', dest = 'level', help = 'Sets %(prog)s\'s log level to DEBUG.')
         
         parser.add_argument('--base-url', help = 'Sets the site\'s base URL.')
         parser.add_argument('-f', '--force', action = 'store_true', help = 'Forces generation deleting the destination if it already exists.')
