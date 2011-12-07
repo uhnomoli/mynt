@@ -52,7 +52,7 @@ from setuptools import find_packages, setup
 
 setup(
     name = 'mynt',
-    version = '0.1.1',
+    version = '0.1.2-dev',
     author = 'Andrew Fricke',
     author_email = 'andrew@mirroredwhite.com',
     url = 'http://mynt.mirroredwhite.com/',
