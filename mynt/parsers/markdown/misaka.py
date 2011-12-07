@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, unicode_literals
 
+import re
+
 import misaka as m
 
 from mynt.base import Parser as _Parser
@@ -54,9 +56,41 @@ class Parser(_Parser):
         'render_flags': 0
     }
     
+    _s_toc_l = {}
+    
+    
+    def _semantic_toc(self, match):
+        patterns = [
+            (r'<[^<]+?>', ''),
+            (r'[^a-z0-9_.\s-]', ''),
+            (r'\s+', '-'),
+            (r'^[^a-z]+', ''),
+            (r'^$', 'section')
+        ]
+        
+        level, identifier = match.groups()
+        identifier = identifier.lower()
+        
+        for pattern, replace in patterns:
+            identifier = re.sub(pattern, replace, identifier)
+        
+        if identifier in self._s_toc_l:
+            self._s_toc_l[identifier] += 1
+            identifier = '{0}-{1}'.format(identifier, self._s_toc_l[identifier])
+        else:
+            self._s_toc_l[identifier] = 1
+        
+        return '<h{0} id="{1}">{2}</h{0}>'.format(level, identifier, match.group(2))
+    
     
     def parse(self, markdown):
-        return m.html(markdown.encode('utf-8'), **self.flags).decode('utf-8')
+        html = m.html(markdown.encode('utf-8'), **self.flags).decode('utf-8')
+        
+        if self.config['render_flags'].get('toc', False):
+            self._s_toc_l = {}
+            html = re.sub(r'<h([1-6]) id="toc_[0-9]+">(.+)</h[1-6]>', self._semantic_toc, html)
+        
+        return html
     
     def setup(self):
         for k, v in self.options.iteritems():
