@@ -180,7 +180,7 @@ class Mynt(object):
         for f in path:
             post = Post(f)
             
-            content = self.renderer.from_string(self.parser.parse(post.bodymatter), post.frontmatter)
+            content = self.parser.parse(self.renderer.from_string(post.bodymatter, post.frontmatter))
             excerpt = re.search(r'\A.*?(<p>.+?</p>)?', content, re.M | re.S).group(1)
             
             data = {
