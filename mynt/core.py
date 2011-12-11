@@ -188,7 +188,6 @@ class Mynt(object):
                 'content': content,
                 'date': post.date.strftime(self.config['date_format']),
                 'excerpt': excerpt,
-                'slug': post.slug,
                 'tags': [],
                 'timestamp': timegm(post.date.utctimetuple()),
                 'url': self._get_post_url(post.date, post.slug)
