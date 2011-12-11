@@ -84,6 +84,9 @@ class Parser(_Parser):
     
     
     def parse(self, markdown):
+        if markdown == '':
+            return markdown
+        
         html = m.html(markdown.encode('utf-8'), **self.flags).decode('utf-8')
         
         if self.config['render_flags'].get('toc', False):
