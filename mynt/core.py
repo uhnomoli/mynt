@@ -33,6 +33,7 @@ class Mynt(object):
         'posts_url': '/<year>/<month>/<day>/<title>/',
         'pygmentize': True,
         'renderer': 'jinja',
+        'tag_layout': None,
         'tags_url': '/'
     }
     
@@ -265,7 +266,7 @@ class Mynt(object):
                 self._pygmentize(self.renderer.render(template))
             ))
         
-        if 'tag_layout' in self.config and self.tags:
+        if self.config['tag_layout'] and self.tags:
             logger.debug('..  tags')
             
             for name, data in self.tags:
