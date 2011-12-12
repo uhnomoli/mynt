@@ -132,7 +132,7 @@ class Mynt(object):
             '<day>': '%d',
             '<i_month>': str(date.month).decode('utf-8'),
             '<i_day>': str(date.day).decode('utf-8'),
-            '<title>': slug
+            '<title>': self._slugify(slug)
         }
         
         link = self.config['posts_url'].replace('%', '%%')
@@ -145,7 +145,7 @@ class Mynt(object):
     def _get_tag_url(self, name):
         end = '/' if self.config['tags_url'].endswith('/') else '.html'
         
-        return '{0}/{1}{2}'.format(self.config['tags_url'], name, end)
+        return '{0}/{1}{2}'.format(self.config['tags_url'], self._slugify(name), end)
     
     def _get_renderer(self):
         return load_entry_point('mynt', 'mynt.renderers', self.config['renderer'])
@@ -169,6 +169,11 @@ class Mynt(object):
             return html
         
         return re.sub(r'<pre[^>]+lang="([^>]+)"[^>]*><code>(.+?)</code></pre>', self._highlight, html, flags = re.S)
+    
+    def _slugify(self, text):
+        text = re.sub(r'\s+', '-', text.strip())
+        
+        return re.sub(r'[^a-z0-9\-_.~]', '', text, flags = re.I)
     
     
     def _parse(self):
@@ -215,8 +220,8 @@ class Mynt(object):
                 posts.sort(key = lambda post: post['timestamp'], reverse = True)
                 
                 sorting.append({
-                    'name': name,
                     'count': len(posts),
+                    'name': name,
                     'posts': posts,
                     'url': self._get_tag_url(name)
                 })
@@ -237,6 +242,7 @@ class Mynt(object):
         logger.info('>> Rendering')
         
         self.renderer.register({
+            'archives': self.archives,
             'posts': self.posts,
             'tags': self.tags
         })
