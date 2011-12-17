@@ -115,7 +115,10 @@ class Mynt(object):
         return opts
     
     def _get_parser(self):
-        return load_entry_point('mynt', 'mynt.parsers.{0}'.format(self.config['markup']), self.config['parser'])
+        try:
+            return load_entry_point('mynt', 'mynt.parsers.{0}'.format(self.config['markup']), self.config['parser'])
+        except ImportError:
+            return __import__('mynt.parsers.{0}.{1}'.format(self.config['markup'], self.config['parser']), globals(), locals(), ['Parser'], -1).Parser
     
     def _get_path(self, url):
         parts = [self.dest.path] + url.split('/')
@@ -148,7 +151,10 @@ class Mynt(object):
         return '{0}/{1}{2}'.format(self.config['tags_url'], self._slugify(name), end)
     
     def _get_renderer(self):
-        return load_entry_point('mynt', 'mynt.renderers', self.config['renderer'])
+        try:
+            return load_entry_point('mynt', 'mynt.renderers', self.config['renderer'])
+        except ImportError:
+            return __import__('mynt.renderers.{0}'.format(self.config['renderer']), globals(), locals(), ['Renderer'], -1).Renderer
     
     def _highlight(self, match):
             language, code = match.groups()
