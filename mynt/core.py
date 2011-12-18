@@ -133,8 +133,8 @@ class Mynt(object):
             '<year>': '%Y',
             '<month>': '%m',
             '<day>': '%d',
-            '<i_month>': str(date.month).decode('utf-8'),
-            '<i_day>': str(date.day).decode('utf-8'),
+            '<i_month>': '{0}'.format(date.month),
+            '<i_day>': '{0}'.format(date.day),
             '<title>': self._slugify(slug)
         }
         
@@ -143,7 +143,7 @@ class Mynt(object):
         for match, replace in subs.iteritems():
             link = link.replace(match, replace)
         
-        return date.strftime(link)
+        return date.strftime(link).decode('utf-8')
     
     def _get_tag_url(self, name):
         end = '/' if self.config['tags_url'].endswith('/') else '.html'
@@ -197,7 +197,7 @@ class Mynt(object):
             
             data = {
                 'content': content,
-                'date': post.date.strftime(self.config['date_format']),
+                'date': post.date.strftime(self.config['date_format']).decode('utf-8'),
                 'excerpt': excerpt,
                 'tags': [],
                 'timestamp': timegm(post.date.utctimetuple()),
