@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from codecs import open
+from datetime import datetime
 from os import makedirs, path as op, walk
 import shutil
 
@@ -108,6 +109,11 @@ class File(object):
     @property
     def exists(self):
         return op.exists(self.path) and op.isfile(self.path)
+    
+    @property
+    def mtime(self):
+        if self.exists:
+            return datetime.utcfromtimestamp(op.getmtime(self.path))
     
     
     def __str__(self):
