@@ -62,10 +62,10 @@ class Post(object):
         logger.debug('..  {0}.{1}'.format(self.name, self.extension))
         
         try:
-            date, self.slug = re.match(r'(\d{4}-\d{2}-\d{2})-(.+)', self.name).groups()
-            self.date = datetime.strptime(date, '%Y-%m-%d')
+            date, self.slug = re.match(r'(\d{4}(?:-\d{2}-\d{2}){1,2})-(.+)', self.name).groups()
+            self.date = self._get_date(post.mtime, date)
         except (AttributeError, ValueError):
-            raise PostException('Invalid post filename.', 'src: {0}'.format(self.path), 'must be of the format \'YYYY-MM-DD-Post-title.md\'')
+            raise PostException('Invalid post filename.', 'src: {0}'.format(self.path), 'must be of the format \'YYYY-MM-DD[-HH-MM]-Post-title.md\'')
         
         try:
             frontmatter, self.bodymatter = re.search(r'\A---\s+^(.+?)$\s+---\s*(.*)\Z', post.content, re.M | re.S).groups()
@@ -79,6 +79,20 @@ class Post(object):
         
         if 'layout' not in self.frontmatter:
             raise PostException('Invalid post frontmatter.', 'src: {0}'.format(self.path), 'layout must be set')
+    
+    
+    def _get_date(self, mtime, date):
+        d = [None, None, None, 0, 0]
+        
+        for i, v in enumerate(date.split('-')):
+            d[i] = v
+        
+        if not d[3]:
+            d[3], d[4] = mtime.strftime('%H %M').split()
+        elif not d[4]:
+            d[4] = '{0:02d}'.format(d[4])
+        
+        return datetime.strptime('-'.join(d), '%Y-%m-%d-%H-%M')
 
 class Tags(OrderedDict):
     def __iter__(self):
