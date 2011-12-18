@@ -24,7 +24,7 @@ class Archives(object):
     
     def __init__(self, posts):
         for post in posts:
-            year, month = datetime.utcfromtimestamp(post['timestamp']).strftime('%Y %B').split()
+            year, month = datetime.utcfromtimestamp(post['timestamp']).strftime('%Y %B').decode('utf-8').split()
             
             if year not in self.posts:
                 self.posts[year] = OrderedDict({month: [post]})
@@ -88,7 +88,7 @@ class Post(object):
             d[i] = v
         
         if not d[3]:
-            d[3], d[4] = mtime.strftime('%H %M').split()
+            d[3], d[4] = mtime.strftime('%H %M').decode('utf-8').split()
         elif not d[4]:
             d[4] = '{0:02d}'.format(d[4])
         

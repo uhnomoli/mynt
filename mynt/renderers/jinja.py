@@ -44,9 +44,9 @@ class Renderer(_Renderer):
     
     def _date(self, ts, format = '%A, %B %d, %Y'):
         if ts is None:
-            return datetime.utcnow().strftime(format)
+            return datetime.utcnow().strftime(format).decode('utf-8')
         
-        return datetime.utcfromtimestamp(ts).strftime(format)
+        return datetime.utcfromtimestamp(ts).strftime(format).decode('utf-8')
     
     def _get_asset(self, asset):
         return absurl(self.globals['site']['base_url'], self.globals['site']['assets_url'], asset)
