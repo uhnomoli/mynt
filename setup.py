@@ -4,13 +4,12 @@ mynt
 
 *Another static site generator?*
 
-With the ever growing population of static site generators, more often
-than not I found that they either had very simplistic support for blogs
-or used template engines that for one reason or another irked me.
+With the ever growing population of static site generators, all filling a
+certain need, I've yet to find one that allows the generation of anything but
+the simplest of blogs.
 
-After not finding a solution I was happy with, just as any other
-programmer would do, I decided to roll my own and wrote mynt with the
-hope that others would find it useful as well.
+That's where mynt comes in, being designed to give you all the features of a
+CMS with none of the often rigid implementations of those features.
 
 Install
 -------
@@ -37,8 +36,8 @@ Dependencies
 Support
 -------
 
-If you run into any issues or have any questions, either open an
-`issue`_ or hop in #mynt on irc.freenode.net.
+If you run into any issues or have any questions, either open an `issue`_ or
+hop in #mynt on irc.freenode.net.
 
 .. _docs: http://mynt.mirroredwhite.com/
 .. _Jinja2: http://jinja.pocoo.org/
