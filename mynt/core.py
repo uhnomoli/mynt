@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from argparse import ArgumentParser
 from calendar import timegm
+from datetime import datetime
 import logging
 import re
 from time import time
@@ -14,10 +15,10 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 from pygments.util import ClassNotFound
 
-from mynt.containers import Archives, Config, Page, Post, Tags
+from mynt.containers import Config, Page, Post
 from mynt.exceptions import ConfigException, OptionException, RendererException
 from mynt.fs import Directory, File
-from mynt.utils import get_logger, normpath
+from mynt.utils import get_logger, normpath, OrderedDict
 
 
 logger = get_logger('mynt')
@@ -25,6 +26,8 @@ logger = get_logger('mynt')
 
 class Mynt(object):
     config = {
+        'archive_layout': None,
+        'archives_url': '/',
         'assets_url': '/assets',
         'base_url': '/',
         'date_format': '%A, %B %d, %Y',
@@ -40,10 +43,10 @@ class Mynt(object):
     _parser = None
     _renderer = None
     
-    archives = []
+    archives = OrderedDict()
     pages = []
     posts = []
-    tags = Tags()
+    tags = OrderedDict()
     
     
     def __init__(self, args = None):
@@ -84,6 +87,11 @@ class Mynt(object):
         
         self.renderer.register({'site': self.config})
     
+    
+    def _get_archives_url(self, year):
+        format = self._get_url_format(self.config['tags_url'].endswith('/'))
+        
+        return format.format(self.config['archives_url'], year)
     
     def _get_opts(self, args):
         opts = {}
@@ -145,16 +153,19 @@ class Mynt(object):
         
         return date.strftime(link).decode('utf-8')
     
-    def _get_tag_url(self, name):
-        end = '/' if self.config['tags_url'].endswith('/') else '.html'
-        
-        return '{0}/{1}{2}'.format(self.config['tags_url'], self._slugify(name), end)
-    
     def _get_renderer(self):
         try:
             return load_entry_point('mynt', 'mynt.renderers', self.config['renderer'])
         except ImportError:
             return __import__('mynt.renderers.{0}'.format(self.config['renderer']), globals(), locals(), ['Renderer'], -1).Renderer
+    
+    def _get_tag_url(self, name):
+        format = self._get_url_format(self.config['tags_url'].endswith('/'))
+        
+        return format.format(self.config['tags_url'], self._slugify(name))
+    
+    def _get_url_format(self, clean):
+        return '{0}{1}/' if clean else '{0}/{1}.html'
     
     def _highlight(self, match):
             language, code = match.groups()
@@ -214,36 +225,59 @@ class Mynt(object):
                     self.tags[tag] = []
                 
                 self.tags[tag].append(data)
+    
+    def _process(self):
+        self._parse()
+        
+        logger.info('>> Processing')
         
         if self.posts:
+            logger.debug('..  ordering posts')
+            
             self.posts.sort(key = lambda post: post['timestamp'], reverse = True)
             
-            self.archives = Archives(self.posts)
+            logger.debug('..  generating archives')
             
-            sorting = []
+            for post in self.posts:
+                year, month = datetime.utcfromtimestamp(post['timestamp']).strftime('%Y %B').decode('utf-8').split()
+                
+                if year not in self.archives:
+                    self.archives[year] = {
+                        'months': OrderedDict({month: [post]}),
+                        'url': self._get_archives_url(year),
+                        'year': year
+                    }
+                elif month not in self.archives[year]['months']:
+                    self.archives[year]['months'][month] = [post]
+                else:
+                    self.archives[year]['months'][month].append(post)
+            
+            logger.debug('..  sorting tags')
+            
+            tags = []
             
             for name, posts in self.tags:
                 posts.sort(key = lambda post: post['timestamp'], reverse = True)
                 
-                sorting.append({
+                tags.append({
                     'count': len(posts),
                     'name': name,
                     'posts': posts,
                     'url': self._get_tag_url(name)
                 })
             
-            sorting.sort(key = lambda tag: tag['name'].lower())
-            sorting.sort(key = lambda tag: tag['count'], reverse = True)
+            tags.sort(key = lambda tag: tag['name'].lower())
+            tags.sort(key = lambda tag: tag['count'], reverse = True)
             
             self.tags.clear()
             
-            for tag in sorting:
+            for tag in tags:
                 self.tags[tag['name']] = tag
         else:
             logger.debug('..  no posts found')
     
     def _render(self):
-        self._parse()
+        self._process()
         
         logger.info('>> Rendering')
         
@@ -284,6 +318,15 @@ class Mynt(object):
                 self.pages.append(Page(
                     self._get_path(data['url']),
                     self._pygmentize(self.renderer.render(self.config['tag_layout'], {'tag': data}))
+                ))
+        
+        if self.config['archive_layout'] and self.archives:
+            logger.debug('..  archives')
+            
+            for year, data in self.archives:
+                self.pages.append(Page(
+                    self._get_path(data['url']),
+                    self._pygmentize(self.renderer.render(self.config['archive_layout'], {'year': data}))
                 ))
     
     

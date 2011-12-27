@@ -2,7 +2,6 @@
 
 from __future__ import unicode_literals
 
-from collections import OrderedDict
 from datetime import datetime
 import re
 
@@ -17,26 +16,6 @@ yaml.add_constructor('tag:yaml.org,2002:str', lambda loader, node: loader.constr
 
 logger = get_logger('mynt')
 
-
-class Archives(object):
-    posts = OrderedDict()
-    
-    
-    def __init__(self, posts):
-        for post in posts:
-            year, month = datetime.utcfromtimestamp(post['timestamp']).strftime('%Y %B').decode('utf-8').split()
-            
-            if year not in self.posts:
-                self.posts[year] = OrderedDict({month: [post]})
-            elif month not in self.posts[year]:
-                self.posts[year][month] = [post]
-            else:
-                self.posts[year][month].append(post)
-    
-    
-    def __iter__(self):
-        for year, months in self.posts.iteritems():
-            yield (year, months.items())
 
 class Config(dict):
     def __init__(self, string):
@@ -93,8 +72,3 @@ class Post(object):
             d[4] = '{0:02d}'.format(d[4])
         
         return datetime.strptime('-'.join(d), '%Y-%m-%d-%H-%M')
-
-class Tags(OrderedDict):
-    def __iter__(self):
-        for name in super(Tags, self).__iter__():
-            yield (name, self[name])

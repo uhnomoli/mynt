@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+from collections import OrderedDict as _OrderedDict
 import logging
 from os import path as op
 from re import match, sub
@@ -47,3 +48,9 @@ def normpath(*args):
             *_cleanpath(*args)
         )
     )
+
+
+class OrderedDict(_OrderedDict):
+    def __iter__(self):
+        for key in super(OrderedDict, self).__iter__():
+            yield (key, self[key])
