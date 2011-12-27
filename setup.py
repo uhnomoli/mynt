@@ -51,7 +51,7 @@ from setuptools import find_packages, setup
 
 setup(
     name = 'mynt',
-    version = '0.1.2-dev',
+    version = '0.1.2',
     author = 'Andrew Fricke',
     author_email = 'andrew@mirroredwhite.com',
     url = 'http://mynt.mirroredwhite.com/',
