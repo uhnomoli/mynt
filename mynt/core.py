@@ -249,8 +249,7 @@ class Mynt(object):
                 if year not in self.archives:
                     self.archives[year] = {
                         'months': OrderedDict({month: [post]}),
-                        'url': self._get_archives_url(year),
-                        'year': year
+                        'url': self._get_archives_url(year)
                     }
                 elif month not in self.archives[year]['months']:
                     self.archives[year]['months'][month] = [post]
@@ -277,7 +276,7 @@ class Mynt(object):
             self.tags.clear()
             
             for tag in tags:
-                self.tags[tag['name']] = tag
+                self.tags[tag.pop('name')] = tag
         else:
             logger.debug('..  no posts found')
     
@@ -331,7 +330,7 @@ class Mynt(object):
             for year, data in self.archives:
                 self.pages.append(Page(
                     self._get_path(data['url']),
-                    self._pygmentize(self.renderer.render(self.config['archive_layout'], {'year': data}))
+                    self._pygmentize(self.renderer.render(self.config['archive_layout'], {'archive': dict(year = year, **data)}))
                 ))
     
     
