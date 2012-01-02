@@ -48,10 +48,12 @@ hop in #mynt on irc.freenode.net.
 '''
 from setuptools import find_packages, setup
 
+from mynt.core import __version__
+
 
 setup(
     name = 'mynt',
-    version = '0.1.2',
+    version = __version__,
     author = 'Andrew Fricke',
     author_email = 'andrew@mirroredwhite.com',
     url = 'http://mynt.mirroredwhite.com/',

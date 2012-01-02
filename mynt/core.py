@@ -19,6 +19,7 @@ from mynt.containers import Config, Page, Post
 from mynt.exceptions import ConfigException, OptionException, RendererException
 from mynt.fs import Directory, File
 from mynt.utils import get_logger, normpath, OrderedDict
+from mynt.version import __version__
 
 
 logger = get_logger('mynt')
@@ -37,7 +38,8 @@ class Mynt(object):
         'pygmentize': True,
         'renderer': 'jinja',
         'tag_layout': None,
-        'tags_url': '/'
+        'tags_url': '/',
+        'version': __version__
     }
     
     _parser = None
@@ -53,6 +55,7 @@ class Mynt(object):
         self._start = time()
         
         self.opts = self._get_opts(args)
+        
         self.src = Directory(self.opts['src'])
         self.dest = Directory(self.opts['dest'])
         
@@ -109,6 +112,8 @@ class Mynt(object):
         
         parser.add_argument('--base-url', help = 'Sets the site\'s base URL.')
         parser.add_argument('-f', '--force', action = 'store_true', help = 'Forces generation deleting the destination if it already exists.')
+        
+        parser.add_argument('-V', '--version', action = 'version', version = '%(prog)s v{0}'.format(__version__), help = 'Prints %(prog)s\'s version and exits.')
         
         for option, value in vars(parser.parse_args(args)).iteritems():
             if value is not None:
