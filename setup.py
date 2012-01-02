@@ -53,7 +53,7 @@ from mynt.core import __version__
 
 setup(
     name = 'mynt',
-    version = __version__,
+    version = str(__version__),
     author = 'Andrew Fricke',
     author_email = 'andrew@mirroredwhite.com',
     url = 'http://mynt.mirroredwhite.com/',
