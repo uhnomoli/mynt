@@ -48,7 +48,7 @@ hop in #mynt on irc.freenode.net.
 '''
 from setuptools import find_packages, setup
 
-from mynt.core import __version__
+from mynt.version import __version__
 
 
 setup(
