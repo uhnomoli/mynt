@@ -68,7 +68,7 @@ setup(
         'mynt.renderers': [
             'jinja = mynt.renderers.jinja:Renderer'
         ],
-        'console_scripts': 'mynt = mynt:main'
+        'console_scripts': 'mynt = mynt.main:main'
     },
     install_requires = [
         'Jinja2',
