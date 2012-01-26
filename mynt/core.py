@@ -15,11 +15,11 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 from pygments.util import ClassNotFound
 
+from mynt import __version__
 from mynt.containers import Config, Page, Post
 from mynt.exceptions import ConfigException, OptionException, RendererException
 from mynt.fs import Directory, File
 from mynt.utils import get_logger, normpath, OrderedDict
-from mynt.version import __version__
 
 
 logger = get_logger('mynt')
