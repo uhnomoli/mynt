@@ -71,7 +71,7 @@ class File(object):
     def cp(self, dest):
         dest = File(dest)
         
-        logger.debug('..  cp: {0}.{1}\n..      src:  {2}\n..      dest: {3}'.format(self.name, self.extension, self.root, dest.root))
+        logger.debug('..  cp: {0}{1}\n..      src:  {2}\n..      dest: {3}'.format(self.name, self.extension, self.root, dest.root))
         
         if dest.exists:
             dest.rm()
