@@ -209,7 +209,7 @@ class Mynt(object):
             post = Post(f)
             
             content = self.parser.parse(self.renderer.from_string(post.bodymatter, post.frontmatter))
-            excerpt = re.search(r'\A.*?(<p>.+?</p>)?', content, re.M | re.S).group(1)
+            excerpt = re.search(r'\A.*?(?:<p>(.+?)</p>)?', content, re.M | re.S).group(1)
             
             data = {
                 'content': content,
