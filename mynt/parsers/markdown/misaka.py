@@ -87,7 +87,12 @@ class Parser(_Parser):
         if markdown == '':
             return markdown
         
-        html = m.html(markdown.encode('utf-8'), **self.flags).decode('utf-8')
+        html = m.html(markdown.encode('utf-8'), **self.flags)
+        
+        if html is None:
+            return ''
+        
+        html = html.decode('utf-8')
         
         if self.config['render_flags'].get('toc', False):
             self._s_toc_l = {}
