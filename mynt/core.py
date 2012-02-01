@@ -292,12 +292,12 @@ class Mynt(object):
         })
         
         logger.debug('..  posts')
-        
-        for post in self.posts:
+
+        for (newer_post, post, older_post) in zip([None] + self.posts[:-1], self.posts, self.posts[1:] + [None]):
             try:
                 self.pages.append(Page(
                     self._get_path(post['url']),
-                    self._pygmentize(self.renderer.render(post['layout'], {'post': post}))
+                    self._pygmentize(self.renderer.render(post['layout'], {'older_post': older_post, 'post': post, 'newer_post': newer_post}))
                 ))
             except RendererException as e:
                 raise RendererException(e.message, '{0} in post \'{1}\''.format(post['layout'], post['title']))
@@ -336,7 +336,7 @@ class Mynt(object):
     
     def generate(self):
         self._render()
-        
+
         logger.info('>> Generating')
         
         assets_src = Directory(normpath(self.src.path, '_assets'))
