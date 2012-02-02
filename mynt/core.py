@@ -185,19 +185,20 @@ class Mynt(object):
                 code = highlight(code, get_lexer_by_name('text'), formatter)
             
             return '<div class="code"><div>{0}</div></div>'.format(code)
-    
+
     def _pygmentize(self, html):
         if not self.config['pygmentize']:
             return html
-        
-        return re.sub(r'<pre[^>]+lang="([^>]+)"[^>]*><code>(.+?)</code></pre>', self._highlight, html, flags = re.S)
-    
+
+        code_element = re.compile(r'<pre[^>]+lang="([^>]+)"[^>]*><code>(.+?)</code></pre>', flags = re.S)
+        return code_element.sub(self._highlight, html)
+
     def _slugify(self, text):
         text = re.sub(r'\s+', '-', text.strip())
-        
-        return re.sub(r'[^a-z0-9\-_.~]', '', text, flags = re.I)
-    
-    
+
+        non_slug_characters = re.compile(r'[^a-z0-9\-_.~]', flags = re.I)
+        return re.sub(non_slug_characters, '', text)
+
     def _parse(self):
         logger.info('>> Parsing')
         
