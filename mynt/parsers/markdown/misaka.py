@@ -9,6 +9,39 @@ import misaka as m
 from mynt.base import Parser as _Parser
 
 
+class _Renderer(m.HtmlRenderer):
+    _toc_ids = {}
+    _toc_patterns = [
+        (r'<[^<]+?>', ''),
+        (r'[^a-z0-9_.\s-]', ''),
+        (r'\s+', '-'),
+        (r'^[^a-z]+', ''),
+        (r'^$', 'section')
+    ]
+    
+    def block_code(self, text, lang):
+        lang = ' lang="{0}"'.format(lang) if lang else ''
+        
+        return '<pre{0}><code>{1}</code></pre>'.format(lang, text)
+    
+    def header(self, text, level):
+        if self.flags & m.HTML_TOC:
+            identifier = text.lower()
+            
+            for pattern, replace in self._toc_patterns:
+                identifier = re.sub(pattern, replace, identifier)
+            
+            if identifier in self._toc_ids:
+                self._toc_ids[identifier] += 1
+                identifier = '{0}-{1}'.format(identifier, self._toc_ids[identifier])
+            else:
+                self._toc_ids[identifier] = 1
+            
+            return '<h{0} id="{1}">{2}</h{0}>'.format(level, identifier, text)
+        else:
+            return '<h{0}>{1}</h{0}>'.format(level, text)
+
+
 class Parser(_Parser):
     lookup = {
         'extensions': {
@@ -23,7 +56,6 @@ class Parser(_Parser):
         },
         'render_flags': {
             'expand_tabs': m.HTML_EXPAND_TABS,
-            'github_blockcode': m.HTML_GITHUB_BLOCKCODE,
             'hard_wrap': m.HTML_HARD_WRAP,
             'safelink': m.HTML_SAFELINK,
             'skip_html': m.HTML_SKIP_HTML,
@@ -45,7 +77,6 @@ class Parser(_Parser):
             'strikethrough': True
         },
         'render_flags': {
-            'github_blockcode': True,
             'hard_wrap': True,
             'smartypants': True
         }
@@ -56,49 +87,9 @@ class Parser(_Parser):
         'render_flags': 0
     }
     
-    _s_toc_l = {}
-    
-    
-    def _semantic_toc(self, match):
-        patterns = [
-            (r'<[^<]+?>', ''),
-            (r'[^a-z0-9_.\s-]', ''),
-            (r'\s+', '-'),
-            (r'^[^a-z]+', ''),
-            (r'^$', 'section')
-        ]
-        
-        level, identifier = match.groups()
-        identifier = identifier.lower()
-        
-        for pattern, replace in patterns:
-            identifier = re.sub(pattern, replace, identifier)
-        
-        if identifier in self._s_toc_l:
-            self._s_toc_l[identifier] += 1
-            identifier = '{0}-{1}'.format(identifier, self._s_toc_l[identifier])
-        else:
-            self._s_toc_l[identifier] = 1
-        
-        return '<h{0} id="{1}">{2}</h{0}>'.format(level, identifier, match.group(2))
-    
     
     def parse(self, markdown):
-        if markdown == '':
-            return markdown
-        
-        html = m.html(markdown.encode('utf-8'), **self.flags)
-        
-        if html is None:
-            return ''
-        
-        html = html.decode('utf-8')
-        
-        if self.config['render_flags'].get('toc', False):
-            self._s_toc_l = {}
-            html = re.sub(r'<h([1-6]) id="toc_[0-9]+">(.+)</h[1-6]>', self._semantic_toc, html)
-        
-        return html
+        return self._html.render(markdown)
     
     def setup(self):
         for k, v in self.options.iteritems():
@@ -108,3 +99,5 @@ class Parser(_Parser):
             for option, value in options.iteritems():
                 if value:
                     self.flags[group] |= self.lookup[group][option]
+        
+        self._html = m.Markdown(_Renderer(self.flags['render_flags']), self.flags['extensions'])
