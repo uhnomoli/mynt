@@ -72,7 +72,7 @@ setup(
     },
     install_requires = [
         'Jinja2',
-        'misaka',
+        'misaka>=1.0.0',
         'Pygments',
         'PyYAML'
     ],
