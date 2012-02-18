@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from codecs import open
 from datetime import datetime
-from os import makedirs, path as op, walk
+from os import makedirs, path as op, walk, unlink
 import shutil
 
 from mynt.utils import abspath, get_logger, normpath
@@ -30,6 +30,13 @@ class Directory(object):
             
             shutil.rmtree(self.path)
     
+    def clear(self):
+        if self.exists:
+            for root, dirs, files in walk(self.path):
+                for f in files:
+                    unlink(op.join(root, f))
+                for d in dirs:
+                    shutil.rmtree(op.join(root, d))
     
     @property
     def exists(self):

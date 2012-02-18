@@ -346,9 +346,9 @@ class Mynt(object):
             if not self.opts['force']:
                 raise OptionException('Destination already exists.', 'the -f option must be used to force generation by deleting the destination')
             
-            self.dest.rm()
-        
-        self.dest.mk()
+            self.dest.clear()
+        else:
+            self.dest.mk()
         
         for page in self.pages:
             page.mk()
