@@ -20,11 +20,15 @@ class _Renderer(m.HtmlRenderer):
     ]
     
     def block_code(self, text, lang):
-        lang = ' lang="{0}"'.format(lang) if lang else ''
+        text = text.decode('utf-8')
+        lang = ' lang="{0}"'.format(lang.decode('utf-8')) if lang else ''
         
         return '<pre{0}><code>{1}</code></pre>'.format(lang, text)
     
     def header(self, text, level):
+        text = text.decode('utf-8')
+        level = level.decode('utf-8')
+        
         if self.flags & m.HTML_TOC:
             identifier = text.lower()
             
