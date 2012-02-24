@@ -27,7 +27,6 @@ class _Renderer(m.HtmlRenderer):
     
     def header(self, text, level):
         text = text.decode('utf-8')
-        level = level.decode('utf-8')
         
         if self.flags & m.HTML_TOC:
             identifier = text.lower()
