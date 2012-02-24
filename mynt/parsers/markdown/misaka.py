@@ -23,7 +23,7 @@ class _Renderer(m.HtmlRenderer):
         text = text.decode('utf-8')
         lang = ' lang="{0}"'.format(lang.decode('utf-8')) if lang else ''
         
-        return '<pre{0}><code>{1}</code></pre>'.format(lang, text)
+        return '<pre{0}><code>{1}</code></pre>'.format(lang, text).encode('utf-8')
     
     def header(self, text, level):
         text = text.decode('utf-8')
@@ -41,9 +41,9 @@ class _Renderer(m.HtmlRenderer):
             else:
                 self._toc_ids[identifier] = 1
             
-            return '<h{0} id="{1}">{2}</h{0}>'.format(level, identifier, text)
+            return '<h{0} id="{1}">{2}</h{0}>'.format(level, identifier, text).encode('utf-8')
         else:
-            return '<h{0}>{1}</h{0}>'.format(level, text)
+            return '<h{0}>{1}</h{0}>'.format(level, text).encode('utf-8')
 
 
 class Parser(_Parser):
