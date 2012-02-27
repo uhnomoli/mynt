@@ -141,7 +141,7 @@ class Mynt(object):
         
         return normpath(*parts)
     
-    def _get_post_url(self, date, slug):
+    def _get_post_url(self, date, slug, permalink=None):
         subs = {
             '<year>': '%Y',
             '<month>': '%m',
@@ -150,7 +150,8 @@ class Mynt(object):
             '<i_day>': '{0}'.format(date.day),
             '<title>': self._slugify(slug)
         }
-        
+        if permalink:
+            return permalink
         link = self.config['posts_url'].replace('%', '%%')
         
         for match, replace in subs.iteritems():
@@ -217,7 +218,7 @@ class Mynt(object):
                 'excerpt': excerpt,
                 'tags': [],
                 'timestamp': timegm(post.date.utctimetuple()),
-                'url': self._get_post_url(post.date, post.slug)
+                'url': self._get_post_url(post.date, post.slug, post.permalink)
             }
             
             data.update(post.frontmatter)
