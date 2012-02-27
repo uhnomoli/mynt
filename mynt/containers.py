@@ -58,7 +58,11 @@ class Post(object):
         
         if 'layout' not in self.frontmatter:
             raise PostException('Invalid post frontmatter.', 'src: {0}'.format(self.path), 'layout must be set')
-    
+   
+        if 'permalink' in self.frontmatter and self.frontmatter['permalink']:
+            self.permalink = self.frontmatter['permalink']
+        else:
+            self.permalink = None
     
     def _get_date(self, mtime, date):
         d = [None, None, None, 0, 0]
