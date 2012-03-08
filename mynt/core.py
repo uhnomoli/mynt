@@ -176,7 +176,7 @@ class Mynt(object):
             language, code = match.groups()
             formatter = HtmlFormatter(linenos = 'table')
             
-            for pattern, replace in [('&amp;', '&'), ('&gt;', '>'), ('&lt;', '<'), ('&quot;', '"')]:
+            for pattern, replace in [('&#34;', '"'), ('&#39;', '\''), ('&amp;', '&'), ('&apos;', '\''), ('&gt;', '>'), ('&lt;', '<'), ('&quot;', '"')]:
                 code = code.replace(pattern, replace)
             
             try:
