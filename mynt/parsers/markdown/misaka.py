@@ -23,6 +23,9 @@ class _Renderer(m.HtmlRenderer):
         text = text.decode('utf-8')
         lang = ' lang="{0}"'.format(lang.decode('utf-8')) if lang else ''
         
+        for pattern, replace in [('&', '&amp;'), ('"', '&#34;'), ('\'', '&#39;'), ('>', '&gt;'), ('<', '&lt;')]:
+                text = text.replace(pattern, replace)
+        
         return '<pre{0}><code>{1}</code></pre>'.format(lang, text).encode('utf-8')
     
     def header(self, text, level):
