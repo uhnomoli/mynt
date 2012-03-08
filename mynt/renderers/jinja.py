@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 
 from collections import OrderedDict
 from datetime import datetime
-from math import ceil
 
 from jinja2 import Environment, FileSystemLoader, PrefixLoader
 from jinja2.exceptions import TemplateNotFound
