@@ -54,12 +54,6 @@ class Renderer(_Renderer):
     def _get_url(self, url = ''):
         return absurl(self.globals['site']['base_url'], url)
     
-    def _needed(self, iterable, multiple):
-        length = float(len(iterable))
-        multiple = float(multiple)
-        
-        return int((ceil(length / multiple) * multiple) - length)
-    
     
     def from_string(self, source, vars_ = {}):
         template = self.environment.from_string(source)
@@ -88,7 +82,6 @@ class Renderer(_Renderer):
         self.environment = Environment(**self.config)
         
         self.environment.filters['date'] = self._date
-        self.environment.filters['needed'] = self._needed
         
         self.environment.globals.update(self.globals)
         self.environment.globals['get_asset'] = self._get_asset
