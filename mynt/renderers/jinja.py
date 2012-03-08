@@ -12,6 +12,7 @@ from mynt.base import Renderer as _Renderer
 from mynt.exceptions import RendererException
 from mynt.utils import absurl, normpath
 
+from os.path import sep as pathsep
 
 class _PrefixLoader(PrefixLoader):
     def get_source(self, environment, template):
@@ -32,6 +33,9 @@ class _PrefixLoader(PrefixLoader):
             raise TemplateNotFound(template)
         
         try:
+            if pathsep != '/':
+                name = name.replace(pathsep, '/')
+            
             return loader.get_source(environment, name)
         except TemplateNotFound:
             raise TemplateNotFound(template)
@@ -74,7 +78,7 @@ class Renderer(_Renderer):
     def setup(self):
         self.config.update(self.options)
         self.config['loader'] = _PrefixLoader(OrderedDict([
-            ('/', FileSystemLoader(self.path)),
+            (pathsep, FileSystemLoader(self.path)),
             ('', FileSystemLoader(normpath(self.path, '_templates')))
         ]), None)
         
