@@ -186,19 +186,20 @@ class Mynt(object):
                 code = highlight(code, get_lexer_by_name('text'), formatter)
             
             return '<div class="code"><div>{0}</div></div>'.format(code)
-    
+
     def _pygmentize(self, html):
         if not self.config['pygmentize']:
             return html
-        
-        return re.sub(r'<pre[^>]+lang="([^>]+)"[^>]*><code>(.+?)</code></pre>', self._highlight, html, flags = re.S)
-    
+
+        code_element = re.compile(r'<pre[^>]+lang="([^>]+)"[^>]*><code>(.+?)</code></pre>', flags = re.S)
+        return code_element.sub(self._highlight, html)
+
     def _slugify(self, text):
         text = re.sub(r'\s+', '-', text.strip())
-        
-        return re.sub(r'[^a-z0-9\-_.~]', '', text, flags = re.I)
-    
-    
+
+        non_slug_characters = re.compile(r'[^a-z0-9\-_.~]', flags = re.I)
+        return re.sub(non_slug_characters, '', text)
+
     def _parse(self):
         logger.info('>> Parsing')
         
@@ -293,12 +294,12 @@ class Mynt(object):
         })
         
         logger.debug('..  posts')
-        
-        for post in self.posts:
+
+        for (newer_post, post, older_post) in zip([None] + self.posts[:-1], self.posts, self.posts[1:] + [None]):
             try:
                 self.pages.append(Page(
                     self._get_path(post['url']),
-                    self._pygmentize(self.renderer.render(post['layout'], {'post': post}))
+                    self._pygmentize(self.renderer.render(post['layout'], {'older_post': older_post, 'post': post, 'newer_post': newer_post}))
                 ))
             except RendererException as e:
                 raise RendererException(e.message, '{0} in post \'{1}\''.format(post['layout'], post['title']))
@@ -337,7 +338,7 @@ class Mynt(object):
     
     def generate(self):
         self._render()
-        
+
         logger.info('>> Generating')
         
         assets_src = Directory(normpath(self.src.path, '_assets'))

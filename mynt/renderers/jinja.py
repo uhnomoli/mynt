@@ -2,7 +2,10 @@
 
 from __future__ import unicode_literals
 
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 from datetime import datetime
 from os import path as op
 from re import sub
