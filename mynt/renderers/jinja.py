@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from collections import OrderedDict
 from datetime import datetime
+from os import path as op
 
 from jinja2 import Environment, FileSystemLoader, PrefixLoader
 from jinja2.exceptions import TemplateNotFound
@@ -30,6 +31,10 @@ class _PrefixLoader(PrefixLoader):
                 loader = self.mapping[prefix]
         except (KeyError, ValueError):
             raise TemplateNotFound(template)
+        
+        # Gross hack to appease Jinja when handling Windows paths.
+        if op.sep != '/':
+            name = name.replace(op.sep, '/')
         
         try:
             return loader.get_source(environment, name)
@@ -74,7 +79,7 @@ class Renderer(_Renderer):
     def setup(self):
         self.config.update(self.options)
         self.config['loader'] = _PrefixLoader(OrderedDict([
-            ('/', FileSystemLoader(self.path)),
+            (op.sep, FileSystemLoader(self.path)),
             ('', FileSystemLoader(normpath(self.path, '_templates')))
         ]), None)
         
