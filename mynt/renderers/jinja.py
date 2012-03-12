@@ -56,9 +56,11 @@ class Renderer(_Renderer):
         return absurl(self.globals['site']['base_url'], self.globals['site']['assets_url'], asset)
     
     def _get_url(self, url = '', absolute = False):
-        domain = self.globals['site']['domain'] or ''
+        domain = self.globals['site']['domain']
         
-        if absolute and domain and not domain.startswith(('http://', 'https://')):
+        if not absolute or not domain:
+            domain = ''
+        elif not domain.startswith(('http://', 'https://')):
             domain = 'http://' + domain
         
         return absurl(domain, self.globals['site']['base_url'], url)
