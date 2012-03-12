@@ -55,8 +55,13 @@ class Renderer(_Renderer):
     def _get_asset(self, asset):
         return absurl(self.globals['site']['base_url'], self.globals['site']['assets_url'], asset)
     
-    def _get_url(self, url = ''):
-        return absurl(self.globals['site']['base_url'], url)
+    def _get_url(self, url = '', absolute = False):
+        domain = self.globals['site']['domain'] or ''
+        
+        if absolute and domain and not domain.startswith(('http://', 'https://')):
+            domain = 'http://' + domain
+        
+        return absurl(domain, self.globals['site']['base_url'], url)
     
     
     def from_string(self, source, vars_ = {}):
