@@ -32,6 +32,7 @@ class Mynt(object):
         'assets_url': '/assets',
         'base_url': '/',
         'date_format': '%A, %B %d, %Y',
+        'domain': None,
         'markup': 'markdown',
         'parser': 'misaka',
         'posts_url': '/<year>/<month>/<day>/<title>/',
