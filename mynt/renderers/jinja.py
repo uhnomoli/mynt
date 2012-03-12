@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from collections import OrderedDict
 from datetime import datetime
 from os import path as op
+from re import sub
 
 from jinja2 import Environment, FileSystemLoader, PrefixLoader
 from jinja2.exceptions import TemplateNotFound
@@ -45,6 +46,12 @@ class _PrefixLoader(PrefixLoader):
 class Renderer(_Renderer):
     config = {}
     
+    
+    def _absolutize(self, html):
+        def _replace(match):
+            return self._get_url(match.group(1).replace(self.globals['site']['base_url'], ''), True)
+        
+        return sub(r'(?<==")(/[^"]*)', _replace, html)
     
     def _date(self, ts, format = '%A, %B %d, %Y'):
         if ts is None:
@@ -92,6 +99,7 @@ class Renderer(_Renderer):
         
         self.environment = Environment(**self.config)
         
+        self.environment.filters['absolutize'] = self._absolutize
         self.environment.filters['date'] = self._date
         
         self.environment.globals.update(self.globals)
