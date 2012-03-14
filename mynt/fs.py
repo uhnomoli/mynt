@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from codecs import open
 from datetime import datetime
-from os import makedirs, path as op, walk
+from os import makedirs, path as op, remove, walk
 import shutil
 
 from mynt.utils import abspath, get_logger, normpath
@@ -17,6 +17,23 @@ class Directory(object):
     def __init__(self, path):
         self.path = abspath(path)
     
+    
+    def empty(self):
+        if self.exists:
+            for root, dirs, files in walk(self.path):
+                for d in dirs[:]:
+                    if not d.startswith(('.', '_')):
+                        logger.debug('..  rm: {0}'.format(abspath(root, d)))
+                        
+                        Directory(abspath(root, d)).rm()
+                    
+                    dirs.remove(d)
+                
+                for f in files:
+                    if not f.startswith(('.', '_')):
+                        logger.debug('..  rm: {0}'.format(abspath(root, f)))
+                        
+                        File(abspath(root, f)).rm()
     
     def mk(self):
         if not self.exists:
@@ -71,27 +88,32 @@ class File(object):
     def cp(self, dest):
         dest = File(dest)
         
-        logger.debug('..  cp: {0}{1}\n..      src:  {2}\n..      dest: {3}'.format(self.name, self.extension, self.root, dest.root))
-        
-        if dest.exists:
-            dest.rm()
-        elif not dest.root.exists:
-            dest.root.mk()
-        
-        shutil.copyfile(self.path, dest.path)
+        if self.path != dest.path:
+            if not dest.root.exists:
+                dest.root.mk()
+            
+            logger.debug('..  cp: {0}{1}\n..      src:  {2}\n..      dest: {3}'.format(self.name, self.extension, self.root, dest.root))
+            
+            shutil.copyfile(self.path, dest.path)
     
     def mk(self):
         if not self.exists:
-            logger.debug('..  mk: {0}'.format(self.path))
-            
             if not self.root.exists:
                 self.root.mk()
+            
+            logger.debug('..  mk: {0}'.format(self.path))
             
             with open(self.path, 'w', encoding = 'utf-8') as f:
                 if self.content is None:
                     self.content = ''
                 
                 f.write(self.content)
+    
+    def rm(self):
+        if self.exists:
+            logger.debug('..  rm: {0}'.format(self.path))
+            
+            remove(self.path)
     
     
     @property
