@@ -57,39 +57,7 @@ class Mynt(object):
         
         self.opts = self._get_opts(args)
         
-        self.src = Directory(self.opts['src'])
-        self.dest = Directory(self.opts['dest'])
-        
         logger.setLevel(getattr(logging, self.opts['level'], logging.INFO))
-        logger.debug('>> Initializing\n..  src:  {0}\n..  dest: {1}'.format(self.src, self.dest))
-        
-        if self.src == self.dest:
-            raise OptionException('Source and destination must differ.')
-        elif self.src.path in ('/', '//') or self.dest.path in ('/', '//'):
-            raise OptionException('Root is not a valid source or destination.')
-        
-        logger.debug('>> Searching for config')
-        
-        for ext in ('.yml', '.yaml'):
-            f = File(normpath(self.src.path, 'config' + ext))
-            
-            if f.exists:
-                logger.debug('..  found: {0}'.format(f.path))
-                
-                try:
-                    self.config.update(Config(f.content))
-                except ConfigException as e:
-                    raise ConfigException(e.message, 'src: {0}'.format(f.path))
-                
-                break
-        else:
-            logger.debug('..  no config file found')
-        
-        for opt in ('base_url',):
-            if opt in self.opts:
-                self.config[opt] = self.opts[opt]
-        
-        self.renderer.register({'site': self.config})
     
     
     def _archive(self, posts):
@@ -130,8 +98,12 @@ class Mynt(object):
         level.add_argument('-q', '--quiet', action = 'store_const', const = 'ERROR', dest = 'level', help = 'Sets %(prog)s\'s log level to ERROR.')
         level.add_argument('-v', '--verbose', action = 'store_const', const = 'DEBUG', dest = 'level', help = 'Sets %(prog)s\'s log level to DEBUG.')
         
+        force = parser.add_mutually_exclusive_group()
+        
+        force.add_argument('-c', '--clean', action = 'store_true', help = 'Deletes the destination if it exists before generation.')
+        force.add_argument('-f', '--force', action = 'store_true', help = 'Forces generation emptying the destination if it already exists.')
+        
         parser.add_argument('--base-url', help = 'Sets the site\'s base URL.')
-        parser.add_argument('-f', '--force', action = 'store_true', help = 'Forces generation deleting the destination if it already exists.')
         
         parser.add_argument('-V', '--version', action = 'version', version = '%(prog)s v{0}'.format(__version__), help = 'Prints %(prog)s\'s version and exits.')
         
@@ -216,6 +188,24 @@ class Mynt(object):
         text = re.sub(r'\s+', '-', text.strip())
         
         return re.sub(r'[^a-z0-9\-_.~]', '', text, flags = re.I)
+    
+    def _update_config(self):
+        logger.debug('>> Searching for config')
+        
+        for ext in ('.yml', '.yaml'):
+            f = File(normpath(self.src.path, 'config' + ext))
+            
+            if f.exists:
+                logger.debug('..  found: {0}'.format(f.path))
+                
+                try:
+                    self.config.update(Config(f.content))
+                except ConfigException as e:
+                    raise ConfigException(e.message, 'src: {0}'.format(f.path))
+                
+                break
+        else:
+            logger.debug('..  no config file found')
     
     
     def _parse(self):
@@ -343,8 +333,9 @@ class Mynt(object):
                     self._pygmentize(self.renderer.render(self.config['archive_layout'], {'archive': data}))
                 ))
     
-    
-    def generate(self):
+    def _generate(self, clean = False):
+        self.renderer.register({'site': self.config})
+        
         self._render()
         
         logger.info('>> Generating')
@@ -353,12 +344,12 @@ class Mynt(object):
         assets_dest = Directory(normpath(self.dest.path, *self.config['assets_url'].split('/')))
         
         if self.dest.exists:
-            if not self.opts['force']:
-                raise OptionException('Destination already exists.', 'the -f option must be used to force generation by deleting the destination')
-            
-            self.dest.rm()
-        
-        self.dest.mk()
+            if clean:
+                self.dest.rm()
+            else:
+                self.dest.empty()
+        else:
+            self.dest.mk()
         
         for page in self.pages:
             page.mk()
@@ -368,6 +359,28 @@ class Mynt(object):
                 asset.cp(asset.path.replace(assets_src.path, assets_dest.path))
         
         logger.info('Completed in {0:.3f}s'.format(time() - self._start))
+    
+    
+    def generate(self):
+        self.src = Directory(self.opts['src'])
+        self.dest = Directory(self.opts['dest'])
+        
+        logger.debug('>> Initializing\n..  src:  {0}\n..  dest: {1}'.format(self.src, self.dest))
+        
+        if self.src == self.dest:
+            raise OptionException('Source and destination must differ.')
+        elif self.src.path in ('/', '//') or self.dest.path in ('/', '//'):
+            raise OptionException('Root is not a valid source or destination.')
+        elif self.dest.exists and not (self.opts['force'] or self.opts['clean']):
+            raise OptionException('Destination already exists.', 'the -c or -f option must be used to force generation')
+        
+        self._update_config()
+        
+        for opt in ('base_url',):
+            if opt in self.opts:
+                self.config[opt] = self.opts[opt]
+        
+        self._generate(self.opts['clean'])
     
     
     @property
