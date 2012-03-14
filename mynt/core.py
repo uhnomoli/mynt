@@ -92,6 +92,25 @@ class Mynt(object):
         self.renderer.register({'site': self.config})
     
     
+    def _archive(self, posts):
+        archives = OrderedDict()
+        
+        for post in posts:
+            year, month = datetime.utcfromtimestamp(post['timestamp']).strftime('%Y %B').decode('utf-8').split()
+            
+            if year not in archives:
+                archives[year] = {
+                    'months': OrderedDict({month: [post]}),
+                    'url': self._get_archives_url(year),
+                    'year': year
+                }
+            elif month not in archives[year]['months']:
+                archives[year]['months'][month] = [post]
+            else:
+                archives[year]['months'][month].append(post)
+        
+        return archives
+    
     def _get_archives_url(self, year):
         format = self._get_url_format(self.config['tags_url'].endswith('/'))
         
@@ -244,19 +263,7 @@ class Mynt(object):
             
             logger.debug('..  generating archives')
             
-            for post in self.posts:
-                year, month = datetime.utcfromtimestamp(post['timestamp']).strftime('%Y %B').decode('utf-8').split()
-                
-                if year not in self.archives:
-                    self.archives[year] = {
-                        'months': OrderedDict({month: [post]}),
-                        'url': self._get_archives_url(year),
-                        'year': year
-                    }
-                elif month not in self.archives[year]['months']:
-                    self.archives[year]['months'][month] = [post]
-                else:
-                    self.archives[year]['months'][month].append(post)
+            self.archives = self._archive(self.posts)
             
             logger.debug('..  sorting tags')
             
@@ -266,6 +273,7 @@ class Mynt(object):
                 posts.sort(key = lambda post: post['timestamp'], reverse = True)
                 
                 tags.append({
+                    'archives': self._archive(posts),
                     'count': len(posts),
                     'name': name,
                     'posts': posts,
@@ -279,7 +287,6 @@ class Mynt(object):
             
             for tag in tags:
                 self.tags[tag['name']] = tag
-            
         else:
             logger.debug('..  no posts found')
     
