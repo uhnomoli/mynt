@@ -1,0 +1,75 @@
+#
+# BASE CONFIGURATION
+#
+
+# `base_url` should only be changed if your site isn't hosted at the root of a domain.
+# `domain` is used to generate absolute URLs and is only required if `feed` is set to true.
+#
+#   Example:
+#       http://my-site.com/
+#           base_url: /
+#           domain: my-site.com
+#       http://my-site.com/my-blog/
+#           base_url: /my-blog/
+#           domain: my-site.com
+base_url: /
+domain:
+
+
+#
+# METADATA
+#
+
+# Used in header meta tags and the site feed.
+author:
+# A description of your site to be used in header meta tags.
+description:
+# Used in the site feed.
+email:
+# Your site's subtitle.
+subtitle:
+# Your site's title.
+title:
+
+
+#
+# DISPLAY SETTINGS
+#
+
+# The amount of posts that will be displayed on the front page.
+#   Leave blank or set to `false` to disable.
+post_limit: 10
+
+
+#
+# THIRD PARTY SETTINGS
+#
+
+# If you'd like to enable Google Analytics for your site, set this to your tracking code.
+analytics:
+# Set this to True to enable an Atom feed of your site.
+#   NOTE: `author`, `domain`, and `title` must be set to generate a valid feed.
+feed: true
+# Links to profiles on various social networking sites.
+#   Set any of the following to your username/ID on that site to enable it.
+social:
+    dribbble:
+    facebook:
+    github:
+    google_plus:
+    lastfm:
+    stack_overflow:
+    steam:
+    twitter:
+
+
+#
+# Chances are you probably don't need to touch anything below here.
+#
+archive_layout: archive.html
+archives_url: /archives/
+jinja:
+    extensions:
+        - jinja2.ext.loopcontrols
+tag_layout: tag.html
+tags_url: /tags/

@@ -9,7 +9,7 @@ import logging
 import re
 from time import time
 
-from pkg_resources import load_entry_point
+from pkg_resources import load_entry_point, resource_filename
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
@@ -58,6 +58,8 @@ class Mynt(object):
         self.opts = self._get_opts(args)
         
         logger.setLevel(getattr(logging, self.opts['level'], logging.INFO))
+        
+        self.opts['func']()
     
     
     def _archive(self, posts):
@@ -88,9 +90,7 @@ class Mynt(object):
         opts = {}
         
         parser = ArgumentParser(description = 'A static blog generator.')
-        
-        parser.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The location %(prog)s looks for source files.')
-        parser.add_argument('dest', metavar = 'destination', help = 'The location %(prog)s outputs to.')
+        sub = parser.add_subparsers()
         
         level = parser.add_mutually_exclusive_group()
         
@@ -98,14 +98,30 @@ class Mynt(object):
         level.add_argument('-q', '--quiet', action = 'store_const', const = 'ERROR', dest = 'level', help = 'Sets %(prog)s\'s log level to ERROR.')
         level.add_argument('-v', '--verbose', action = 'store_const', const = 'DEBUG', dest = 'level', help = 'Sets %(prog)s\'s log level to DEBUG.')
         
-        force = parser.add_mutually_exclusive_group()
+        parser.add_argument('-V', '--version', action = 'version', version = '%(prog)s v{0}'.format(__version__), help = 'Prints %(prog)s\'s version and exits.')
+        
+        gen = sub.add_parser('gen')
+        
+        gen.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The location %(prog)s looks for source files.')
+        gen.add_argument('dest', metavar = 'destination', help = 'The location %(prog)s outputs to.')
+        
+        gen.add_argument('--base-url', help = 'Sets the site\'s base URL.')
+        
+        force = gen.add_mutually_exclusive_group()
         
         force.add_argument('-c', '--clean', action = 'store_true', help = 'Deletes the destination if it exists before generation.')
         force.add_argument('-f', '--force', action = 'store_true', help = 'Forces generation emptying the destination if it already exists.')
         
-        parser.add_argument('--base-url', help = 'Sets the site\'s base URL.')
+        gen.set_defaults(func = self.generate)
         
-        parser.add_argument('-V', '--version', action = 'version', version = '%(prog)s v{0}'.format(__version__), help = 'Prints %(prog)s\'s version and exits.')
+        init = sub.add_parser('init')
+        
+        init.add_argument('dest', metavar = 'destination', help = 'The location %(prog)s initializes.')
+        
+        init.add_argument('-f', '--force', action = 'store_true', help = 'Forces initialization deleting the destination if it already exists.')
+        init.add_argument('-t', '--theme', default = 'default', help = 'Sets the theme to be used.')
+        
+        init.set_defaults(func = self.init)
         
         for option, value in vars(parser.parse_args(args)).iteritems():
             if value is not None:
@@ -160,6 +176,9 @@ class Mynt(object):
         format = self._get_url_format(self.config['tags_url'].endswith('/'))
         
         return format.format(self.config['tags_url'], self._slugify(name))
+    
+    def _get_theme(self, theme):
+        return resource_filename(__name__, 'themes/{0}'.format(theme))
     
     def _get_url_format(self, clean):
         return '{0}{1}/' if clean else '{0}/{1}.html'
@@ -381,6 +400,18 @@ class Mynt(object):
             raise OptionException('Destination already exists.', 'the -c or -f option must be used to force generation')
         
         self._generate()
+    
+    def init(self):
+        self.dest = Directory(self.opts['dest'])
+        
+        if self.dest.exists and not self.opts['force']:
+            raise OptionException('Destination already exists.', 'the -f option must be used to force initialization by deleting the destination')
+        
+        logger.info('>> Initializing')
+        
+        Directory(self._get_theme(self.opts['theme'])).cp(self.dest.path)
+        
+        logger.info('Completed in {0:.3f}s'.format(time() - self._start))
     
     
     @property
