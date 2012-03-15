@@ -71,7 +71,7 @@ class Mynt(object):
             if year not in archives:
                 archives[year] = {
                     'months': OrderedDict({month: [post]}),
-                    'url': self._get_archives_url(year),
+                    'url': self._get_archive_url(year),
                     'year': year
                 }
             elif month not in archives[year]['months']:
@@ -81,7 +81,7 @@ class Mynt(object):
         
         return archives
     
-    def _get_archives_url(self, year):
+    def _get_archive_url(self, year):
         format = self._get_url_format(self.config['archives_url'].endswith('/'))
         
         return format.format(self.config['archives_url'], year)
