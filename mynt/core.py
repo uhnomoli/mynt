@@ -333,7 +333,15 @@ class Mynt(object):
                     self._pygmentize(self.renderer.render(self.config['archive_layout'], {'archive': data}))
                 ))
     
-    def _generate(self, clean = False):
+    def _generate(self):
+        logger.debug('>> Initializing\n..  src:  {0}\n..  dest: {1}'.format(self.src.path, self.dest.path))
+        
+        self._update_config()
+        
+        for opt in ('base_url',):
+            if opt in self.opts:
+                self.config[opt] = self.opts[opt]
+        
         self.renderer.register({'site': self.config})
         
         self._render()
@@ -344,7 +352,7 @@ class Mynt(object):
         assets_dest = Directory(normpath(self.dest.path, *self.config['assets_url'].split('/')))
         
         if self.dest.exists:
-            if clean:
+            if self.opts['clean']:
                 self.dest.rm()
             else:
                 self.dest.empty()
@@ -365,8 +373,6 @@ class Mynt(object):
         self.src = Directory(self.opts['src'])
         self.dest = Directory(self.opts['dest'])
         
-        logger.debug('>> Initializing\n..  src:  {0}\n..  dest: {1}'.format(self.src, self.dest))
-        
         if self.src == self.dest:
             raise OptionException('Source and destination must differ.')
         elif self.src.path in ('/', '//') or self.dest.path in ('/', '//'):
@@ -374,13 +380,7 @@ class Mynt(object):
         elif self.dest.exists and not (self.opts['force'] or self.opts['clean']):
             raise OptionException('Destination already exists.', 'the -c or -f option must be used to force generation')
         
-        self._update_config()
-        
-        for opt in ('base_url',):
-            if opt in self.opts:
-                self.config[opt] = self.opts[opt]
-        
-        self._generate(self.opts['clean'])
+        self._generate()
     
     
     @property
