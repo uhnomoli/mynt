@@ -10,7 +10,7 @@ from mynt.exceptions import MyntException
 
 def main():
     try:
-        Mynt().generate()
+        Mynt()
     except MyntException as e:
         print(e)
         
