@@ -82,7 +82,7 @@ class Mynt(object):
         return archives
     
     def _get_archives_url(self, year):
-        format = self._get_url_format(self.config['tags_url'].endswith('/'))
+        format = self._get_url_format(self.config['archives_url'].endswith('/'))
         
         return format.format(self.config['archives_url'], year)
     
