@@ -18,6 +18,16 @@ class Directory(object):
         self.path = abspath(path)
     
     
+    def cp(self, dest):
+        dest = Directory(dest)
+        
+        if dest.exists:
+            dest.rm()
+        
+        logger.debug('..  cp: {0}\n..      dest: {1}'.format(self.path, dest.path))
+        
+        shutil.copytree(self.path, dest.path)
+    
     def empty(self):
         if self.exists:
             for root, dirs, files in walk(self.path):
