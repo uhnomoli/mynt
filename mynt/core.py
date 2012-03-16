@@ -121,6 +121,7 @@ class Mynt(object):
         
         init.add_argument('dest', metavar = 'destination', help = 'The location %(prog)s initializes.')
         
+        init.add_argument('--bare', action = 'store_true', help = 'An empty directory structure is created instead of copying a theme.')
         init.add_argument('-f', '--force', action = 'store_true', help = 'Forces initialization deleting the destination if it already exists.')
         init.add_argument('-t', '--theme', default = 'default', help = 'Sets the theme to be used.')
         
@@ -430,6 +431,7 @@ class Mynt(object):
         self._generate()
     
     def init(self):
+        self.src = Directory(self._get_theme(self.opts['theme']))
         self.dest = Directory(self.opts['dest'])
         
         if self.dest.exists and not self.opts['force']:
@@ -437,7 +439,13 @@ class Mynt(object):
         
         logger.info('>> Initializing')
         
-        Directory(self._get_theme(self.opts['theme'])).cp(self.dest.path)
+        if self.opts['bare']:
+            for d in ['_assets/css', '_assets/images', '_assets/js', '_templates', '_posts']:
+                Directory(normpath(self.dest.path, d)).mk()
+            
+            File(normpath(self.dest.path, 'config.yml')).mk()
+        else:
+            self.src.cp(self.dest.path)
         
         logger.info('Completed in {0:.3f}s'.format(time() - self._start))
     
