@@ -371,10 +371,10 @@ class Mynt(object):
         assets_dest = Directory(normpath(self.dest.path, *self.config['assets_url'].split('/')))
         
         if self.dest.exists:
-            if self.opts['clean']:
-                self.dest.rm()
-            else:
+            if self.opts['force']:
                 self.dest.empty()
+            else:
+                self.dest.rm()
         else:
             self.dest.mk()
         
