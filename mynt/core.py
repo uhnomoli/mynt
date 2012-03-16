@@ -97,7 +97,7 @@ class Mynt(object):
         
         level = parser.add_mutually_exclusive_group()
         
-        level.add_argument('-l', '--level', default = b'INFO', type = str.upper, choices = ['DEBUG', 'INFO', 'WARNING', 'ERROR'], help = 'Sets %(prog)s\'s log level.')
+        level.add_argument('-l', '--level', default = b'INFO', type = str.upper, choices = [b'DEBUG', b'INFO', b'WARNING', b'ERROR'], help = 'Sets %(prog)s\'s log level.')
         level.add_argument('-q', '--quiet', action = 'store_const', const = 'ERROR', dest = 'level', help = 'Sets %(prog)s\'s log level to ERROR.')
         level.add_argument('-v', '--verbose', action = 'store_const', const = 'DEBUG', dest = 'level', help = 'Sets %(prog)s\'s log level to DEBUG.')
         
