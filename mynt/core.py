@@ -434,7 +434,9 @@ class Mynt(object):
         self.src = Directory(self._get_theme(self.opts['theme']))
         self.dest = Directory(self.opts['dest'])
         
-        if self.dest.exists and not self.opts['force']:
+        if not self.src.exists:
+            raise OptionException('Theme not found.')
+        elif self.dest.exists and not self.opts['force']:
             raise OptionException('Destination already exists.', 'the -f option must be used to force initialization by deleting the destination')
         
         logger.info('>> Initializing')
