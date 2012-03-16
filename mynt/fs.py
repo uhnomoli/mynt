@@ -6,6 +6,10 @@ from codecs import open
 from datetime import datetime
 from os import makedirs, path as op, remove, walk
 import shutil
+from sys import exc_info
+import traceback
+
+from watchdog.events import FileSystemEventHandler
 
 from mynt.utils import abspath, get_logger, normpath
 
@@ -86,6 +90,24 @@ class Directory(object):
     
     def __unicode__(self):
         return self.path
+
+class EventHandler(FileSystemEventHandler):
+    def __init__(self, callback):
+        self._callback = callback
+    
+    
+    def on_any_event(self, event):
+        logger.info('>> Change detected in: {0}'.format(event.src_path))
+        
+        try:
+            self._callback()
+        except:
+            t, v, tb = exc_info()
+            lc = traceback.extract_tb(tb)[-1:][0]
+            
+            logger.error('!! {0}\n..  file: {1}\n..  line: {2}\n..    in: {3}\n..    at: {4}'.format(v, *lc))
+            
+            pass
 
 class File(object):
     def __init__(self, path, content = None):

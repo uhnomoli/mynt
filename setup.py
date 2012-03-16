@@ -74,7 +74,8 @@ setup(
         'Jinja2',
         'misaka>=1.0.0',
         'Pygments',
-        'PyYAML'
+        'PyYAML',
+        'watchdog'
     ],
     platforms = 'any',
     zip_safe = False,
