@@ -421,7 +421,9 @@ class Mynt(object):
         self.src = Directory(self.opts['src'])
         self.dest = Directory(self.opts['dest'])
         
-        if self.src == self.dest:
+        if not self.src.exists:
+            raise OptionException('Source must exist.')
+        elif self.src == self.dest:
             raise OptionException('Source and destination must differ.')
         elif self.src.path in ('/', '//') or self.dest.path in ('/', '//'):
             raise OptionException('Root is not a valid source or destination.')
@@ -455,7 +457,9 @@ class Mynt(object):
         self.src = Directory(self.opts['src'])
         self.dest = Directory(self.opts['dest'])
         
-        if self.src == self.dest:
+        if not self.src.exists:
+            raise OptionException('Source must exist.')
+        elif self.src == self.dest:
             raise OptionException('Source and destination must differ.')
         elif self.src.path in ('/', '//') or self.dest.path in ('/', '//'):
             raise OptionException('Root is not a valid source or destination.')
