@@ -37,21 +37,13 @@ class Directory(object):
             for root, dirs, files in walk(self.path):
                 for d in dirs[:]:
                     if not d.startswith(('.', '_')):
-                        path = abspath(root, d)
-                        
-                        logger.debug('..  rm: {0}'.format(path))
-                        
-                        Directory(path).rm()
+                        Directory(abspath(root, d)).rm()
                     
                     dirs.remove(d)
                 
                 for f in files:
                     if not f.startswith(('.', '_')):
-                        path = abspath(root, d)
-                        
-                        logger.debug('..  rm: {0}'.format(path))
-                        
-                        File(path).rm()
+                        File(abspath(root, f)).rm()
     
     def mk(self):
         if not self.exists:
