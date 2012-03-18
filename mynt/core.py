@@ -510,7 +510,7 @@ class Mynt(object):
         
         self.observer = Observer()
         
-        self.observer.schedule(EventHandler(self._regenerate), self.src.path, True)
+        self.observer.schedule(EventHandler(self.src.path, self._regenerate), self.src.path, True)
         self.observer.start()
         
         try:

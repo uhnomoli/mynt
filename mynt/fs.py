@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from codecs import open
 from datetime import datetime
 from os import makedirs, path as op, remove, walk
+from re import search
 import shutil
 from sys import exc_info
 import traceback
@@ -88,22 +89,28 @@ class Directory(object):
         return self.path
 
 class EventHandler(FileSystemEventHandler):
-    def __init__(self, callback):
+    def __init__(self, src, callback):
+        self._src = src
         self._callback = callback
     
     
     def on_any_event(self, event):
-        logger.info('>> Change detected in: {0}'.format(event.src_path))
+        path = event.src_path.replace(self._src, '')
         
-        try:
-            self._callback()
-        except:
-            t, v, tb = exc_info()
-            lc = traceback.extract_tb(tb)[-1:][0]
+        if search(r'/[._](?!assets|posts|templates)', path):
+            logger.debug('>> Skipping: {0}'.format(path))
+        else:
+            logger.info('>> Change detected in: {0}'.format(path))
             
-            logger.error('!! {0}\n..  file: {1}\n..  line: {2}\n..    in: {3}\n..    at: {4}'.format(v, *lc))
-            
-            pass
+            try:
+                self._callback()
+            except:
+                t, v, tb = exc_info()
+                lc = traceback.extract_tb(tb)[-1:][0]
+                
+                logger.error('!! {0}\n..  file: {1}\n..  line: {2}\n..    in: {3}\n..    at: {4}'.format(v, *lc))
+                
+                pass
 
 class File(object):
     def __init__(self, path, content = None):
