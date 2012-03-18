@@ -7,6 +7,7 @@ from calendar import timegm
 from copy import deepcopy
 from datetime import datetime
 import logging
+from os import chdir, getcwd
 import re
 from time import sleep, time
 
@@ -21,6 +22,7 @@ from mynt import __version__
 from mynt.containers import Config, Page, Post
 from mynt.exceptions import ConfigException, OptionException, RendererException
 from mynt.fs import Directory, EventHandler, File
+from mynt.server import RequestHandler, Server
 from mynt.utils import get_logger, normpath, OrderedDict
 
 
@@ -126,6 +128,15 @@ class Mynt(object):
         init.add_argument('-t', '--theme', default = 'default', help = 'Sets the theme to be used.')
         
         init.set_defaults(func = self.init)
+        
+        serve = sub.add_parser('serve')
+        
+        serve.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The location %(prog)s will serve from.')
+        
+        serve.add_argument('--base-url', default = '/', help = 'Sets the site\'s base URL.')
+        serve.add_argument('-p', '--port', default = 8080, type = int, help = 'The port the server will be available at.')
+        
+        serve.set_defaults(func = self.serve)
         
         watch = sub.add_parser('watch')
         
@@ -452,6 +463,29 @@ class Mynt(object):
             self.src.cp(self.dest.path)
         
         logger.info('Completed in {0:.3f}s'.format(time() - self._start))
+    
+    def serve(self):
+        self.src = Directory(self.opts['src'])
+        base_url = re.sub(r'//+', '/', '/{0}/'.format(self.opts['base_url']))
+        
+        if not self.src.exists:
+            raise OptionException('Source must exist.')
+        
+        logger.info('>> Serving at 127.0.0.1:{0}'.format(self.opts['port']))
+        logger.info('Press ctrl+c to stop.')
+        
+        cwd = getcwd()
+        self.server = Server(('', self.opts['port']), base_url, RequestHandler)
+        
+        chdir(self.src.path)
+        
+        try:
+            self.server.serve_forever()
+        except KeyboardInterrupt:
+            self.server.shutdown()
+            chdir(cwd)
+            
+            print('')
     
     def watch(self):
         self.src = Directory(self.opts['src'])
