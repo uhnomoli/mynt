@@ -415,6 +415,8 @@ class Mynt(object):
         logger.info('Completed in {0:.3f}s'.format(time() - self._start))
     
     def _regenerate(self):
+        logger.setLevel(logging.ERROR)
+        
         self._parser = None
         self._renderer = None
         self._start = time()
@@ -426,6 +428,9 @@ class Mynt(object):
         self.tags = OrderedDict()
         
         self._generate()
+        
+        logger.setLevel(getattr(logging, self.opts['level'], logging.INFO))
+        logger.info('Regenerated in {0:.3f}s'.format(time() - self._start))
     
     
     def generate(self):
