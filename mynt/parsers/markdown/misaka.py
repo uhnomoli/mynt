@@ -46,6 +46,11 @@ class _Renderer(m.HtmlRenderer):
             return '<h{0} id="{1}">{2}</h{0}>'.format(level, identifier, text).encode('utf-8')
         else:
             return '<h{0}>{1}</h{0}>'.format(level, text).encode('utf-8')
+    
+    def preprocess(self, markdown):
+        self._toc_ids = {}
+        
+        return markdown
 
 
 class Parser(_Parser):
