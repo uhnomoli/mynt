@@ -9,34 +9,39 @@ That's where mynt comes in, being designed to give you all the features of a CMS
 
 ### Install
 
-From PyPI:  
-`pip install mynt`
+From PyPI:
 
-Latest trunk:  
-`pip install git+https://github.com/Anomareh/mynt.git`
+    $ pip install mynt
+
+Latest trunk:
+
+    $ pip install git+https://github.com/Anomareh/mynt.git
 
 
 ### Getting Started
 
-After installing mynt head on over and give the [docs][1] a read.
+After installing mynt head on over and give the [quickstart][quickstart] page and [docs][docs] a read.
 
 
 ### Dependencies
 
-+ [Jinja2][2]
-+ [misaka][3]
-+ [Pygments][4]
-+ [PyYAML][5]
++ [Jinja2][jinja]
++ [misaka][misaka]
++ [Pygments][pygments]
++ [PyYAML][pyyaml]
++ [watchdog][watchdog]
 
 
 ### Support
 
-If you run into any issues or have any questions, either open an [issue][6] or hop in #mynt on irc.freenode.net.
+If you run into any issues or have any questions, either open an [issue][issues] or hop in #mynt on irc.freenode.net.
 
 
-[1]: http://mynt.mirroredwhite.com/
-[2]: http://jinja.pocoo.org/
-[3]: http://misaka.61924.nl/
-[4]: http://pygments.org/
-[5]: http://pyyaml.org/
-[6]: https://github.com/Anomareh/mynt/issues
+[docs]: http://mynt.mirroredwhite.com/
+[issues]: https://github.com/Anomareh/mynt/issues
+[jinja]: http://jinja.pocoo.org/
+[misaka]: http://misaka.61924.nl/
+[pygments]: http://pygments.org/
+[pyyaml]: http://pyyaml.org/
+[quickstart]: http://mynt.mirroredwhite.com/quickstart/
+[watchdog]: http://packages.python.org/watchdog/
