@@ -66,6 +66,7 @@ setup(
     long_description = __doc__,
     license = 'BSD',
     packages = find_packages(),
+    include_package_data = True,
     entry_points = {
         'mynt.parsers.markdown': [
             'misaka = mynt.parsers.markdown.misaka:Parser'
