@@ -167,6 +167,11 @@ li
     
     ul > &:before
         content: '\2022'
+    
+    ul.unstyled > &:before
+        padding-right: 0px
+        
+        content: none
 
 ol, ul
     margin-left: 35px
@@ -245,6 +250,10 @@ th
     thead &
         background-color: #F2F2F2
 
+ul
+    &.unstyled
+        margin-left: 0px
+
 a
     color: #5E8000
     text-decoration: none
@@ -260,6 +269,18 @@ code
     +box-shadow(0px 0px 0px 2px #F2F2F2)
     
     white-space: pre
+
+small
+    display: block
+    
+    color: #8C8C8C
+    font:
+        size: 10px
+        style: italic
+    text-transform: uppercase
+    
+    a
+        color: #4D4D4D
 
 
 //
@@ -412,22 +433,6 @@ dl.archives
     
     dd
         margin-left: 75px
-        
-        & + dd
-            margin-top: 2px
-            
-            color: #8C8C8C
-            font:
-                size: 10px
-                style: italic
-            text-transform: uppercase
-            
-            a
-                color: #4D4D4D
-        
-        span
-            position: relative
-            top: -1px
     
     dt
         width: 50px
@@ -438,6 +443,13 @@ dl.archives
             style: italic
             weight: normal
         text-transform: uppercase
+    
+    small
+        margin-top: 2px
+        
+        span
+            position: relative
+            top: -1px
 
 // FOOTER
 #footer
