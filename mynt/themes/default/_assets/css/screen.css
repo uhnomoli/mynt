@@ -157,6 +157,10 @@ ol > li:before {
 ul > li:before {
   content: "\2022";
 }
+ul.unstyled > li:before {
+  padding-right: 0px;
+  content: none;
+}
 
 ol, ul {
   margin-left: 35px;
@@ -208,9 +212,10 @@ table {
 td, th {
   padding: 10px;
   border-bottom: 1px solid #d9d9d9;
-}
-td + td, th + th {
   border-left: 1px dotted #d9d9d9;
+}
+td:first-child, th:first-child {
+  border-left-width: 0px;
 }
 td > :first-child, th > :first-child {
   margin-top: 0px;
@@ -221,15 +226,23 @@ td > :last-child, th > :last-child {
 td > *, th > * {
   margin: 10px 0px 10px 0px;
 }
-
-tr:nth-child(2n) td {
+tbody tr:nth-child(2n) td, tbody tr:nth-child(2n) th {
   background-color: #f2f2f2;
 }
 
 th {
-  background-color: #f2f2f2;
   font-weight: bold;
   text-align: center;
+}
+tbody th {
+  text-align: right;
+}
+thead th {
+  background-color: #f2f2f2;
+}
+
+ul.unstyled {
+  margin-left: 0px;
 }
 
 a {
@@ -247,6 +260,17 @@ code {
   -webkit-box-shadow: 0px 0px 0px 2px #f2f2f2;
   box-shadow: 0px 0px 0px 2px #f2f2f2;
   white-space: pre;
+}
+
+small {
+  display: block;
+  color: #8c8c8c;
+  font-size: 10px;
+  font-style: italic;
+  text-transform: uppercase;
+}
+small a {
+  color: #4d4d4d;
 }
 
 #container {
@@ -385,20 +409,6 @@ dl.archives > dt a {
 dl.archives dd {
   margin-left: 75px;
 }
-dl.archives dd + dd {
-  margin-top: 2px;
-  color: #8c8c8c;
-  font-size: 10px;
-  font-style: italic;
-  text-transform: uppercase;
-}
-dl.archives dd + dd a {
-  color: #4d4d4d;
-}
-dl.archives dd span {
-  position: relative;
-  top: -1px;
-}
 dl.archives dt {
   width: 50px;
   color: #8c8c8c;
@@ -406,6 +416,13 @@ dl.archives dt {
   font-style: italic;
   font-weight: normal;
   text-transform: uppercase;
+}
+dl.archives small {
+  margin-top: 2px;
+}
+dl.archives small span {
+  position: relative;
+  top: -1px;
 }
 
 #footer {
