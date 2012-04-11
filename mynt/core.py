@@ -23,7 +23,7 @@ from mynt.containers import Config, Page, Post
 from mynt.exceptions import ConfigException, OptionException, RendererException
 from mynt.fs import Directory, EventHandler, File
 from mynt.server import RequestHandler, Server
-from mynt.utils import get_logger, normpath, OrderedDict
+from mynt.utils import absurl, get_logger, normpath, OrderedDict
 
 
 logger = get_logger('mynt')
@@ -471,7 +471,7 @@ class Mynt(object):
     
     def serve(self):
         self.src = Directory(self.opts['src'])
-        base_url = re.sub(r'//+', '/', '/{0}/'.format(self.opts['base_url']))
+        base_url = absurl(self.opts['base_url'], '')
         
         if not self.src.exists:
             raise OptionException('Source must exist.')
