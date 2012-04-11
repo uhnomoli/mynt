@@ -49,9 +49,9 @@ class Renderer(_Renderer):
     
     def _absolutize(self, html):
         def _replace(match):
-            return self._get_url(match.group(1).replace(self.globals['site']['base_url'], ''), True)
+            return self._get_url(match.group(1).replace(self.globals['site']['base_url'], '', 1), True)
         
-        return sub(r'(?<==")(/[^"]*)', _replace, html)
+        return sub(r'(?<==")({0}[^"]*)'.format(absurl(self.globals['site']['base_url']), ''), _replace, html)
     
     def _date(self, ts, format = '%A, %B %d, %Y'):
         if ts is None:
