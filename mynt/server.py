@@ -23,6 +23,15 @@ class RequestHandler(SimpleHTTPRequestHandler):
         SimpleHTTPRequestHandler.do_GET(self)
     
     def log_message(self, format, *args):
+        # A little bit of me died inside having had to commit this.
+        args = list(args)
+        
+        for i, v in enumerate(args):
+            if not isinstance(v, basestring):
+                args[i] = str(v).decode('utf-8')
+            elif isinstance(v, str):
+                args[i] = v.decode('utf-8')
+        
         logger.debug('>> [{0}] {1}: {2}'.format(self.log_date_time_string(), self.address_string(), ' '.join(args)))
 
 class Server(TCPServer):
