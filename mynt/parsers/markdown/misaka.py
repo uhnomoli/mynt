@@ -19,6 +19,7 @@ class _Renderer(m.HtmlRenderer):
         (r'^$', 'section')
     ]
     
+    
     def block_code(self, text, lang):
         lang = ' lang="{0}"'.format(lang) if lang else ''
         
@@ -44,10 +45,22 @@ class _Renderer(m.HtmlRenderer):
         else:
             return '<h{0}>{1}</h{0}>'.format(level, text).encode('utf-8')
     
+    
+    def setup(self):
+        super(_Renderer, self).setup()
+        
+        self.sp = m.SmartyPants().postprocess
+    
     def preprocess(self, markdown):
         self._toc_ids = {}
         
         return markdown
+    
+    def postprocess(self, html):
+        if self.flags & m.HTML_SMARTYPANTS:
+            html = self.sp(html)
+        
+        return html
 
 
 class Parser(_Parser):
