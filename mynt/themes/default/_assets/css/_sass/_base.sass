@@ -13,7 +13,7 @@
     &:before, &:after
         content: ''
         display: table
-    
+
     &:after
         clear: both
 
@@ -26,7 +26,7 @@
 
 @mixin box-shadow($one, $two: false, $three: false, $four: false, $five: false)
     $shadows: compact($one, $two, $three, $four, $five)
-    
+
     @include experimental(box-shadow, $shadows, not -moz, -webkit, not -o, not -ms, not -khtml, official)
 
 @mixin opacity($opacity)
@@ -36,5 +36,5 @@
 
 @mixin transition($one, $two: false, $three: false, $four: false, $five: false)
     $transitions: compact($one, $two, $three, $four, $five)
-    
+
     @include experimental(transition, $transitions, -moz, -webkit, -o, -ms, not -khtml, official)

@@ -10,10 +10,10 @@ from re import match, sub
 
 def _cleanpath(*args):
     parts = [args[0].strip()]
-    
+
     for arg in args[1:]:
         parts.append((arg.replace(op.sep, '', 1) if arg.startswith(op.sep) else arg).strip())
-    
+
     return parts
 
 
@@ -34,12 +34,12 @@ def absurl(*args):
 
 def get_logger(name):
     logger = logging.getLogger(name)
-    
+
     if not logger.handlers:
         handler = logging.StreamHandler()
-        
+
         logger.addHandler(handler)
-    
+
     return logger
 
 def normpath(*args):

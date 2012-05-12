@@ -18,48 +18,48 @@ class _Renderer(m.HtmlRenderer):
         (r'^[^a-z]+', ''),
         (r'^$', 'section')
     ]
-    
-    
+
+
     def block_code(self, text, lang):
         lang = ' lang="{0}"'.format(lang) if lang else ''
-        
+
         for pattern, replace in [('&', '&amp;'), ('"', '&#34;'), ('\'', '&#39;'), ('>', '&gt;'), ('<', '&lt;')]:
                 text = text.replace(pattern, replace)
-        
+
         return '<pre{0}><code>{1}</code></pre>'.format(lang, text).encode('utf-8')
-    
+
     def header(self, text, level):
         if self.flags & m.HTML_TOC:
             identifier = text.lower()
-            
+
             for pattern, replace in self._toc_patterns:
                 identifier = re.sub(pattern, replace, identifier)
-            
+
             if identifier in self._toc_ids:
                 self._toc_ids[identifier] += 1
                 identifier = '{0}-{1}'.format(identifier, self._toc_ids[identifier])
             else:
                 self._toc_ids[identifier] = 1
-            
+
             return '<h{0} id="{1}">{2}</h{0}>'.format(level, identifier, text).encode('utf-8')
         else:
             return '<h{0}>{1}</h{0}>'.format(level, text).encode('utf-8')
-    
-    
+
+
     def setup(self):
         super(_Renderer, self).setup()
-        
+
         self.sp = m.SmartyPants().postprocess
-    
+
     def preprocess(self, markdown):
         self._toc_ids = {}
-        
+
         return markdown
-    
+
     def postprocess(self, html):
         if self.flags & m.HTML_SMARTYPANTS:
             html = self.sp(html)
-        
+
         return html
 
 
@@ -89,7 +89,7 @@ class Parser(_Parser):
             'use_xhtml': m.HTML_USE_XHTML
         }
     }
-    
+
     config = {
         'extensions': {
             'autolink': True,
@@ -102,23 +102,23 @@ class Parser(_Parser):
             'smartypants': True
         }
     }
-    
+
     flags = {
         'extensions': 0,
         'render_flags': 0
     }
-    
-    
+
+
     def parse(self, markdown):
         return self._html.render(markdown)
-    
+
     def setup(self):
         for k, v in self.options.iteritems():
             self.config[k].update(v)
-        
+
         for group, options in self.config.iteritems():
             for option, value in options.iteritems():
                 if value:
                     self.flags[group] |= self.lookup[group][option]
-        
+
         self._html = m.Markdown(_Renderer(self.flags['render_flags']), self.flags['extensions'])
