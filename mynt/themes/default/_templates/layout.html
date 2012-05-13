@@ -3,7 +3,7 @@
 <html>
 <head>
     {% include 'page.header.html' %}
-    
+
     {% if site.title %}<title>{% if title %}{{ title }} &ndash; {% endif %}{{ site.title }}{% if not title and site.subtitle %} &ndash; {{ site.subtitle }}{% endif %}</title>{% endif %}
 </head>
 
@@ -15,7 +15,7 @@
                 <li><a href="{{ get_url('archives/') }}">Archives</a></li>
                 {% if site.feed %}<li><a href="{{ get_url('feed.xml') }}">Feed</a></li>{% endif %}
             </ul>
-            
+
             {% if site.social.values()|sort(true)|first %}
                 <ul id="social">
                     {% if site.social.dribbble %}<li><a href="http://dribbble.com/{{ site.social.dribbble }}"><img src="{{ get_asset('images/social/dribbble.png') }}" width="16" height="16" alt="Dribbble"></a></li>{% endif %}
@@ -29,16 +29,16 @@
                 </ul>
             {% endif %}
         </div>
-        
+
         <div id="header">
             <h1><a href="{{ get_url() }}">{{ site.title }}</a></h1>
             {% if site.subtitle %}<h2>{{ site.subtitle }}</h2>{% endif %}
         </div>
-        
+
         <div id="content">
             {% block content %}{% endblock %}
         </div>
-        
+
         <div id="footer">
             <p>{% if site.author %}Copyright &copy; {{ none|date('%Y') }} {{ site.author }} &ndash; {% endif %}powered by <a href="http://mynt.mirroredwhite.com/">mynt</a></p>
         </div>

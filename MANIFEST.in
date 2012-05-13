@@ -1,2 +1,2 @@
-include LICENSE README.md
+include LICENSE README.rst
 graft mynt/themes

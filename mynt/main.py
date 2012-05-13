@@ -13,9 +13,9 @@ def main():
         Mynt()
     except MyntException as e:
         print(e)
-        
+
         return e.code
-    
+
     return 0
 
 
