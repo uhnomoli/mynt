@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+from urllib2 import unquote
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 from SocketServer import TCPServer
 
@@ -19,6 +20,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
                 self, request, client_address, server)
 
     def do_GET(self):
+        self.path = unquote(self.path).decode('utf-8')
         self.path = self.path.replace(self.base_url, '/')
 
         SimpleHTTPRequestHandler.do_GET(self)
