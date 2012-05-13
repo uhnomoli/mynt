@@ -46,14 +46,13 @@ class _PrefixLoader(PrefixLoader):
 class Renderer(_Renderer):
     config = {}
 
-
     def _absolutize(self, html):
         def _replace(match):
             return self._get_url(match.group(1).replace(self.globals['site']['base_url'], '', 1), True)
 
         return sub(r'(?<==")({0}[^"]*)'.format(absurl(self.globals['site']['base_url']), ''), _replace, html)
 
-    def _date(self, ts, format = '%A, %B %d, %Y'):
+    def _date(self, ts, format='%A, %B %d, %Y'):
         if ts is None:
             return datetime.utcnow().strftime(format).decode('utf-8')
 
@@ -62,7 +61,7 @@ class Renderer(_Renderer):
     def _get_asset(self, asset):
         return absurl(self.globals['site']['base_url'], self.globals['site']['assets_url'], asset)
 
-    def _get_url(self, url = '', absolute = False):
+    def _get_url(self, url='', absolute=False):
         parts = [self.globals['site']['base_url'], url]
         domain = self.globals['site']['domain']
 
@@ -74,8 +73,7 @@ class Renderer(_Renderer):
 
         return absurl(*parts)
 
-
-    def from_string(self, source, vars_ = {}):
+    def from_string(self, source, vars_={}):
         template = self.environment.from_string(source)
 
         return template.render(**vars_)
@@ -84,7 +82,7 @@ class Renderer(_Renderer):
         self.globals.update(vars_)
         self.environment.globals.update(vars_)
 
-    def render(self, template, vars_ = {}):
+    def render(self, template, vars_={}):
         try:
             template = self.environment.get_template(template)
         except TemplateNotFound:

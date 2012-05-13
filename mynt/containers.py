@@ -12,7 +12,10 @@ from mynt.fs import File
 from mynt.utils import get_logger
 
 
-yaml.add_constructor('tag:yaml.org,2002:str', lambda loader, node: loader.construct_scalar(node))
+yaml.add_constructor(
+    'tag:yaml.org,2002:str',
+    lambda loader, node: loader.construct_scalar(node)
+)
 
 logger = get_logger('mynt')
 
@@ -28,8 +31,10 @@ class Config(dict):
         except:
             raise ConfigException('Invalid config format.')
 
+
 class Page(File):
     pass
+
 
 class Post(object):
     def __init__(self, post):
@@ -41,24 +46,45 @@ class Post(object):
         logger.debug('..  {0}.{1}'.format(self.name, self.extension))
 
         try:
-            date, self.slug = re.match(r'(\d{4}(?:-\d{2}-\d{2}){1,2})-(.+)', self.name).groups()
+            date, self.slug = re.match(
+                r'(\d{4}(?:-\d{2}-\d{2}){1,2})-(.+)',
+                self.name
+            ).groups()
+
             self.date = self._get_date(post.mtime, date)
+
         except (AttributeError, ValueError):
-            raise PostException('Invalid post filename.', 'src: {0}'.format(self.path), 'must be of the format \'YYYY-MM-DD[-HH-MM]-Post-title.md\'')
+            raise PostException(
+                'Invalid post filename.',
+                'src: {0}'.format(self.path),
+                'must be of the format \'YYYY-MM-DD[-HH-MM]-Post-title.md\'')
 
         try:
-            frontmatter, self.bodymatter = re.search(r'\A---\s+^(.+?)$\s+---\s*(.*)\Z', post.content, re.M | re.S).groups()
+            frontmatter, self.bodymatter = re.search(
+                r'\A---\s+^(.+?)$\s+---\s*(.*)\Z',
+                post.content,
+                re.M | re.S
+            ).groups()
+
         except AttributeError:
-            raise PostException('Invalid post format.', 'src: {0}'.format(self.path), 'frontmatter must not be empty')
+            raise PostException(
+                'Invalid post format.',
+                'src: {0}'.format(self.path),
+                'frontmatter must not be empty')
 
         try:
             self.frontmatter = Config(frontmatter)
         except ConfigException as e:
-            raise ConfigException('Invalid post frontmatter.', 'src: {0}'.format(self.path), e.message.lower().replace('.', ''))
+            raise ConfigException(
+                'Invalid post frontmatter.',
+                'src: {0}'.format(self.path),
+                e.message.lower().replace('.', ''))
 
         if 'layout' not in self.frontmatter:
-            raise PostException('Invalid post frontmatter.', 'src: {0}'.format(self.path), 'layout must be set')
-
+            raise PostException(
+                'Invalid post frontmatter.',
+                'src: {0}'.format(self.path),
+                'layout must be set')
 
     def _get_date(self, mtime, date):
         d = [None, None, None, 0, 0]

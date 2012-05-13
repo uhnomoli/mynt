@@ -20,17 +20,17 @@ def _cleanpath(*args):
 def abspath(*args):
     return op.realpath(
         op.expanduser(
-            op.join(
-                *_cleanpath(*args)
-            )
+            op.join(*_cleanpath(*args))
         )
     )
+
 
 def absurl(*args):
     if match('.+://', args[0]):
         return sub(r'(?<!:)//+', '/', '/'.join(args))
     else:
         return sub(r'//+', '/', '/' + '/'.join(args))
+
 
 def get_logger(name):
     logger = logging.getLogger(name)
@@ -42,12 +42,10 @@ def get_logger(name):
 
     return logger
 
+
 def normpath(*args):
     return op.normpath(
-        op.join(
-            *_cleanpath(*args)
-        )
-    )
+        op.join(*_cleanpath(*args)))
 
 
 class OrderedDict(_OrderedDict):

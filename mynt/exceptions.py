@@ -6,11 +6,9 @@ from __future__ import unicode_literals
 class MyntException(Exception):
     code = 1
 
-
     def __init__(self, message, *args):
         self.message = message
         self.debug = args
-
 
     def __str__(self):
         return unicode(self).encode('utf-8')
@@ -27,14 +25,18 @@ class MyntException(Exception):
 class OptionException(MyntException):
     code = 2
 
+
 class ConfigException(MyntException):
     pass
+
 
 class ParserException(MyntException):
     pass
 
+
 class PostException(MyntException):
     pass
+
 
 class RendererException(MyntException):
     pass

@@ -56,8 +56,7 @@ class Mynt(object):
     posts = []
     tags = OrderedDict()
 
-
-    def __init__(self, args = None):
+    def __init__(self, args=None):
         self._start = time()
 
         self.opts = self._get_opts(args)
@@ -66,12 +65,13 @@ class Mynt(object):
 
         self.opts['func']()
 
-
     def _archive(self, posts):
         archives = OrderedDict()
 
         for post in posts:
-            year, month = datetime.utcfromtimestamp(post['timestamp']).strftime('%Y %B').decode('utf-8').split()
+            year, month = datetime\
+                .utcfromtimestamp(post['timestamp']).strftime('%Y %B')\
+                .decode('utf-8').split()
 
             if year not in archives:
                 archives[year] = {
@@ -87,66 +87,118 @@ class Mynt(object):
         return archives
 
     def _get_archive_url(self, year):
-        format = self._get_url_format(self.config['archives_url'].endswith('/'))
+        format = self._get_url_format(
+            self.config['archives_url'].endswith('/'))
 
         return format.format(self.config['archives_url'], year)
 
     def _get_opts(self, args):
+        """
+        Parses command-line arguments
+        """
         opts = {}
 
-        parser = ArgumentParser(description = 'A static blog generator.')
+        parser = ArgumentParser(description='A static blog generator.')
         sub = parser.add_subparsers()
 
         level = parser.add_mutually_exclusive_group()
+        level.add_argument(
+            '-l', '--level',
+            default=b'INFO', type=str.upper,
+            choices=[b'DEBUG', b'INFO', b'WARNING', b'ERROR'],
+            help='Sets %(prog)s\'s log level.')
 
-        level.add_argument('-l', '--level', default = b'INFO', type = str.upper, choices = [b'DEBUG', b'INFO', b'WARNING', b'ERROR'], help = 'Sets %(prog)s\'s log level.')
-        level.add_argument('-q', '--quiet', action = 'store_const', const = 'ERROR', dest = 'level', help = 'Sets %(prog)s\'s log level to ERROR.')
-        level.add_argument('-v', '--verbose', action = 'store_const', const = 'DEBUG', dest = 'level', help = 'Sets %(prog)s\'s log level to DEBUG.')
+        level.add_argument(
+            '-q', '--quiet',
+            action='store_const', const='ERROR', dest='level',
+            help='Sets %(prog)s\'s log level to ERROR.')
 
-        parser.add_argument('-V', '--version', action = 'version', version = '%(prog)s v{0}'.format(__version__), help = 'Prints %(prog)s\'s version and exits.')
+        level.add_argument(
+            '-v', '--verbose',
+            action='store_const', const='DEBUG', dest='level',
+            help='Sets %(prog)s\'s log level to DEBUG.')
+
+        parser.add_argument(
+            '-V', '--version', action='version',
+            version='%(prog)s v{0}'.format(__version__),
+            help='Prints %(prog)s\'s version and exits.')
 
         gen = sub.add_parser('gen')
+        gen.add_argument(
+            'src', nargs='?', default='.', metavar='source',
+            help='The location %(prog)s looks for source files.')
 
-        gen.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The location %(prog)s looks for source files.')
-        gen.add_argument('dest', metavar = 'destination', help = 'The location %(prog)s outputs to.')
+        gen.add_argument(
+            'dest', metavar='destination',
+            help='The location %(prog)s outputs to.')
 
-        gen.add_argument('--base-url', help = 'Sets the site\'s base URL.')
+        gen.add_argument(
+            '--base-url',
+            help='Sets the site\'s base URL.')
 
         force = gen.add_mutually_exclusive_group()
+        force.add_argument(
+            '-c', '--clean', action='store_true',
+            help='Deletes the destination if it exists before generation.')
 
-        force.add_argument('-c', '--clean', action = 'store_true', help = 'Deletes the destination if it exists before generation.')
-        force.add_argument('-f', '--force', action = 'store_true', help = 'Forces generation emptying the destination if it already exists.')
+        force.add_argument(
+            '-f', '--force', action='store_true',
+            help='Forces generation emptying the destination if it already exists.')
 
-        gen.set_defaults(func = self.generate)
+        gen.set_defaults(func=self.generate)
 
         init = sub.add_parser('init')
+        init.add_argument(
+            'dest', metavar='destination',
+            help='The location %(prog)s initializes.')
 
-        init.add_argument('dest', metavar = 'destination', help = 'The location %(prog)s initializes.')
+        init.add_argument(
+            '--bare', action='store_true',
+            help='An empty directory structure is created instead of copying a theme.')
 
-        init.add_argument('--bare', action = 'store_true', help = 'An empty directory structure is created instead of copying a theme.')
-        init.add_argument('-f', '--force', action = 'store_true', help = 'Forces initialization deleting the destination if it already exists.')
-        init.add_argument('-t', '--theme', default = 'default', help = 'Sets the theme to be used.')
+        init.add_argument(
+            '-f', '--force', action='store_true',
+            help='Forces initialization deleting the destination if it already exists.')
 
-        init.set_defaults(func = self.init)
+        init.add_argument(
+            '-t', '--theme', default='default',
+            help='Sets the theme to be used.')
+
+        init.set_defaults(func=self.init)
 
         serve = sub.add_parser('serve')
+        serve.add_argument(
+            'src', nargs='?', default='.', metavar='source',
+            help='The location %(prog)s will serve from.')
 
-        serve.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The location %(prog)s will serve from.')
+        serve.add_argument(
+            '--base-url', default='/',
+            help='Sets the site\'s base URL.')
 
-        serve.add_argument('--base-url', default = '/', help = 'Sets the site\'s base URL.')
-        serve.add_argument('-p', '--port', default = 8080, type = int, help = 'The port the server will be available at.')
+        serve.add_argument(
+            '-p', '--port', default=8080, type=int,
+            help='The port the server will be available at.')
 
-        serve.set_defaults(func = self.serve)
+        serve.set_defaults(func=self.serve)
 
         watch = sub.add_parser('watch')
+        watch.add_argument(
+            'src', nargs='?', default='.', metavar='source',
+            help='The location %(prog)s looks for source files.')
 
-        watch.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The location %(prog)s looks for source files.')
-        watch.add_argument('dest', metavar = 'destination', help = 'The location %(prog)s outputs to.')
+        watch.add_argument(
+            'dest', metavar='destination',
+            help='The location %(prog)s outputs to.')
 
-        watch.add_argument('--base-url', help = 'Sets the site\'s base URL.')
-        watch.add_argument('-f', '--force', action = 'store_true', help = 'Forces watching emptying the destination if it already exists on changes.')
+        watch.add_argument(
+            '--base-url',
+            help='Sets the site\'s base URL.')
 
-        watch.set_defaults(func = self.watch)
+        watch.add_argument(
+            '-f', '--force', action='store_true',
+            help='Forces watching emptying the destination if it already exists on changes.')
+
+        watch.set_defaults(func=self.watch)
 
         for option, value in vars(parser.parse_args(args)).iteritems():
             if value is not None:
@@ -162,9 +214,17 @@ class Mynt(object):
 
     def _get_parser(self):
         try:
-            return load_entry_point('mynt', 'mynt.parsers.{0}'.format(self.config['markup']), self.config['parser'])
+            return load_entry_point(
+                'mynt',
+                'mynt.parsers.{0}'.format(self.config['markup']),
+                self.config['parser'])
+
         except ImportError:
-            return __import__('mynt.parsers.{0}.{1}'.format(self.config['markup'], self.config['parser']), globals(), locals(), ['Parser'], -1).Parser
+            return __import__(
+                'mynt.parsers.{0}.{1}'.format(self.config['markup'],
+                                              self.config['parser']),
+                globals(), locals(), ['Parser'], -1
+            ).Parser
 
     def _get_path(self, url):
         parts = [self.dest.path] + url.split('/')
@@ -193,9 +253,16 @@ class Mynt(object):
 
     def _get_renderer(self):
         try:
-            return load_entry_point('mynt', 'mynt.renderers', self.config['renderer'])
+            return load_entry_point(
+                'mynt',
+                'mynt.renderers',
+                self.config['renderer'])
+
         except ImportError:
-            return __import__('mynt.renderers.{0}'.format(self.config['renderer']), globals(), locals(), ['Renderer'], -1).Renderer
+            return __import__(
+                'mynt.renderers.{0}'.format(self.config['renderer']),
+                globals(), locals(), ['Renderer'], -1
+            ).Renderer
 
     def _get_tag_url(self, name):
         format = self._get_url_format(self.config['tags_url'].endswith('/'))
@@ -210,9 +277,12 @@ class Mynt(object):
 
     def _highlight(self, match):
             language, code = match.groups()
-            formatter = HtmlFormatter(linenos = 'table')
+            formatter = HtmlFormatter(linenos='table')
 
-            for pattern, replace in [('&#34;', '"'), ('&#39;', '\''), ('&amp;', '&'), ('&apos;', '\''), ('&gt;', '>'), ('&lt;', '<'), ('&quot;', '"')]:
+            for pattern, replace in [
+                    ('&#34;', '"'), ('&#39;', '\''),
+                    ('&amp;', '&'), ('&apos;', '\''),
+                    ('&gt;', '>'), ('&lt;', '<'), ('&quot;', '"')]:
                 code = code.replace(pattern, replace)
 
             try:
@@ -226,12 +296,14 @@ class Mynt(object):
         if not self.config['pygmentize']:
             return html
 
-        return re.sub(r'<pre[^>]+lang="([^>]+)"[^>]*><code>(.+?)</code></pre>', self._highlight, html, flags = re.S)
+        return re.sub(
+            r'<pre[^>]+lang="([^>]+)"[^>]*><code>(.+?)</code></pre>',
+            self._highlight, html, flags=re.S)
 
     def _slugify(self, text):
         text = re.sub(r'\s+', '-', text.strip())
 
-        return re.sub(r'[^a-z0-9\-_.~]', '', text, flags = re.I)
+        return re.sub(r'[^a-z0-9\-_.~]', '', text, flags=re.I)
 
     def _update_config(self):
         self.config = deepcopy(self.defaults)
@@ -253,7 +325,6 @@ class Mynt(object):
         else:
             logger.debug('..  no config file found')
 
-
     def _parse(self):
         logger.info('>> Parsing')
 
@@ -264,12 +335,15 @@ class Mynt(object):
         for f in path:
             post = Post(f)
 
-            content = self.parser.parse(self.renderer.from_string(post.bodymatter, post.frontmatter))
-            excerpt = re.search(r'\A.*?(?:<p>(.+?)</p>)?', content, re.M | re.S).group(1)
+            content = self.parser.parse(
+                self.renderer.from_string(post.bodymatter, post.frontmatter))
+            excerpt = re.search(
+                r'\A.*?(?:<p>(.+?)</p>)?', content, re.M | re.S).group(1)
 
             data = {
                 'content': content,
-                'date': post.date.strftime(self.config['date_format']).decode('utf-8'),
+                'date': post.date.strftime(
+                    self.config['date_format']).decode('utf-8'),
                 'excerpt': excerpt,
                 'tags': [],
                 'timestamp': timegm(post.date.utctimetuple()),
@@ -277,7 +351,7 @@ class Mynt(object):
             }
 
             data.update(post.frontmatter)
-            data['tags'].sort(key = unicode.lower)
+            data['tags'].sort(key=unicode.lower)
 
             self.posts.append(data)
 
@@ -295,7 +369,7 @@ class Mynt(object):
         if self.posts:
             logger.debug('..  ordering posts')
 
-            self.posts.sort(key = lambda post: post['timestamp'], reverse = True)
+            self.posts.sort(key=lambda post: post['timestamp'], reverse=True)
 
             logger.debug('..  generating archives')
 
@@ -306,7 +380,7 @@ class Mynt(object):
             tags = []
 
             for name, posts in self.tags:
-                posts.sort(key = lambda post: post['timestamp'], reverse = True)
+                posts.sort(key=lambda post: post['timestamp'], reverse=True)
 
                 tags.append({
                     'archives': self._archive(posts),
@@ -316,8 +390,8 @@ class Mynt(object):
                     'url': self._get_tag_url(name)
                 })
 
-            tags.sort(key = lambda tag: tag['name'].lower())
-            tags.sort(key = lambda tag: tag['count'], reverse = True)
+            tags.sort(key=lambda tag: tag['name'].lower())
+            tags.sort(key=lambda tag: tag['count'], reverse=True)
 
             self.tags.clear()
 
@@ -343,10 +417,14 @@ class Mynt(object):
             try:
                 self.pages.append(Page(
                     self._get_path(post['url']),
-                    self._pygmentize(self.renderer.render(post['layout'], {'post': post}))
+                    self._pygmentize(
+                        self.renderer.render(post['layout'], {'post': post}))
                 ))
             except RendererException as e:
-                raise RendererException(e.message, '{0} in post \'{1}\''.format(post['layout'], post['title']))
+                raise RendererException(
+                    e.message,
+                    '{0} in post \'{1}\''.format(post['layout'],
+                    post['title']))
 
         logger.debug('..  pages')
 
@@ -367,7 +445,8 @@ class Mynt(object):
             for name, data in self.tags:
                 self.pages.append(Page(
                     self._get_path(data['url']),
-                    self._pygmentize(self.renderer.render(self.config['tag_layout'], {'tag': data}))
+                    self._pygmentize(self.renderer.render(
+                        self.config['tag_layout'], {'tag': data}))
                 ))
 
         if self.config['archive_layout'] and self.archives:
@@ -376,11 +455,13 @@ class Mynt(object):
             for year, data in self.archives:
                 self.pages.append(Page(
                     self._get_path(data['url']),
-                    self._pygmentize(self.renderer.render(self.config['archive_layout'], {'archive': data}))
+                    self._pygmentize(self.renderer.render(
+                        self.config['archive_layout'], {'archive': data}))
                 ))
 
     def _generate(self):
-        logger.debug('>> Initializing\n..  src:  {0}\n..  dest: {1}'.format(self.src.path, self.dest.path))
+        logger.debug('>> Initializing\n..  src:  {0}\n..  dest: {1}'.format(
+                self.src.path, self.dest.path))
 
         self._update_config()
 
@@ -395,7 +476,8 @@ class Mynt(object):
         logger.info('>> Generating')
 
         assets_src = Directory(normpath(self.src.path, '_assets'))
-        assets_dest = Directory(normpath(self.dest.path, *self.config['assets_url'].split('/')))
+        assets_dest = Directory(normpath(
+            self.dest.path, *self.config['assets_url'].split('/')))
 
         if self.dest.exists:
             if self.opts['force']:
@@ -432,8 +514,10 @@ class Mynt(object):
         logger.setLevel(getattr(logging, self.opts['level'], logging.INFO))
         logger.info('Regenerated in {0:.3f}s'.format(time() - self._start))
 
-
     def generate(self):
+        """
+        Generate site content
+        """
         self.src = Directory(self.opts['src'])
         self.dest = Directory(self.opts['dest'])
 
@@ -444,7 +528,10 @@ class Mynt(object):
         elif self.src.path in ('/', '//') or self.dest.path in ('/', '//'):
             raise OptionException('Root is not a valid source or destination.')
         elif self.dest.exists and not (self.opts['force'] or self.opts['clean']):
-            raise OptionException('Destination already exists.', 'the -c or -f option must be used to force generation')
+            raise OptionException(
+                'Destination already exists.',
+                'the -c or -f option must be used to force generation'
+            )
 
         self._generate()
 
@@ -455,12 +542,17 @@ class Mynt(object):
         if not self.src.exists:
             raise OptionException('Theme not found.')
         elif self.dest.exists and not self.opts['force']:
-            raise OptionException('Destination already exists.', 'the -f option must be used to force initialization by deleting the destination')
+            raise OptionException(
+                'Destination already exists.',
+                'the -f option must be used to force initialization by deleting the destination')
 
         logger.info('>> Initializing')
 
         if self.opts['bare']:
-            for d in ['_assets/css', '_assets/images', '_assets/js', '_templates', '_posts']:
+            for d in [
+                '_assets/css', '_assets/images',
+                '_assets/js', '_templates', '_posts'
+            ]:
                 Directory(normpath(self.dest.path, d)).mk()
 
             File(normpath(self.dest.path, 'config.yml')).mk()
@@ -503,14 +595,17 @@ class Mynt(object):
         elif self.src.path in ('/', '//') or self.dest.path in ('/', '//'):
             raise OptionException('Root is not a valid source or destination.')
         elif self.dest.exists and not self.opts['force']:
-            raise OptionException('Destination already exists.', 'the -f option must be used to force watching by emptying the destination on changes')
+            raise OptionException(
+                'Destination already exists.',
+                'the -f option must be used to force watching by emptying the destination on changes')
 
         logger.info('>> Watching')
         logger.info('Press ctrl+c to stop.')
 
         self.observer = Observer()
 
-        self.observer.schedule(EventHandler(self.src.path, self._regenerate), self.src.path, True)
+        self.observer.schedule(EventHandler(self.src.path, self._regenerate),
+                               self.src.path, True)
         self.observer.start()
 
         try:
@@ -523,17 +618,18 @@ class Mynt(object):
 
         self.observer.join()
 
-
     @property
     def parser(self):
         if self._parser is None:
-            self._parser = self._get_parser()(self.config.get(self.config['parser'], {}))
+            self._parser = self._get_parser()(
+                self.config.get(self.config['parser'], {}))
 
         return self._parser
 
     @property
     def renderer(self):
         if self._renderer is None:
-            self._renderer = self._get_renderer()(self.src.path, self.config.get(self.config['renderer'], {}))
+            self._renderer = self._get_renderer()(
+                self.src.path, self.config.get(self.config['renderer'], {}))
 
         return self._renderer
