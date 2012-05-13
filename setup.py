@@ -1,15 +1,8 @@
 # encoding: utf-8
 
-import os
 from setuptools import find_packages, setup
 from mynt import __version__
 
-
-def read(fname):
-    try:
-        return open(os.path.join(os.path.dirname(__file__), fname)).read()
-    except IOError:
-        return ''
 
 setup(
     name='mynt',
@@ -18,7 +11,7 @@ setup(
     author_email='andrew@mirroredwhite.com',
     url='http://mynt.mirroredwhite.com/',
     description='A static blog generator.',
-    long_description=read('README.rst'),
+    long_description=open('README.rst').read(),
     license='BSD',
     packages=find_packages(),
     include_package_data=True,
