@@ -41,7 +41,7 @@ class _Renderer(m.HtmlRenderer):
             else:
                 self._toc_ids[identifier] = 1
             
-            return '<h{0} id="{1}">{2}</h{0}>'.format(level, identifier, text).encode('utf-8')
+            return '<h{0} id="{1}"><a href="{1}" title="{2}">{2}</a></h{0}>'.format(level, identifier, text).encode('utf-8')
         else:
             return '<h{0}>{1}</h{0}>'.format(level, text).encode('utf-8')
     
