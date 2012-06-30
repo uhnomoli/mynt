@@ -10,6 +10,7 @@ import logging
 from os import chdir, getcwd
 import re
 from time import sleep, time
+import locale
 
 from pkg_resources import load_entry_point, resource_filename
 from pygments import highlight
@@ -40,6 +41,7 @@ class Mynt(object):
         'markup': 'markdown',
         'parser': 'misaka',
         'posts_url': '/<year>/<month>/<day>/<title>/',
+        'time_locale': None,
         'pygmentize': True,
         'renderer': 'jinja',
         'tag_layout': None,
@@ -252,6 +254,15 @@ class Mynt(object):
                 break
         else:
             logger.debug('..  no config file found')
+
+        if self.config['time_locale']:
+            # ascii-encoding is fallback for: http://bugs.python.org/issue3067
+            time_locale = self.config['time_locale'].encode('ascii')
+            logger.debug('..  changing time locale to ' + time_locale)
+            try:
+                locale.setlocale(locale.LC_TIME, time_locale)
+            except ValueError:
+                logger.error('Wrong time locale format: {0} ({1})'.format(time_locale, type(time_locale)))
     
     
     def _parse(self):
