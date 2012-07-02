@@ -212,11 +212,7 @@ class Mynt(object):
     
     def _highlight(self, match):
             language, code = match.groups()
-            formatter = HtmlFormatter(linenos = 'table')
-
-            # remove markdown 4-space prefix for code
-            # ^\s{4,4} fails for empty lines b/w code
-            code = re.sub('(?m)^ {4,4}','',code)            
+            formatter = HtmlFormatter(linenos = 'table')       
             
             for pattern, replace in [('&#34;', '"'), ('&#39;', '\''), ('&amp;', '&'), ('&apos;', '\''), ('&gt;', '>'), ('&lt;', '<'), ('&quot;', '"')]:
                 code = code.replace(pattern, replace)
