@@ -13,9 +13,9 @@ class _Renderer(m.HtmlRenderer):
     _toc_ids = {}
     _toc_patterns = [
         (r'<[^<]+?>', ''),
-        (r'[^a-z0-9_.\s-]', ''),
+        (r'[^\w0-9_.\s-]', ''),
         (r'\s+', '-'),
-        (r'^[^a-z]+', ''),
+        (r'^[^\w]+', ''),
         (r'^$', 'section')
     ]
     
@@ -33,7 +33,7 @@ class _Renderer(m.HtmlRenderer):
             identifier = text.lower()
             
             for pattern, replace in self._toc_patterns:
-                identifier = re.sub(pattern, replace, identifier)
+                identifier = re.sub(pattern, replace, identifier, flags=re.UNICODE)
             
             if identifier in self._toc_ids:
                 self._toc_ids[identifier] += 1
