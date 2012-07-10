@@ -35,6 +35,7 @@ class Mynt(object):
         'archive_layout': None,
         'archives_url': '/',
         'assets_url': '/assets',
+        'figures_url': '/figures',
         'base_url': '/',
         'date_format': '%A, %B %d, %Y',
         'domain': None,
@@ -407,6 +408,9 @@ class Mynt(object):
         
         assets_src = Directory(normpath(self.src.path, '_assets'))
         assets_dest = Directory(normpath(self.dest.path, *self.config['assets_url'].split('/')))
+
+        figures_src = Directory(normpath(self.src.path, '_figures'))
+        figures_dest = Directory(normpath(self.dest.path, *self.config['figures_url'].split('/')))
         
         if self.dest.exists:
             if self.opts['force']:
@@ -422,6 +426,10 @@ class Mynt(object):
         if assets_src.exists:
             for asset in assets_src:
                 asset.cp(asset.path.replace(assets_src.path, assets_dest.path))
+
+        if figures_src.exists:
+            for figure in figures_src:
+                figure.cp(figure.path.replace(figures_src.path, figures_dest.path))
         
         logger.info('Completed in {0:.3f}s'.format(time() - self._start))
     

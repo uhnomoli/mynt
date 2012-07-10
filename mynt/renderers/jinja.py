@@ -61,6 +61,11 @@ class Renderer(_Renderer):
     
     def _get_asset(self, asset):
         return absurl(self.globals['site']['base_url'], self.globals['site']['assets_url'], asset)
+
+    def _get_figure(self, post, figure):
+        return absurl(self.globals['site']['base_url'], 
+                      self.globals['site']['figures_url'], 
+                      post.id, figure)      
     
     def _get_url(self, url = '', absolute = False):
         parts = [self.globals['site']['base_url'], url]
@@ -106,4 +111,5 @@ class Renderer(_Renderer):
         
         self.environment.globals.update(self.globals)
         self.environment.globals['get_asset'] = self._get_asset
+        self.environment.globals['get_figure'] = self._get_figure
         self.environment.globals['get_url'] = self._get_url
