@@ -264,8 +264,14 @@ class Mynt(object):
                 locale.setlocale(locale.LC_TIME, time_locale)
             except ValueError:
                 logger.error('Wrong time locale format: {0} ({1})'.format(time_locale, type(time_locale)))
-    
-    
+
+    def _get_post_locals(self, post):
+        return {
+            'slug': post.slug,
+            'date': post.date
+        }
+
+
     def _parse(self):
         logger.info('>> Parsing')
         
@@ -276,7 +282,10 @@ class Mynt(object):
         for f in path:
             post = Post(f)
             
-            content = self.parser.parse(self.renderer.from_string(post.bodymatter, post.frontmatter))
+            _locals = self._get_post_locals(post)
+            _locals.update(post.frontmatter)
+            
+            content = self.parser.parse(self.renderer.from_string(post.bodymatter, _locals))
             excerpt = re.search(r'\A.*?(?:<p>(.+?)</p>)?', content, re.M | re.S).group(1)
             
             data = {

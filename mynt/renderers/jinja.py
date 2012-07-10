@@ -62,10 +62,10 @@ class Renderer(_Renderer):
     def _get_asset(self, asset):
         return absurl(self.globals['site']['base_url'], self.globals['site']['assets_url'], asset)
 
-    def _get_figure(self, post, figure):
+    def _get_figure(self, slug, figure):
         return absurl(self.globals['site']['base_url'], 
                       self.globals['site']['figures_url'], 
-                      post.id, figure)      
+                      slug, figure)      
     
     def _get_url(self, url = '', absolute = False):
         parts = [self.globals['site']['base_url'], url]
