@@ -55,19 +55,18 @@ from setuptools import find_packages, setup
 
 from mynt import __version__
 
-
 setup(
-    name = 'mynt',
-    version = str(__version__),
-    author = 'Andrew Fricke',
-    author_email = 'andrew@mirroredwhite.com',
-    url = 'http://mynt.mirroredwhite.com/',
-    description = 'A static blog generator.',
-    long_description = __doc__,
-    license = 'BSD',
-    packages = find_packages(),
-    include_package_data = True,
-    entry_points = {
+    name='mynt',
+    version=str(__version__),
+    author='Andrew Fricke',
+    author_email='andrew@mirroredwhite.com',
+    url='http://mynt.mirroredwhite.com/',
+    description='A static blog generator.',
+    long_description=__doc__,
+    license='BSD',
+    packages=find_packages(),
+    include_package_data=True,
+    entry_points={
         'mynt.parsers.markdown': [
             'misaka = mynt.parsers.markdown.misaka:Parser'
         ],
@@ -76,16 +75,16 @@ setup(
         ],
         'console_scripts': 'mynt = mynt.main:main'
     },
-    install_requires = [
+    install_requires=[
         'Jinja2',
         'misaka>=1.0.2',
         'Pygments',
         'PyYAML',
         'watchdog'
     ],
-    platforms = 'any',
-    zip_safe = False,
-    classifiers = [
+    platforms='any',
+    zip_safe=False,
+    classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Environment :: Web Environment',
