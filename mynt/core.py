@@ -11,6 +11,7 @@ from os import chdir, getcwd
 import re
 from time import sleep, time
 
+import houdini as h
 from pkg_resources import load_entry_point, resource_filename
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
@@ -212,8 +213,7 @@ class Mynt(object):
             language, code = match.groups()
             formatter = HtmlFormatter(linenos = 'table')
             
-            for pattern, replace in [('&#34;', '"'), ('&#39;', '\''), ('&amp;', '&'), ('&apos;', '\''), ('&gt;', '>'), ('&lt;', '<'), ('&quot;', '"')]:
-                code = code.replace(pattern, replace)
+            code = h.unescape_html(code.encode('utf-8')).decode('utf-8')
             
             try:
                 code = highlight(code, get_lexer_by_name(language), formatter)
