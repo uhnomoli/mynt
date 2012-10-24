@@ -26,7 +26,7 @@ class _Renderer(m.HtmlRenderer):
         for pattern, replace in [('&', '&amp;'), ('"', '&#34;'), ('\'', '&#39;'), ('>', '&gt;'), ('<', '&lt;')]:
                 text = text.replace(pattern, replace)
         
-        return '<pre{0}><code>{1}</code></pre>'.format(lang, text).encode('utf-8')
+        return '<pre{0}><code>{1}</code></pre>'.format(lang, text)
     
     def header(self, text, level):
         if self.flags & m.HTML_TOC:
@@ -41,9 +41,9 @@ class _Renderer(m.HtmlRenderer):
             else:
                 self._toc_ids[identifier] = 1
             
-            return '<h{0} id="{1}">{2}</h{0}>'.format(level, identifier, text).encode('utf-8')
+            return '<h{0} id="{1}">{2}</h{0}>'.format(level, identifier, text)
         else:
-            return '<h{0}>{1}</h{0}>'.format(level, text).encode('utf-8')
+            return '<h{0}>{1}</h{0}>'.format(level, text)
     
     
     def setup(self):
