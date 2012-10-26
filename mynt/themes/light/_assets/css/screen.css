@@ -1,0 +1,436 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  border-width: 0px;
+  outline: invert none 0px;
+}
+
+body {
+  background-color: #f2f2f2;
+  background-image: url("../images/bg.png");
+  background-position: left top;
+  background-repeat: repeat;
+  color: #333333;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 13px;
+}
+
+blockquote, dl, ol, p, pre, table, ul {
+  margin: 18px 0px 18px 0px;
+}
+
+blockquote {
+  overflow: hidden;
+  padding: 0px 18px 0px 18px;
+  background-color: #e6e6e6;
+}
+
+dd, dt {
+  line-height: 18px;
+}
+
+dl.horizontal > dd {
+  margin-left: 65px;
+}
+dl.horizontal > dd + dt {
+  margin-top: 18px;
+}
+dl.horizontal > dd + dt + dd {
+  margin-top: 18px;
+}
+dl.horizontal > dt {
+  float: left;
+  width: 50px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #262626;
+  font-style: italic;
+  font-weight: normal;
+  line-height: 18px;
+}
+
+h1, h2 {
+  line-height: 36px;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 22px;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  font-size: 12px;
+}
+
+li {
+  line-height: 18px;
+}
+ol > li:before, ul > li:before {
+  padding-right: 8px;
+  color: #99171c;
+}
+ol > li {
+  counter-increment: item;
+}
+ol > li:before {
+  content: counter(item, decimal) ".";
+}
+ul > li:before {
+  content: "\2022";
+}
+ul.unstyled > li:before {
+  padding-right: 0px;
+  content: none;
+}
+
+ol, ul {
+  list-style-image: none;
+  list-style-position: inside;
+  list-style-type: none;
+}
+ol ol, ol ul, ul ol, ul ul {
+  margin: 0px 0px 0px 20px;
+}
+
+ol {
+  counter-reset: item;
+}
+
+p {
+  line-height: 18px;
+  text-align: justify;
+}
+
+pre {
+  padding: 0px 3px 0px 3px;
+  background-color: #272727;
+  font-family: "Envy Code R", "Ubuntu Mono", monospace;
+  line-height: 18px;
+}
+
+table {
+  background-color: #e6e6e6;
+  border-collapse: collapse;
+}
+
+td, th {
+  padding: 9px;
+  line-height: 18px;
+}
+
+td > :first-child {
+  margin-top: 0px;
+}
+td > :last-child {
+  margin-bottom: 0px;
+}
+tr:nth-child(2n) > td {
+  background-color: #ebebeb;
+}
+
+th {
+  background-color: #dedede;
+  color: #cc171d;
+  font-style: italic;
+  font-weight: normal;
+  text-align: left;
+}
+
+a {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: #cc171d;
+  text-decoration: none;
+  -webkit-transition: color 0.2s;
+  -moz-transition: color 0.2s;
+  -ms-transition: color 0.2s;
+  -o-transition: color 0.2s;
+  transition: color 0.2s;
+}
+a:hover {
+  color: #99171c;
+}
+#header a, .module-nav a, #breadcrumbs a, .item-header-posts > h1 a, .archives-year a, .archives-post-title a {
+  border-bottom-width: 0px;
+}
+
+code {
+  padding: 0px 3px 0px 3px;
+  background-color: #dedede;
+  color: #262626;
+  font-family: "Envy Code R", "Ubuntu Mono", monospace;
+  line-height: 18px;
+  white-space: pre;
+}
+pre code {
+  padding: 0px;
+  background-color: transparent;
+  color: #f8f8f2;
+}
+table code {
+  background-color: #dedede;
+}
+
+a > img {
+  vertical-align: text-bottom;
+  margin-bottom: -1px;
+  padding: 5px;
+  background-color: #dedede;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+#container {
+  margin-top: 18px;
+  width: 960px;
+}
+
+#sidebar {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  padding: 0px 18px 0px 18px;
+  width: 255px;
+}
+
+#header {
+  margin: 18px 0px 18px 0px;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  padding: 0px 18px 0px 18px;
+  width: 255px;
+}
+
+#breadcrumbs {
+  position: fixed;
+  top: 18px;
+  left: 309px;
+  margin: 0px;
+  padding: 9px;
+  width: 633px;
+}
+
+#content {
+  margin: 18px 0px 18px 309px;
+  width: 651px;
+}
+#breadcrumbs + #content {
+  margin-top: 72px;
+}
+#content > :first-child {
+  margin-top: 0px;
+}
+#content > :last-child {
+  margin-bottom: 0px;
+}
+
+#sidebar {
+  background-color: #dedede;
+  background-image: url("../images/sbg.png");
+  background-position: left top;
+  background-repeat: repeat;
+}
+
+#header > h1 {
+  font-family: "Ubuntu Mono", sans-serif;
+  font-size: 36px;
+  line-height: 36px;
+}
+#header > h2 {
+  color: gray;
+  font-size: 16px;
+  line-height: 18px;
+}
+#header a {
+  color: #262626;
+  -webkit-transition: color 0.25s;
+  -moz-transition: color 0.25s;
+  -ms-transition: color 0.25s;
+  -o-transition: color 0.25s;
+  transition: color 0.25s;
+}
+#header a:hover {
+  color: #cc171d;
+}
+
+.module {
+  margin-top: 18px;
+  font-style: italic;
+}
+
+.module-nav {
+  font-family: "Ubuntu Mono", sans-serif;
+  font-style: normal;
+  text-transform: uppercase;
+}
+
+#footer {
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+#breadcrumbs {
+  background-color: #dedede;
+  color: gray;
+  font-family: "Ubuntu Mono", sans-serif;
+  font-style: italic;
+}
+#breadcrumbs > li {
+  float: left;
+}
+#breadcrumbs > li:before {
+  padding-right: 0px;
+  content: none;
+}
+#breadcrumbs span {
+  padding: 0px 6px 0px 6px;
+  color: #333333;
+  font-style: normal;
+}
+
+.item-header {
+  padding: 12px;
+  background-color: #e6e6e6;
+}
+.item-header > h1 {
+  font-size: 24px;
+  line-height: 30px;
+}
+.item-header > h2 {
+  color: gray;
+  font-size: 11px;
+  font-style: normal;
+  line-height: 18px;
+  text-transform: uppercase;
+  word-spacing: 2px;
+}
+.item-header span {
+  position: relative;
+  top: -1px;
+}
+
+.item-body {
+  margin-top: 18px;
+}
+.item-body > :first-child {
+  margin-top: 0px;
+}
+.item-body > :last-child {
+  margin-bottom: 0px;
+}
+.item-body h1 {
+  margin: 24px 0px -6px 0px;
+}
+
+div.code {
+  margin: 18px 0px 18px 0px;
+}
+div.code > div {
+  overflow: auto;
+  background-color: #272727;
+}
+div.code pre {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 0px;
+  background-color: transparent;
+}
+
+.highlighttable {
+  margin: 0px;
+  background-color: transparent;
+}
+.highlighttable .linenos, .highlighttable .code {
+  padding: 9px;
+}
+.highlighttable .linenos {
+  background-color: #dedede;
+  color: #262626;
+}
+
+.item-header-posts {
+  margin: 18px 0px 18px 0px;
+  padding: 9px;
+}
+.item-header-posts > h1 {
+  font-size: 16px;
+  line-height: 18px;
+}
+.item-header-posts > h2 {
+  font-size: 10px;
+  line-height: 18px;
+}
+.item-header-posts > h2 a {
+  color: #262626;
+}
+.item-header-posts > h2 a:hover {
+  color: #cc171d;
+}
+
+.archives {
+  padding: 9px;
+  background-color: #e6e6e6;
+}
+.archives .archives {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 0px;
+  background-color: transparent;
+}
+
+.archives-year a {
+  color: #262626;
+  font-size: 18px;
+  font-style: italic;
+  line-height: 18px;
+}
+.archives-year a:hover {
+  color: #cc171d;
+}
+
+.archives-post-date {
+  color: gray;
+  font-size: 12px;
+  font-style: italic;
+  text-transform: uppercase;
+}
+
+.archives-post-title {
+  font-style: italic;
+}
+
+.archives-post-tags {
+  color: gray;
+  font-size: 10px;
+  text-transform: uppercase;
+  word-spacing: 2px;
+}
+.archives-post-tags a {
+  color: #262626;
+}
+.archives-post-tags a:hover {
+  color: #cc171d;
+}
+.archives-post-tags span {
+  position: relative;
+  top: -1px;
+}
