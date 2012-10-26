@@ -126,7 +126,7 @@ class Mynt(object):
         
         init.add_argument('--bare', action = 'store_true', help = 'An empty directory structure is created instead of copying a theme.')
         init.add_argument('-f', '--force', action = 'store_true', help = 'Forces initialization deleting the destination if it already exists.')
-        init.add_argument('-t', '--theme', default = 'default', help = 'Sets the theme to be used.')
+        init.add_argument('-t', '--theme', default = 'dark', help = 'Sets the theme to be used.')
         
         init.set_defaults(func = self.init)
         
