@@ -23,9 +23,9 @@ class _Renderer(m.HtmlRenderer):
     
     def block_code(self, text, lang):
         text = h.escape_html(text.encode('utf-8'), 1).decode('utf-8')
-        lang = ' lang="{0}"'.format(lang) if lang else ''
+        lang = ' data-lang="{0}"'.format(lang) if lang else ''
         
-        return '<pre{0}><code>{1}</code></pre>'.format(lang, text)
+        return '<pre><code{0}>{1}</code></pre>'.format(lang, text)
     
     def header(self, text, level):
         if self.flags & m.HTML_TOC:
