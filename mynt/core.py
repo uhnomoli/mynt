@@ -226,7 +226,7 @@ class Mynt(object):
         if not self.config['pygmentize']:
             return html
         
-        return re.sub(r'<pre[^>]+lang="([^>]+)"[^>]*><code>(.+?)</code></pre>', self._highlight, html, flags = re.S)
+        return re.sub(r'<pre><code[^>]+data-lang="([^>]+)"[^>]*>(.+?)</code></pre>', self._highlight, html, flags = re.S)
     
     def _slugify(self, text):
         text = re.sub(r'\s+', '-', text.strip())
