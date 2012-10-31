@@ -231,7 +231,7 @@ class Mynt(object):
     def _slugify(self, text):
         text = re.sub(r'\s+', '-', text.strip())
         
-        return re.sub(r'[^a-z0-9\-_.~]', '', text, flags = re.I)
+        return re.sub(r'[^a-z0-9\-_.]', '', text, flags = re.I)
     
     def _update_config(self):
         self.config = deepcopy(self.defaults)
