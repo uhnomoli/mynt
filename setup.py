@@ -54,9 +54,22 @@ hop in #mynt on irc.freenode.net.
 .. _watchdog: http://packages.python.org/watchdog/
 '''
 from setuptools import find_packages, setup
+import sys
 
 from mynt import __version__
 
+install_requires = [
+    'houdini.py',
+    'Jinja2',
+    'misaka>=1.0.2',
+    'Pygments',
+    'PyYAML',
+    'watchdog'
+]
+
+# Using alternative implementation of OrderedDict for Python verison < 2.7
+if sys.version_info < (2, 7):
+    install_requires.append("ordereddict")
 
 setup(
     name = 'mynt',
@@ -78,14 +91,7 @@ setup(
         ],
         'console_scripts': 'mynt = mynt.main:main'
     },
-    install_requires = [
-        'houdini.py',
-        'Jinja2',
-        'misaka>=1.0.2',
-        'Pygments',
-        'PyYAML',
-        'watchdog'
-    ],
+    install_requires = install_requires,
     platforms = 'any',
     zip_safe = False,
     classifiers = [

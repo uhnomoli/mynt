@@ -2,7 +2,11 @@
 
 from __future__ import unicode_literals
 
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
+
 from datetime import datetime
 from os import path as op
 from re import sub
@@ -77,8 +81,14 @@ class Renderer(_Renderer):
     
     def from_string(self, source, vars_ = {}):
         template = self.environment.from_string(source)
-        
-        return template.render(**vars_)
+
+        return template.render(**self.with_strkeys(vars_))
+
+    def with_strkeys(self, d):
+        # Python<2.7 doesn't allow unicode literals as keywords
+        # This function converts a dictionary with unicode keys into an
+        # eqvivalant dict with str keys.
+        return dict((str(k), v) for k, v in d.items())
     
     def register(self, vars_):
         self.globals.update(vars_)
@@ -90,7 +100,7 @@ class Renderer(_Renderer):
         except TemplateNotFound:
             raise RendererException('Template not found.')
         
-        return template.render(**vars_)
+        return template.render(**self.with_strkeys(vars_))
     
     def setup(self):
         self.config.update(self.options)
@@ -99,7 +109,7 @@ class Renderer(_Renderer):
             ('', FileSystemLoader(normpath(self.path, '_templates')))
         ]), None)
         
-        self.environment = Environment(**self.config)
+        self.environment = Environment(**self.with_strkeys(self.config))
         
         self.environment.filters['absolutize'] = self._absolutize
         self.environment.filters['date'] = self._date

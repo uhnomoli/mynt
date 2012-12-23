@@ -222,16 +222,19 @@ class Mynt(object):
             
             return '<div class="code"><div>{0}</div></div>'.format(code)
     
+
+    _re_pygmentize = re.compile(r'<pre><code[^>]+data-lang="([^>]+)"[^>]*>(.+?)</code></pre>', re.S)
     def _pygmentize(self, html):
         if not self.config['pygmentize']:
             return html
         
-        return re.sub(r'<pre><code[^>]+data-lang="([^>]+)"[^>]*>(.+?)</code></pre>', self._highlight, html, flags = re.S)
+        return self._re_pygmentize.sub(self._highlight, html)
     
+    _re_slugify = re.compile(r'[^a-z0-9\-_.]', re.I)
     def _slugify(self, text):
         text = re.sub(r'\s+', '-', text.strip())
         
-        return re.sub(r'[^a-z0-9\-_.]', '', text, flags = re.I)
+        return self._re_slugify.sub('', text)
     
     def _update_config(self):
         self.config = deepcopy(self.defaults)
