@@ -44,6 +44,7 @@ class Mynt(object):
         'pygmentize': True,
         'renderer': 'jinja',
         'tag_layout': None,
+        'tag_feed_layout': 'feed.xml',
         'tags_url': '/',
         'version': __version__
     }
@@ -368,6 +369,10 @@ class Mynt(object):
                 self.pages.append(Page(
                     self._get_path(data['url']),
                     self._pygmentize(self.renderer.render(self.config['tag_layout'], {'tag': data}))
+                ))
+                self.pages.append(Page(
+                    self._get_path(data['url']).replace('index.html', self.config['tag_feed_layout']),
+                    self._pygmentize(self.renderer.render(self.config['tag_feed_layout'], {'tag': data}))
                 ))
         
         if self.config['archive_layout'] and self.archives:
