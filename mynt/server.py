@@ -18,7 +18,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
         SimpleHTTPRequestHandler.__init__(self, request, client_address, server)
     
     def do_GET(self):
-        self.path = self.path.replace(self.base_url, '/')
+        self.path = self.path.replace(self.base_url, '/').encode('utf-8')
         
         SimpleHTTPRequestHandler.do_GET(self)
     
