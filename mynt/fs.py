@@ -94,8 +94,8 @@ class EventHandler(FileSystemEventHandler):
         self._callback = callback
     
     
-    def on_any_event(self, event):
-        path = event.src_path.replace(self._src, '')
+    def _regenerate(self, path):
+        path = path.replace(self._src, '')
         
         if search(r'/[._](?!assets|posts|templates)', path):
             logger.debug('>> Skipping: {0}'.format(path))
@@ -111,6 +111,14 @@ class EventHandler(FileSystemEventHandler):
                 logger.error('!! {0}\n..  file: {1}\n..  line: {2}\n..    in: {3}\n..    at: {4}'.format(v, *lc))
                 
                 pass
+    
+    
+    def on_any_event(self, event):
+        if event.event_type != 'moved':
+            self._regenerate(event.src_path)
+    
+    def on_moved(self, event):
+        self._regenerate(event.dest_path)
 
 class File(object):
     def __init__(self, path, content = None):
