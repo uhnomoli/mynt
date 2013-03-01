@@ -21,7 +21,13 @@ logger = get_logger('mynt')
 class Directory(object):
     def __init__(self, path):
         self.path = abspath(path)
-    
+        self.ignore = []
+
+        igfile = op.join(self.path, '.myntignore')
+        if op.exists(igfile):
+            f = open(igfile, 'r')
+            self.ignore = map(str.strip, f.readlines())
+            f.close()
     
     def cp(self, dest):
         dest = Directory(dest)
@@ -37,13 +43,13 @@ class Directory(object):
         if self.exists:
             for root, dirs, files in walk(self.path):
                 for d in dirs[:]:
-                    if not d.startswith(('.', '_')):
+                    if not self.is_ignored(d):
                         Directory(abspath(root, d)).rm()
                     
                     dirs.remove(d)
                 
                 for f in files:
-                    if not f.startswith(('.', '_')):
+                    if not self.is_ignored(f):
                         File(abspath(root, f)).rm()
     
     def mk(self):
@@ -62,19 +68,21 @@ class Directory(object):
     @property
     def exists(self):
         return op.exists(self.path) and op.isdir(self.path)
-    
-    
+
+    def is_ignored(self, name):
+        return name.startswith(('.', '_')) or name in self.ignore
+
     def __eq__(self, other):
         return self.path == other
     
     def __iter__(self):
         for root, dirs, files in walk(self.path):
             for d in dirs[:]:
-                if d.startswith(('.', '_')):
+                if self.is_ignored(d):
                     dirs.remove(d)
             
             for f in files:
-                if f.startswith(('.', '_')):
+                if self.is_ignored(f):
                     continue
                 
                 yield File(normpath(root, f))
