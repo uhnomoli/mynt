@@ -460,7 +460,7 @@ class Mynt(object):
         logger.info('>> Initializing')
         
         if self.opts['bare']:
-            for d in ['_assets/css', '_assets/images', '_assets/js', '_templates', '_posts']:
+            for d in ('_assets/css', '_assets/images', '_assets/js', '_templates', '_posts'):
                 Directory(normpath(self.dest.path, d)).mk()
             
             File(normpath(self.dest.path, 'config.yml')).mk()
