@@ -108,44 +108,44 @@ class Mynt(object):
         
         gen = sub.add_parser('gen')
         
-        gen.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The location %(prog)s looks for source files.')
-        gen.add_argument('dest', metavar = 'destination', help = 'The location %(prog)s outputs to.')
+        gen.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The directory %(prog)s looks in for source files.')
+        gen.add_argument('dest', metavar = 'destination', help = 'The directory %(prog)s outputs to.')
         
-        gen.add_argument('--base-url', help = 'Sets the site\'s base URL.')
+        gen.add_argument('--base-url', help = 'Sets the site\'s base URL overriding the config setting.')
         
         force = gen.add_mutually_exclusive_group()
         
-        force.add_argument('-c', '--clean', action = 'store_true', help = 'Deletes the destination if it exists before generation.')
-        force.add_argument('-f', '--force', action = 'store_true', help = 'Forces generation emptying the destination if it already exists.')
+        force.add_argument('-c', '--clean', action = 'store_true', help = 'Forces generation by deleting the destination if it exists.')
+        force.add_argument('-f', '--force', action = 'store_true', help = 'Forces generation by emptying the destination if it exists.')
         
         gen.set_defaults(func = self.generate)
         
         init = sub.add_parser('init')
         
-        init.add_argument('dest', metavar = 'destination', help = 'The location %(prog)s initializes.')
+        init.add_argument('dest', metavar = 'destination', help = 'The directory %(prog)s outputs to.')
         
-        init.add_argument('--bare', action = 'store_true', help = 'An empty directory structure is created instead of copying a theme.')
-        init.add_argument('-f', '--force', action = 'store_true', help = 'Forces initialization deleting the destination if it already exists.')
-        init.add_argument('-t', '--theme', default = 'dark', help = 'Sets the theme to be used.')
+        init.add_argument('--bare', action = 'store_true', help = 'Initializes a new site without using a theme.')
+        init.add_argument('-f', '--force', action = 'store_true', help = 'Forces initialization by deleting the destination if it exists.')
+        init.add_argument('-t', '--theme', default = 'dark', help = 'Sets which theme will be used.')
         
         init.set_defaults(func = self.init)
         
         serve = sub.add_parser('serve')
         
-        serve.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The location %(prog)s will serve from.')
+        serve.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The directory %(prog)s will serve.')
         
-        serve.add_argument('--base-url', default = '/', help = 'Sets the site\'s base URL.')
-        serve.add_argument('-p', '--port', default = 8080, type = int, help = 'The port the server will be available at.')
+        serve.add_argument('--base-url', default = '/', help = 'Sets the site\'s base URL overriding the config setting.')
+        serve.add_argument('-p', '--port', default = 8080, type = int, help = 'Sets the port used by the server.')
         
         serve.set_defaults(func = self.serve)
         
         watch = sub.add_parser('watch')
         
-        watch.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The location %(prog)s looks for source files.')
-        watch.add_argument('dest', metavar = 'destination', help = 'The location %(prog)s outputs to.')
+        watch.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The directory %(prog)s looks in for source files.')
+        watch.add_argument('dest', metavar = 'destination', help = 'The directory %(prog)s outputs to.')
         
-        watch.add_argument('--base-url', help = 'Sets the site\'s base URL.')
-        watch.add_argument('-f', '--force', action = 'store_true', help = 'Forces watching emptying the destination if it already exists on changes.')
+        watch.add_argument('--base-url', help = 'Sets the site\'s base URL overriding the config setting.')
+        watch.add_argument('-f', '--force', action = 'store_true', help = 'Forces watching by emptying the destination every time a change is made if it exists.')
         
         watch.set_defaults(func = self.watch)
         
