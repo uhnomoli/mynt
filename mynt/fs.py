@@ -29,7 +29,7 @@ class Directory(object):
         if dest.exists:
             dest.rm()
         
-        logger.debug('..  cp: {0}\n..      dest: {1}'.format(self.path, dest.path))
+        logger.debug('..  cp: %s\n..      dest: %s', self.path, dest.path)
         
         shutil.copytree(self.path, dest.path)
     
@@ -48,13 +48,13 @@ class Directory(object):
     
     def mk(self):
         if not self.exists:
-            logger.debug('..  mk: {0}'.format(self.path))
+            logger.debug('..  mk: %s', self.path)
             
             makedirs(self.path)
     
     def rm(self):
         if self.exists:
-            logger.debug('..  rm: {0}'.format(self.path))
+            logger.debug('..  rm: %s', self.path)
             
             shutil.rmtree(self.path)
     
@@ -98,9 +98,9 @@ class EventHandler(FileSystemEventHandler):
         path = path.replace(self._src, '')
         
         if search(r'/[._](?!assets|posts|templates)', path):
-            logger.debug('>> Skipping: {0}'.format(path))
+            logger.debug('>> Skipping: %s', path)
         else:
-            logger.info('>> Change detected in: {0}'.format(path))
+            logger.info('>> Change detected in: %s', path)
             
             try:
                 self._callback()
@@ -108,7 +108,7 @@ class EventHandler(FileSystemEventHandler):
                 t, v, tb = exc_info()
                 lc = traceback.extract_tb(tb)[-1:][0]
                 
-                logger.error('!! {0}\n..  file: {1}\n..  line: {2}\n..    in: {3}\n..    at: {4}'.format(v, *lc))
+                logger.error('!! %s\n..  file: %s\n..  line: %s\n..    in: %s\n..    at: %s', v, *lc)
                 
                 pass
     
@@ -135,7 +135,7 @@ class File(object):
             if not dest.root.exists:
                 dest.root.mk()
             
-            logger.debug('..  cp: {0}{1}\n..      src:  {2}\n..      dest: {3}'.format(self.name, self.extension, self.root, dest.root))
+            logger.debug('..  cp: %s%s\n..      src:  %s\n..      dest: %s', self.name, self.extension, self.root, dest.root)
             
             shutil.copyfile(self.path, dest.path)
     
@@ -144,7 +144,7 @@ class File(object):
             if not self.root.exists:
                 self.root.mk()
             
-            logger.debug('..  mk: {0}'.format(self.path))
+            logger.debug('..  mk: %s', self.path)
             
             with open(self.path, 'w', encoding = 'utf-8') as f:
                 if self.content is None:
@@ -154,7 +154,7 @@ class File(object):
     
     def rm(self):
         if self.exists:
-            logger.debug('..  rm: {0}'.format(self.path))
+            logger.debug('..  rm: %s', self.path)
             
             remove(self.path)
     
