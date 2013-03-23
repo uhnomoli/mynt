@@ -32,7 +32,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
             elif isinstance(v, str):
                 args[i] = v.decode('utf-8')
         
-        logger.debug('>> [{0}] {1}: {2}'.format(self.log_date_time_string(), self.address_string(), ' '.join(args)))
+        logger.debug('>> [%s] %s: %s', self.log_date_time_string(), self.address_string(), ' '.join(args))
 
 class Server(TCPServer):
     allow_reuse_address = True

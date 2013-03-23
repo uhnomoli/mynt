@@ -242,7 +242,7 @@ class Mynt(object):
             f = File(normpath(self.src.path, 'config' + ext))
             
             if f.exists:
-                logger.debug('..  found: {0}'.format(f.path))
+                logger.debug('..  found: %s', f.path)
                 
                 try:
                     self.config.update(Config(f.content))
@@ -259,7 +259,7 @@ class Mynt(object):
         
         path = Directory(normpath(self.src.path, '_posts'))
         
-        logger.debug('..  src: {0}'.format(path))
+        logger.debug('..  src: %s', path)
         
         for f in path:
             post = Post(f)
@@ -380,7 +380,7 @@ class Mynt(object):
                 ))
     
     def _generate(self):
-        logger.debug('>> Initializing\n..  src:  {0}\n..  dest: {1}'.format(self.src.path, self.dest.path))
+        logger.debug('>> Initializing\n..  src:  %s\n..  dest: %s', self.src.path, self.dest.path)
         
         self._update_config()
         
@@ -412,7 +412,7 @@ class Mynt(object):
             for asset in assets_src:
                 asset.cp(asset.path.replace(assets_src.path, assets_dest.path))
         
-        logger.info('Completed in {0:.3f}s'.format(time() - self._start))
+        logger.info('Completed in %.3fs', time() - self._start)
     
     def _regenerate(self):
         logger.setLevel(logging.ERROR)
@@ -430,7 +430,7 @@ class Mynt(object):
         self._generate()
         
         logger.setLevel(getattr(logging, self.opts['level'], logging.INFO))
-        logger.info('Regenerated in {0:.3f}s'.format(time() - self._start))
+        logger.info('Regenerated in %.3fs', time() - self._start)
     
     
     def generate(self):
@@ -467,7 +467,7 @@ class Mynt(object):
         else:
             self.src.cp(self.dest.path)
         
-        logger.info('Completed in {0:.3f}s'.format(time() - self._start))
+        logger.info('Completed in %.3fs', time() - self._start)
     
     def serve(self):
         self.src = Directory(self.opts['src'])
@@ -476,7 +476,7 @@ class Mynt(object):
         if not self.src.exists:
             raise OptionException('Source must exist.')
         
-        logger.info('>> Serving at 127.0.0.1:{0}'.format(self.opts['port']))
+        logger.info('>> Serving at 127.0.0.1:%s', self.opts['port'])
         logger.info('Press ctrl+c to stop.')
         
         cwd = getcwd()
