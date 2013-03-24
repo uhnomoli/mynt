@@ -12,6 +12,7 @@ import traceback
 
 from watchdog.events import FileSystemEventHandler
 
+from mynt.exceptions import FileSystemException
 from mynt.utils import abspath, get_logger, normpath
 
 
@@ -21,17 +22,21 @@ logger = get_logger('mynt')
 class Directory(object):
     def __init__(self, path):
         self.path = abspath(path)
+        
+        if self.is_root:
+            raise FileSystemException('Root is not an acceptible directory.')
     
     
     def cp(self, dest):
-        dest = Directory(dest)
-        
-        if dest.exists:
-            dest.rm()
-        
-        logger.debug('..  cp: %s\n..      dest: %s', self.path, dest.path)
-        
-        shutil.copytree(self.path, dest.path)
+        if self.exists:
+            dest = Directory(dest)
+            
+            if dest.exists:
+                dest.rm()
+            
+            logger.debug('..  cp: %s\n..      dest: %s', self.path, dest.path)
+            
+            shutil.copytree(self.path, dest.path)
     
     def empty(self):
         if self.exists:
@@ -62,6 +67,10 @@ class Directory(object):
     @property
     def exists(self):
         return op.exists(self.path) and op.isdir(self.path)
+    
+    @property
+    def is_root(self):
+        return op.dirname(self.path) == self.path
     
     
     def __eq__(self, other):
@@ -129,15 +138,16 @@ class File(object):
     
     
     def cp(self, dest):
-        dest = File(dest)
-        
-        if self.path != dest.path:
-            if not dest.root.exists:
-                dest.root.mk()
+        if self.exists:
+            dest = File(dest)
             
-            logger.debug('..  cp: %s%s\n..      src:  %s\n..      dest: %s', self.name, self.extension, self.root, dest.root)
-            
-            shutil.copyfile(self.path, dest.path)
+            if self.path != dest.path:
+                if not dest.root.exists:
+                    dest.root.mk()
+                
+                logger.debug('..  cp: %s%s\n..      src:  %s\n..      dest: %s', self.name, self.extension, self.root, dest.root)
+                
+                shutil.copyfile(self.path, dest.path)
     
     def mk(self):
         if not self.exists:

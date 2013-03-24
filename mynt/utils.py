@@ -12,7 +12,7 @@ def _cleanpath(*args):
     parts = [args[0].strip()]
     
     for arg in args[1:]:
-        parts.append((arg.replace(op.sep, '', 1) if arg.startswith(op.sep) else arg).strip())
+        parts.append(arg.strip(' \t\n\r\v\f' + op.sep))
     
     return parts
 
@@ -27,10 +27,12 @@ def abspath(*args):
     )
 
 def absurl(*args):
-    if match('.+://', args[0]):
-        return sub(r'(?<!:)//+', '/', '/'.join(args))
-    else:
-        return sub(r'//+', '/', '/' + '/'.join(args))
+    url = '/'.join(args).replace('..', '')
+    
+    if not match(r'[^/]+://', url):
+        url = '/' + url
+    
+    return sub(r'(?<!:)//+', '/', url)
 
 def get_logger(name):
     logger = logging.getLogger(name)

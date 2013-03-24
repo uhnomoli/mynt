@@ -24,11 +24,14 @@ class MyntException(Exception):
         return message
 
 
-class OptionException(MyntException):
-    code = 2
-
 class ConfigException(MyntException):
     pass
+
+class FileSystemException(MyntException):
+    pass
+
+class OptionException(MyntException):
+    code = 2
 
 class ParserException(MyntException):
     pass
