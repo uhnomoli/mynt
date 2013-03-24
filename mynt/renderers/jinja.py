@@ -51,7 +51,7 @@ class Renderer(_Renderer):
         def _replace(match):
             return self._get_url(match.group(1).replace(self.globals['site']['base_url'], '', 1), True)
         
-        return sub(r'(?<==")({0}[^"]*)'.format(absurl(self.globals['site']['base_url']), ''), _replace, html)
+        return sub(r'(?<==")({0}[^"]*)'.format(self.globals['site']['base_url']), _replace, html)
     
     def _date(self, ts, format = '%A, %B %d, %Y'):
         if ts is None:

@@ -249,6 +249,11 @@ class Mynt(object):
                 except ConfigException as e:
                     raise ConfigException(e.message, 'src: {0}'.format(f.path))
                 
+                self.config['base_url'] = absurl(self.opts.get('base_url', self.config['base_url']), '')
+                
+                for url in ('archives_url', 'assets_url', 'tags_url'):
+                    self.config[url] = absurl(self.config[url])
+                
                 break
         else:
             logger.debug('..  no config file found')
@@ -384,10 +389,6 @@ class Mynt(object):
         
         self._update_config()
         
-        for opt in ('base_url',):
-            if opt in self.opts:
-                self.config[opt] = self.opts[opt]
-        
         self.renderer.register({'site': self.config})
         
         self._render()
@@ -441,8 +442,6 @@ class Mynt(object):
             raise OptionException('Source must exist.')
         elif self.src == self.dest:
             raise OptionException('Source and destination must differ.')
-        elif self.src.path in ('/', '//') or self.dest.path in ('/', '//'):
-            raise OptionException('Root is not a valid source or destination.')
         elif self.dest.exists and not (self.opts['force'] or self.opts['clean']):
             raise OptionException('Destination already exists.', 'the -c or -f option must be used to force generation')
         
@@ -460,6 +459,8 @@ class Mynt(object):
         logger.info('>> Initializing')
         
         if self.opts['bare']:
+            self.dest.rm()
+            
             for d in ('_assets/css', '_assets/images', '_assets/js', '_templates', '_posts'):
                 Directory(normpath(self.dest.path, d)).mk()
             
@@ -500,8 +501,6 @@ class Mynt(object):
             raise OptionException('Source must exist.')
         elif self.src == self.dest:
             raise OptionException('Source and destination must differ.')
-        elif self.src.path in ('/', '//') or self.dest.path in ('/', '//'):
-            raise OptionException('Root is not a valid source or destination.')
         elif self.dest.exists and not self.opts['force']:
             raise OptionException('Destination already exists.', 'the -f option must be used to force watching by emptying the destination on changes')
         
