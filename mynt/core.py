@@ -443,7 +443,7 @@ class Mynt(object):
         elif self.src == self.dest:
             raise OptionException('Source and destination must differ.')
         elif self.dest.exists and not (self.opts['force'] or self.opts['clean']):
-            raise OptionException('Destination already exists.', 'the -c or -f option must be used to force generation')
+            raise OptionException('Destination already exists.', 'the -c or -f flag must be passed to force generation by deleting or emptying the destination')
         
         self._generate()
     
@@ -454,7 +454,7 @@ class Mynt(object):
         if not self.src.exists:
             raise OptionException('Theme not found.')
         elif self.dest.exists and not self.opts['force']:
-            raise OptionException('Destination already exists.', 'the -f option must be used to force initialization by deleting the destination')
+            raise OptionException('Destination already exists.', 'the -f flag must be passed to force initialization by deleting the destination')
         
         logger.info('>> Initializing')
         
@@ -502,7 +502,7 @@ class Mynt(object):
         elif self.src == self.dest:
             raise OptionException('Source and destination must differ.')
         elif self.dest.exists and not self.opts['force']:
-            raise OptionException('Destination already exists.', 'the -f option must be used to force watching by emptying the destination on changes')
+            raise OptionException('Destination already exists.', 'the -f flag must be passed to force watching by emptying the destination every time a change is made')
         
         logger.info('>> Watching')
         logger.info('Press ctrl+c to stop.')
