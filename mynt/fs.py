@@ -66,7 +66,7 @@ class Directory(object):
     
     @property
     def exists(self):
-        return op.exists(self.path) and op.isdir(self.path)
+        return op.isdir(self.path)
     
     @property
     def is_root(self):
@@ -183,7 +183,7 @@ class File(object):
     
     @property
     def exists(self):
-        return op.exists(self.path) and op.isfile(self.path)
+        return op.isfile(self.path)
     
     @property
     def mtime(self):
