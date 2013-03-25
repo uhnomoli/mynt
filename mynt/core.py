@@ -429,9 +429,7 @@ class Mynt(object):
         for page in self.pages:
             page.mk()
         
-        if assets_src.exists:
-            for asset in assets_src:
-                asset.cp(asset.path.replace(assets_src.path, assets_dest.path))
+        assets_src.cp(assets_dest.path)
         
         logger.info('Completed in %.3fs', time() - self._start)
     
@@ -486,7 +484,7 @@ class Mynt(object):
             
             File(normpath(self.dest.path, 'config.yml')).mk()
         else:
-            self.src.cp(self.dest.path)
+            self.src.cp(self.dest.path, False)
         
         logger.info('Completed in %.3fs', time() - self._start)
     
