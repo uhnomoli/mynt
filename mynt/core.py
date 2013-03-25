@@ -263,7 +263,7 @@ class Mynt(object):
                 
                 for setting in ('archives_url', 'assets_url', 'base_url', 'posts_url', 'tags_url'):
                     if re.search(r'(?:^\.{2}/|/\.{2}$|/\.{2}/)', self.config[setting]):
-                        raise ConfigException('Invalid config setting.', 'setting: {0}'.format(setting), 'path traversal is not allowed'.format(setting))
+                        raise ConfigException('Invalid config setting.', 'setting: {0}'.format(setting), 'path traversal is not allowed')
                 
                 for pattern in self.config['include']:
                     if op.commonprefix((self.src.path, normpath(self.src.path, pattern))) != self.src.path:
