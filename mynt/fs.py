@@ -27,16 +27,21 @@ class Directory(object):
             raise FileSystemException('Root is not an acceptible directory.')
     
     
-    def cp(self, dest):
+    def _ignored(self, path, names):
+        return [name for name in names if name.startswith(('.', '_'))]
+    
+    
+    def cp(self, dest, ignore = True):
         if self.exists:
             dest = Directory(dest)
+            ignore = self._ignored if ignore else None
             
             if dest.exists:
                 dest.rm()
             
             logger.debug('..  cp: %s\n..      dest: %s', self.path, dest.path)
             
-            shutil.copytree(self.path, dest.path)
+            shutil.copytree(self.path, dest.path, ignore = ignore)
     
     def empty(self):
         if self.exists:
