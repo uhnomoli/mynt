@@ -27,7 +27,7 @@ def abspath(*args):
     )
 
 def absurl(*args):
-    url = '/'.join(args).replace('..', '')
+    url = '/'.join(args)
     
     if not match(r'[^/]+://', url):
         url = '/' + url
