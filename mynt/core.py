@@ -6,8 +6,9 @@ from argparse import ArgumentParser
 from calendar import timegm
 from copy import deepcopy
 from datetime import datetime
+from glob import iglob
 import logging
-from os import chdir, getcwd
+from os import chdir, getcwd, path as op
 import re
 from time import sleep, time
 
@@ -38,6 +39,7 @@ class Mynt(object):
         'base_url': '/',
         'date_format': '%A, %B %d, %Y',
         'domain': None,
+        'include': [],
         'markup': 'markdown',
         'parser': 'misaka',
         'posts_url': '/<year>/<month>/<day>/<title>/',
@@ -263,6 +265,10 @@ class Mynt(object):
                     if re.search(r'(?:^\.{2}/|/\.{2}$|/\.{2}/)', self.config[setting]):
                         raise ConfigException('Invalid config setting.', 'setting: {0}'.format(setting), 'path traversal is not allowed'.format(setting))
                 
+                for pattern in self.config['include']:
+                    if op.commonprefix((self.src.path, normpath(self.src.path, pattern))) != self.src.path:
+                        raise ConfigException('Invalid include path.', 'path: {0}'.format(pattern), 'path traversal is not allowed')
+                
                 break
         else:
             logger.debug('..  no config file found')
@@ -430,6 +436,15 @@ class Mynt(object):
             page.mk()
         
         assets_src.cp(assets_dest.path)
+        
+        for pattern in self.config['include']:
+            for path in iglob(normpath(self.src.path, pattern)):
+                dest = path.replace(self.src.path, self.dest.path)
+                
+                if op.isdir(path):
+                    Directory(path).cp(dest, False)
+                elif op.isfile(path):
+                    File(path).cp(dest)
         
         logger.info('Completed in %.3fs', time() - self._start)
     
