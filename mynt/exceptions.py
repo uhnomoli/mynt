@@ -33,6 +33,9 @@ class FileSystemException(MyntException):
 class OptionException(MyntException):
     code = 2
 
+class PageException(MyntException):
+    pass
+
 class ParserException(MyntException):
     pass
 

@@ -21,7 +21,7 @@ from watchdog.observers import Observer
 
 from mynt import __version__
 from mynt.containers import Config, Page, Post
-from mynt.exceptions import ConfigException, OptionException, RendererException
+from mynt.exceptions import ConfigException, OptionException, PageException, RendererException
 from mynt.fs import Directory, EventHandler, File
 from mynt.server import RequestHandler, Server
 from mynt.utils import absurl, get_logger, normpath, OrderedDict
@@ -34,7 +34,7 @@ class Mynt(object):
     defaults = {
         'archive_layout': None,
         'archives_url': '/',
-        'assets_url': '/assets',
+        'assets_url': '/assets/',
         'base_url': '/',
         'date_format': '%A, %B %d, %Y',
         'domain': None,
@@ -180,17 +180,17 @@ class Mynt(object):
             '<year>': '%Y',
             '<month>': '%m',
             '<day>': '%d',
-            '<i_month>': '{0}'.format(date.month),
-            '<i_day>': '{0}'.format(date.day),
+            '<i_month>': unicode(date.month),
+            '<i_day>': unicode(date.day),
             '<title>': self._slugify(slug)
         }
         
-        link = self.config['posts_url'].replace('%', '%%')
+        url = self.config['posts_url'].replace('%', '%%')
         
         for match, replace in subs.iteritems():
-            link = link.replace(match, replace)
+            url = url.replace(match, replace)
         
-        return date.strftime(link).decode('utf-8')
+        return date.strftime(url).decode('utf-8')
     
     def _get_renderer(self):
         try:
@@ -229,9 +229,13 @@ class Mynt(object):
         return re.sub(r'<pre><code[^>]+data-lang="([^>]+)"[^>]*>(.+?)</code></pre>', self._highlight, html, flags = re.S)
     
     def _slugify(self, text):
-        text = re.sub(r'\s+', '-', text.strip())
+        slug = re.sub(r'\s+', '-', text.strip())
+        slug = re.sub(r'[^a-z0-9\-_.]', '', slug, flags = re.I)
         
-        return re.sub(r'[^a-z0-9\-_.]', '', text, flags = re.I)
+        if slug == '..':
+            raise PageException('Invalid slug.')
+        
+        return slug
     
     def _update_config(self):
         self.config = deepcopy(self.defaults)
@@ -249,10 +253,15 @@ class Mynt(object):
                 except ConfigException as e:
                     raise ConfigException(e.message, 'src: {0}'.format(f.path))
                 
+                self.config['assets_url'] = absurl(self.config['assets_url'], '')
                 self.config['base_url'] = absurl(self.opts.get('base_url', self.config['base_url']), '')
                 
-                for url in ('archives_url', 'assets_url', 'tags_url'):
-                    self.config[url] = absurl(self.config[url])
+                for setting in ('archives_url', 'posts_url', 'tags_url'):
+                    self.config[setting] = absurl(self.config[setting])
+                
+                for setting in ('archives_url', 'assets_url', 'base_url', 'posts_url', 'tags_url'):
+                    if re.search(r'(?:^\.{2}/|/\.{2}$|/\.{2}/)', self.config[setting]):
+                        raise ConfigException('Invalid config setting.', 'setting: {0}'.format(setting), 'path traversal is not allowed'.format(setting))
                 
                 break
         else:
@@ -272,14 +281,17 @@ class Mynt(object):
             content = self.parser.parse(self.renderer.from_string(post.bodymatter, post.frontmatter))
             excerpt = re.search(r'\A.*?(?:<p>(.+?)</p>)?', content, re.M | re.S).group(1)
             
-            data = {
-                'content': content,
-                'date': post.date.strftime(self.config['date_format']).decode('utf-8'),
-                'excerpt': excerpt,
-                'tags': [],
-                'timestamp': timegm(post.date.utctimetuple()),
-                'url': self._get_post_url(post.date, post.slug)
-            }
+            try:
+                data = {
+                    'content': content,
+                    'date': post.date.strftime(self.config['date_format']).decode('utf-8'),
+                    'excerpt': excerpt,
+                    'tags': [],
+                    'timestamp': timegm(post.date.utctimetuple()),
+                    'url': self._get_post_url(post.date, post.slug)
+                }
+            except PageException:
+                raise PageException('Invalid post slug.', 'src: {0}'.format(post.path))
             
             data.update(post.frontmatter)
             data['tags'].sort(key = unicode.lower)
@@ -313,13 +325,21 @@ class Mynt(object):
             for name, posts in self.tags:
                 posts.sort(key = lambda post: post['timestamp'], reverse = True)
                 
-                tags.append({
-                    'archives': self._archive(posts),
-                    'count': len(posts),
-                    'name': name,
-                    'posts': posts,
-                    'url': self._get_tag_url(name)
-                })
+                try:
+                    tags.append({
+                        'archives': self._archive(posts),
+                        'count': len(posts),
+                        'name': name,
+                        'posts': posts,
+                        'url': self._get_tag_url(name)
+                    })
+                except PageException:
+                    message = ['tag: {0}'.format(name)]
+                    
+                    for post in posts:
+                        message.append('post: {0}'.format(post.get('title', post['url'])))
+                    
+                    raise PageException('Invalid tag slug.', *message)
             
             tags.sort(key = lambda tag: tag['name'].lower())
             tags.sort(key = lambda tag: tag['count'], reverse = True)
