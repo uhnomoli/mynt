@@ -18,7 +18,7 @@ Latest trunk:
     $ pip install git+https://github.com/Anomareh/mynt.git
 
 
-### Getting Started
+### Getting started
 
 After installing mynt head on over and give the [quickstart][quickstart] page and [docs][docs] a read.
 
