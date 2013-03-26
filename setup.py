@@ -50,7 +50,7 @@ hop in #mynt on irc.freenode.net.
 .. _misaka: http://misaka.61924.nl/
 .. _Pygments: http://pygments.org/
 .. _PyYAML: http://pyyaml.org/
-.. _quickstart: http://mynt.mirroredwhite.com/quickstart/
+.. _quickstart: http://mynt.mirroredwhite.com/docs/quickstart/
 .. _watchdog: http://packages.python.org/watchdog/
 '''
 from setuptools import find_packages, setup

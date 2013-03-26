@@ -45,5 +45,5 @@ If you run into any issues or have any questions, either open an [issue][issues]
 [misaka]: http://misaka.61924.nl/
 [pygments]: http://pygments.org/
 [pyyaml]: http://pyyaml.org/
-[quickstart]: http://mynt.mirroredwhite.com/quickstart/
+[quickstart]: http://mynt.mirroredwhite.com/docs/quickstart/
 [watchdog]: http://packages.python.org/watchdog/
