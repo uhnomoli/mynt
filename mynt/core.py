@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
 
 from argparse import ArgumentParser
 from calendar import timegm
