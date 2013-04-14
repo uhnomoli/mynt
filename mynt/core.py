@@ -7,6 +7,7 @@ from calendar import timegm
 from copy import deepcopy
 from datetime import datetime
 from glob import iglob
+import locale
 import logging
 from os import chdir, getcwd, path as op
 import re
@@ -40,6 +41,7 @@ class Mynt(object):
         'date_format': '%A, %B %d, %Y',
         'domain': None,
         'include': [],
+        'locale': None,
         'markup': 'markdown',
         'parser': 'misaka',
         'posts_url': '/<year>/<month>/<day>/<title>/',
@@ -114,6 +116,7 @@ class Mynt(object):
         gen.add_argument('dest', metavar = 'destination', help = 'The directory %(prog)s outputs to.')
         
         gen.add_argument('--base-url', help = 'Sets the site\'s base URL overriding the config setting.')
+        gen.add_argument('--locale', help = 'Sets the locale used by the renderer.')
         
         force = gen.add_mutually_exclusive_group()
         
@@ -148,6 +151,7 @@ class Mynt(object):
         
         watch.add_argument('--base-url', help = 'Sets the site\'s base URL overriding the config setting.')
         watch.add_argument('-f', '--force', action = 'store_true', help = 'Forces watching by emptying the destination every time a change is made if it exists.')
+        watch.add_argument('--locale', help = 'Sets the locale used by the renderer.')
         
         watch.set_defaults(func = self.watch)
         
@@ -254,6 +258,8 @@ class Mynt(object):
                     self.config.update(Config(f.content))
                 except ConfigException as e:
                     raise ConfigException(e.message, 'src: {0}'.format(f.path))
+                
+                self.config['locale'] = self.opts.get('locale', self.config['locale'])
                 
                 self.config['assets_url'] = absurl(self.config['assets_url'], '')
                 self.config['base_url'] = absurl(self.opts.get('base_url', self.config['base_url']), '')
@@ -414,6 +420,12 @@ class Mynt(object):
         logger.debug('>> Initializing\n..  src:  %s\n..  dest: %s', self.src.path, self.dest.path)
         
         self._update_config()
+        
+        if self.config['locale']:
+            try:
+                locale.setlocale(locale.LC_ALL, (self.config['locale'], 'utf-8'))
+            except locale.Error:
+                raise ConfigException('Locale not available.', 'run `locale -a` to see available locales')
         
         self.renderer.register({'site': self.config})
         
