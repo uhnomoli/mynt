@@ -110,7 +110,7 @@ class Renderer(_Renderer):
         self.environment.globals['get_asset'] = self._get_asset
         self.environment.globals['get_url'] = self._get_url
         
-        if 'jinja2.ext.i18n' in self.config['extensions']:
+        if 'extensions' in self.config and 'jinja2.ext.i18n' in self.config['extensions']:
             try:
                 langs = [locale.getlocale(locale.LC_MESSAGES)[0].decode('utf-8')]
             except AttributeError:
