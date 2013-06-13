@@ -26,7 +26,9 @@ class Config(dict):
         except yaml.YAMLError:
             raise ConfigException('Config contains unsupported YAML.')
         except:
-            raise ConfigException('Invalid config format.')
+            logger.debug('..  config file is empty')
+            
+            pass
 
 class Page(File):
     pass
