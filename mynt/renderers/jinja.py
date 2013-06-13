@@ -11,6 +11,7 @@ from re import sub
 
 from jinja2 import Environment, FileSystemLoader, PrefixLoader
 from jinja2.exceptions import TemplateNotFound
+from jinja2.utils import internalcode
 
 from mynt.base import Renderer as _Renderer
 from mynt.exceptions import RendererException
@@ -18,7 +19,7 @@ from mynt.utils import absurl, normpath
 
 
 class _PrefixLoader(PrefixLoader):
-    def get_source(self, environment, template):
+    def get_loader(self, template):
         try:
             if not self.delimiter:
                 for prefix in self.mapping:
@@ -39,10 +40,15 @@ class _PrefixLoader(PrefixLoader):
         if op.sep != '/':
             name = name.replace(op.sep, '/')
         
+        return loader, name
+    
+    @internalcode
+    def load(self, environment, name, globals=None):
+        loader, local_name = self.get_loader(name)
         try:
-            return loader.get_source(environment, name)
+            return loader.load(environment, local_name, globals)
         except TemplateNotFound:
-            raise TemplateNotFound(template)
+            raise TemplateNotFound(name)
 
 
 class Renderer(_Renderer):
