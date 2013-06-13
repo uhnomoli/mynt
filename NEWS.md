@@ -1,23 +1,29 @@
 # News
 
-### 0.2.3 (unreleased)
+### 0.3 (unreleased)
+
+_In development._
+
+
+### 0.2.3 (June 13th, 2013)
 
 + __New__
-    + Localization and internationalization support.
-    + A config setting for specifying directories and files to be copied over that would otherwise be ignored.
     + A new default theme with dark (default) and light versions.
+    + A config setting for specifying directories and files to be copied over that would otherwise be ignored.
+    + Localization and internationalization support.
 + __Changed__
-    + The `watch` subcommand now honors the configured log level.
-    + Tildes are no longer allowed in post slugs.
-    + The programming language of a code block is now stored in the `data-lang` attribute of the `<code>` tag instead of the `lang` attribute of the `<pre>` tag.
     + HTML escaping is now handled by Houdini.
+    + The programming language of a code block is now stored in the `data-lang` attribute of the `<code>` tag instead of the `lang` attribute of the `<pre>` tag.
+    + Tildes are no longer allowed in post slugs.
+    + The `watch` subcommand now honors the configured log level.
 + __Upgraded__
     + Jinja 2.7
 + __Fixed__
-    + A bug in the `watch` subcommand when a file is moved into the directory that is being watched.
-    + A bug in the `serve` subcommand when handling paths containing Unicode characters.
-    + A bug in the misaka parser with SmartyPants.
     + A bug in the handling of log messages in the `serve` subcommand.
+    + A bug in the misaka parser with SmartyPants.
+    + A bug in the `serve` subcommand when handling paths containing Unicode characters.
+    + A bug in the `watch` subcommand when a file is moved into the directory that is being watched.
+    + A bug when handling an empty config file.
 
 
 ### 0.2.2 (April 11th, 2012)
@@ -25,8 +31,8 @@
 + __Upgraded__
     + misaka 1.0.2
 + __Fixed__
-    + A bug in the `get_url` template helper where it was appending a forward slash when it shouldn't.
     + A bug in the `absolutize` filter of the Jinja renderer.
+    + A bug in the `get_url` template helper where it was appending a forward slash when it shouldn't.
 
 
 ### 0.2.1 (March 20th, 2012)
@@ -38,29 +44,29 @@
 ### 0.2 (March 20th, 2012)
 
 + __New__
-    + Four new subcommands: `init`, `gen`, `watch`, and `serve`.
-    + A default theme.
     + An archive property is now available for tags in the tags global.
+    + A default theme.
+    + Four new subcommands: `init`, `gen`, `watch`, and `serve`.
 + __Changed__
-    + Generation is now done via the `gen` subcommand.
-    + When the destination already exists on generation, it is now emptied by default instead of deleted.
     + Archive years and tag names are always available in their respective globals.
+    + When the destination already exists on generation, it is now emptied by default instead of deleted.
+    + Generation is now done via the `gen` subcommand.
 + __Fixed__
-    + A regression in the misaka renderer when generating semantic identifiers.
     + A bug when retrieving the URL for an archive page.
+    + A regression in the misaka renderer when generating semantic identifiers.
 
 
 ### 0.1.9 (March 12th, 2012)
 
 + __New__
-    + A filter for the Jinja render that attempts to convert all relative URLs to absolute URLs.
     + An absolute URL can now be retrieved via the `get_url` template helper if the `domain` config setting has been set.
+    + A filter for the Jinja render that attempts to convert all relative URLs to absolute URLs.
 + __Changed__
     + The misaka parser now automatically escapes code blocks.
 + __Fixed__
-    + A bug in the Jinja renderer when handling Windows paths.
-    + An escaping issue with code highlighting.
     + A Unicode issue in the misaka parser.
+    + An escaping issue with code highlighting.
+    + A bug in the Jinja renderer when handling Windows paths.
 
 
 ### 0.1.8 (February 8th, 2012)
@@ -106,16 +112,16 @@
 ### 0.1.2 (December 27th, 2011)
 
 + __New__
-    + Archive pages can now be automatically generated.
-    + The hour and minute of a post can now be set with it defaulting to the file's `mtime`.
     + Posts are now partially rendered before being parsed enabling renderer functionality within posts.
+    + The hour and minute of a post can now be set with it defaulting to the file's `mtime`.
+    + Archive pages can now be automatically generated.
 + __Changed__
-    + Removed the `slug` property from posts.
     + Identifiers will now be semantic when using misaka's TOC render flag.
+    + Removed the `slug` property from posts.
 + __Fixed__
-    + A Unicode issue with dates.
-    + Post and tag URLs not being properly slugified.
     + A bug when parsing posts with no content.
+    + Post and tag URLs not being properly slugified.
+    + A Unicode issue with dates.
 
 
 ### 0.1.1 (December 4th, 2011)
@@ -123,8 +129,8 @@
 + __Changed__
     + Added a `name` attribute to tags.
 + __Fixed__
-    + A bug when using the `-qv` flags.
     + A bug with extensionless files.
+    + A bug when using the `-qv` flags.
 
 
 ### 0.1 (December 4th, 2011)
