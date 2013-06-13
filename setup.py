@@ -80,7 +80,7 @@ setup(
     },
     install_requires = [
         'houdini.py',
-        'Jinja2',
+        'Jinja2==2.7',
         'misaka>=1.0.2',
         'Pygments',
         'PyYAML',
