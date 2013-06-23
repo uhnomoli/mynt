@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from collections import OrderedDict as _OrderedDict
+from xml.sax.saxutils import escape, unescape
 import logging
 from os import path as op
 from re import match, sub
@@ -56,3 +57,21 @@ class OrderedDict(_OrderedDict):
     def __iter__(self):
         for key in super(OrderedDict, self).__iter__():
             yield (key, self[key])
+
+
+_html_escape_table = {
+    '"': "&quot;",
+    "'": "&#x27;",
+    "/": "&#x2F;"
+}
+
+
+_html_unescape_table = {v: k for k, v in _html_escape_table.iteritems()}
+
+
+def escape_html(text):
+    return escape(text, _html_escape_table)
+
+
+def unescape_html(text):
+    return unescape(text, _html_unescape_table)

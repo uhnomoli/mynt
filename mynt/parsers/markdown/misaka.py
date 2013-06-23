@@ -4,10 +4,10 @@ from __future__ import absolute_import, unicode_literals
 
 import re
 
-import houdini as h
 import misaka as m
 
 from mynt.base import Parser as _Parser
+from mynt.utils import escape_html
 
 
 class _Renderer(m.HtmlRenderer):
@@ -22,7 +22,7 @@ class _Renderer(m.HtmlRenderer):
     
     
     def block_code(self, text, lang):
-        text = h.escape_html(text.encode('utf-8'), 1).decode('utf-8')
+        text = escape_html(text)
         lang = ' data-lang="{0}"'.format(lang) if lang else ''
         
         return '<pre><code{0}>{1}</code></pre>'.format(lang, text)

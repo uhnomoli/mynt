@@ -13,7 +13,6 @@ from os import chdir, getcwd, path as op
 import re
 from time import sleep, time
 
-import houdini as h
 from pkg_resources import load_entry_point, resource_filename
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
@@ -26,7 +25,7 @@ from mynt.containers import Config, Page, Post
 from mynt.exceptions import ConfigException, OptionException, PageException, RendererException
 from mynt.fs import Directory, EventHandler, File
 from mynt.server import RequestHandler, Server
-from mynt.utils import absurl, get_logger, normpath, OrderedDict
+from mynt.utils import absurl, get_logger, normpath, OrderedDict, unescape_html
 
 
 logger = get_logger('mynt')
@@ -219,7 +218,7 @@ class Mynt(object):
             language, code = match.groups()
             formatter = HtmlFormatter(linenos = 'table')
             
-            code = h.unescape_html(code.encode('utf-8')).decode('utf-8')
+            code = unescape_html(code)
             
             try:
                 code = highlight(code, get_lexer_by_name(language), formatter)
