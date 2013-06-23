@@ -60,12 +60,9 @@ class OrderedDict(_OrderedDict):
 
 
 _html_escape_table = {
-    u"&": u"&amp;",
-    u'"': u"&quot;",
-    u"'": u"&#x27;",
-    u">": u"&gt;",
-    u"<": u"&lt;",
-    u"/": u"&#x2F;"
+    '"': "&quot;",
+    "'": "&#x27;",
+    "/": "&#x2F;"
 }
 
 

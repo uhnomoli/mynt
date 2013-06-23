@@ -25,7 +25,7 @@ from mynt.containers import Config, Page, Post
 from mynt.exceptions import ConfigException, OptionException, PageException, RendererException
 from mynt.fs import Directory, EventHandler, File
 from mynt.server import RequestHandler, Server
-from mynt.utils import absurl, get_logger, normpath, OrderedDict, escape_html
+from mynt.utils import absurl, get_logger, normpath, OrderedDict, unescape_html
 
 
 logger = get_logger('mynt')
@@ -218,7 +218,7 @@ class Mynt(object):
             language, code = match.groups()
             formatter = HtmlFormatter(linenos = 'table')
             
-            code = escape_html(code)
+            code = unescape_html(code)
             
             try:
                 code = highlight(code, get_lexer_by_name(language), formatter)
