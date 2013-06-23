@@ -30,7 +30,6 @@ After installing mynt head on over and give the `quickstart`_ page and `docs`_ a
 Dependencies
 ------------
 
--  `houdini.py`_
 -  `Jinja2`_
 -  `misaka`_
 -  `Pygments`_
@@ -44,7 +43,6 @@ If you run into any issues or have any questions, either open an `issue`_ or
 hop in #mynt on irc.freenode.net.
 
 .. _docs: http://mynt.mirroredwhite.com/
-.. _houdini.py: http://python-houdini.61924.nl/
 .. _issue: https://github.com/Anomareh/mynt/issues
 .. _Jinja2: http://jinja.pocoo.org/
 .. _misaka: http://misaka.61924.nl/
@@ -79,7 +77,6 @@ setup(
         'console_scripts': 'mynt = mynt.main:main'
     },
     install_requires = [
-        'houdini.py',
         'Jinja2==2.7',
         'misaka>=1.0.2',
         'Pygments',
