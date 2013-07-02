@@ -32,6 +32,10 @@ After installing mynt head on over and give the [quickstart][quickstart] page an
 + [PyYAML][pyyaml]
 + [watchdog][watchdog]
 
+#### Optional
+
++ [Docutils][docutils] _(reST)_
+
 
 ### Support
 
@@ -39,6 +43,7 @@ If you run into any issues or have any questions, either open an [issue][issues]
 
 
 [docs]: http://mynt.mirroredwhite.com/
+[docutils]: http://docutils.sourceforge.net/
 [houdini]: http://python-houdini.61924.nl/
 [issues]: https://github.com/Anomareh/mynt/issues
 [jinja]: http://jinja.pocoo.org/

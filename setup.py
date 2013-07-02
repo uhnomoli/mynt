@@ -1,6 +1,6 @@
 '''
 mynt
-====
+----
 
 *Another static site generator?*
 
@@ -11,39 +11,49 @@ the simplest of blogs.
 That's where mynt comes in, being designed to give you all the features of a
 CMS with none of the often rigid implementations of those features.
 
+
 Install
--------
+=======
 
 From PyPI::
 
-$ pip install mynt
+    $ pip install mynt
 
 Latest trunk::
 
-$ pip install git+https://github.com/Anomareh/mynt.git
+    $ pip install git+https://github.com/Anomareh/mynt.git
+
 
 Getting started
----------------
+===============
 
 After installing mynt head on over and give the `quickstart`_ page and `docs`_ a read.
 
-Dependencies
-------------
 
--  `houdini.py`_
--  `Jinja2`_
--  `misaka`_
--  `Pygments`_
--  `PyYAML`_
--  `watchdog`_
+Dependencies
+============
+
++ `houdini.py`_
++ `Jinja2`_
++ `misaka`_
++ `Pygments`_
++ `PyYAML`_
++ `watchdog`_
+
+Optional
+~~~~~~~~
+
++ `Docutils`_ *(reST)*
+
 
 Support
--------
+=======
 
 If you run into any issues or have any questions, either open an `issue`_ or
 hop in #mynt on irc.freenode.net.
 
 .. _docs: http://mynt.mirroredwhite.com/
+.. _Docutils: http://docutils.sourceforge.net/
 .. _houdini.py: http://python-houdini.61924.nl/
 .. _issue: https://github.com/Anomareh/mynt/issues
 .. _Jinja2: http://jinja.pocoo.org/
@@ -71,6 +81,7 @@ setup(
     include_package_data = True,
     entry_points = {
         'mynt.parsers' : [
+            'docutils = mynt.parsers.docutils:Parser [reST]',
             'misaka = mynt.parsers.misaka:Parser'
         ],
         'mynt.renderers': [
@@ -86,6 +97,9 @@ setup(
         'PyYAML',
         'watchdog'
     ],
+    extras_require = {
+        'reST': 'docutils>=0.10'
+    },
     platforms = 'any',
     zip_safe = False,
     classifiers = [
