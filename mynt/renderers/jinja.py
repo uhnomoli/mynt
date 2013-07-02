@@ -82,23 +82,35 @@ class Renderer(_Renderer):
         
         return absurl(*parts)
     
+    def _items(self, dict_):
+        return dict_.iteritems()
     
-    def from_string(self, source, vars_ = {}):
-        template = self.environment.from_string(source)
+    def _values(self, dict_):
+        return dict_.itervalues()
+    
+    
+    def from_string(self, string, data = None):
+        if data is None:
+            data = {}
         
-        return template.render(**vars_)
+        template = self.environment.from_string(string)
+        
+        return template.render(**data)
     
-    def register(self, vars_):
-        self.globals.update(vars_)
-        self.environment.globals.update(vars_)
+    def register(self, data):
+        self.globals.update(data)
+        self.environment.globals.update(data)
     
-    def render(self, template, vars_ = {}):
+    def render(self, template, data = None):
+        if data is None:
+            data = {}
+        
         try:
             template = self.environment.get_template(template)
         except TemplateNotFound:
             raise RendererException('Template not found.')
         
-        return template.render(**vars_)
+        return template.render(**data)
     
     def setup(self):
         self.config.update(self.options)
@@ -111,6 +123,8 @@ class Renderer(_Renderer):
         
         self.environment.filters['absolutize'] = self._absolutize
         self.environment.filters['date'] = self._date
+        self.environment.filters['items'] = self._items
+        self.environment.filters['values'] = self._values
         
         self.environment.globals.update(self.globals)
         self.environment.globals['get_asset'] = self._get_asset

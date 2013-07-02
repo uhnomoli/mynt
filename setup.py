@@ -64,14 +64,14 @@ setup(
     author = 'Andrew Fricke',
     author_email = 'andrew@mirroredwhite.com',
     url = 'http://mynt.mirroredwhite.com/',
-    description = 'A static blog generator.',
+    description = 'A static site generator.',
     long_description = __doc__,
     license = 'BSD',
     packages = find_packages(),
     include_package_data = True,
     entry_points = {
-        'mynt.parsers.markdown': [
-            'misaka = mynt.parsers.markdown.misaka:Parser'
+        'mynt.parsers' : [
+            'misaka = mynt.parsers.misaka:Parser'
         ],
         'mynt.renderers': [
             'jinja = mynt.renderers.jinja:Renderer'

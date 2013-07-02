@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, unicode_literals
 
+from copy import deepcopy
+from operator import or_
 import re
 
 import houdini as h
@@ -11,7 +13,6 @@ from mynt.base import Parser as _Parser
 
 
 class _Renderer(m.HtmlRenderer):
-    _toc_ids = {}
     _toc_patterns = [
         (r'<[^<]+?>', ''),
         (r'[^a-z0-9_.\s-]', ''),
@@ -48,21 +49,25 @@ class _Renderer(m.HtmlRenderer):
     def setup(self):
         super(_Renderer, self).setup()
         
-        self.sp = m.SmartyPants().postprocess
+        self._sp = m.SmartyPants().postprocess
+        self._toc_ids = {}
     
     def preprocess(self, markdown):
-        self._toc_ids = {}
+        self._toc_ids.clear()
         
         return markdown
     
     def postprocess(self, html):
         if self.flags & m.HTML_SMARTYPANTS:
-            html = self.sp(html)
+            html = self._sp(html)
         
         return html
 
 
 class Parser(_Parser):
+    accepts = ('.md',)
+    
+    
     lookup = {
         'extensions': {
             'autolink': m.EXT_AUTOLINK,
@@ -89,7 +94,7 @@ class Parser(_Parser):
         }
     }
     
-    config = {
+    defaults = {
         'extensions': {
             'autolink': True,
             'fenced_code': True,
@@ -102,22 +107,20 @@ class Parser(_Parser):
         }
     }
     
-    flags = {
-        'extensions': 0,
-        'render_flags': 0
-    }
-    
     
     def parse(self, markdown):
         return self._html.render(markdown)
     
     def setup(self):
+        self.flags = {}
+        self.config = deepcopy(self.defaults)
+        
         for k, v in self.options.iteritems():
             self.config[k].update(v)
         
         for group, options in self.config.iteritems():
-            for option, value in options.iteritems():
-                if value:
-                    self.flags[group] |= self.lookup[group][option]
+            flags = [self.lookup[group][k] for k, v in options.iteritems() if v]
+            
+            self.flags[group] = reduce(or_, flags, 0)
         
         self._html = m.Markdown(_Renderer(self.flags['render_flags']), self.flags['extensions'])
