@@ -37,7 +37,7 @@ class Mynt(object):
         'domain': None,
         'include': [],
         'locale': None,
-        'posts_url': '/<year>/<month>/<day>/<title>/',
+        'posts_url': '/<year>/<month>/<day>/<slug>/',
         'pygmentize': True,
         'renderer': 'jinja',
         'tag_layout': None,
