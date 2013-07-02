@@ -5,6 +5,7 @@
 + __New__
     + A mechanism for defining content containers.
     + Two new filters for the Jinja renderer, `items` and `values`, that act as syntactic sugar for `iteritems()` and `itervalues()`.
+    + A reStructuredText parser.
 + __Changed__
     + Global and local dictionaries no longer behave different from ordinary Python dictionaries when iterating over them.
     + The `archives` and `tags` globals are now properties of the `posts` global to maintain consistency between content containers.
