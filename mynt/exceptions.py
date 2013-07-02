@@ -27,19 +27,16 @@ class MyntException(Exception):
 class ConfigException(MyntException):
     pass
 
+class ContentException(MyntException):
+    pass
+
 class FileSystemException(MyntException):
     pass
 
 class OptionException(MyntException):
     code = 2
 
-class PageException(MyntException):
-    pass
-
 class ParserException(MyntException):
-    pass
-
-class PostException(MyntException):
     pass
 
 class RendererException(MyntException):

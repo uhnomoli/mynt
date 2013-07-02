@@ -3,30 +3,24 @@
 from __future__ import print_function, unicode_literals
 
 from argparse import ArgumentParser
-from calendar import timegm
 from copy import deepcopy
-from datetime import datetime
 from glob import iglob
 import locale
 import logging
 from os import chdir, getcwd, path as op
 import re
-from time import sleep, time
+from time import sleep
 
-import houdini as h
-from pkg_resources import load_entry_point, resource_filename
-from pygments import highlight
-from pygments.formatters import HtmlFormatter
-from pygments.lexers import get_lexer_by_name
-from pygments.util import ClassNotFound
+from pkg_resources import resource_filename
 from watchdog.observers import Observer
 
 from mynt import __version__
-from mynt.containers import Config, Page, Post
-from mynt.exceptions import ConfigException, OptionException, PageException, RendererException
+from mynt.containers import Config
+from mynt.exceptions import ConfigException, OptionException
 from mynt.fs import Directory, EventHandler, File
+from mynt.processors import Reader, Writer
 from mynt.server import RequestHandler, Server
-from mynt.utils import absurl, get_logger, normpath, OrderedDict
+from mynt.utils import absurl, get_logger, normpath, Timer
 
 
 logger = get_logger('mynt')
@@ -38,12 +32,11 @@ class Mynt(object):
         'archives_url': '/',
         'assets_url': '/assets/',
         'base_url': '/',
+        'containers': {},
         'date_format': '%A, %B %d, %Y',
         'domain': None,
         'include': [],
         'locale': None,
-        'markup': 'markdown',
-        'parser': 'misaka',
         'posts_url': '/<year>/<month>/<day>/<title>/',
         'pygmentize': True,
         'renderer': 'jinja',
@@ -52,18 +45,27 @@ class Mynt(object):
         'version': __version__
     }
     
-    _parser = None
-    _renderer = None
-    
-    archives = OrderedDict()
-    config = {}
-    pages = []
-    posts = []
-    tags = OrderedDict()
+    container_defaults = {
+        'archive_layout': None,
+        'archives_url': '/',
+        'reverse': False,
+        'sort': 'title',
+        'tag_layout': None,
+        'tags_url': '/'
+    }
     
     
     def __init__(self, args = None):
-        self._start = time()
+        Timer.start()
+        
+        self._reader = None
+        self._writer = None
+        
+        self.config = {}
+        self.posts = None
+        self.containers = {}
+        self.data = {}
+        self.pages = []
         
         self.opts = self._get_opts(args)
         
@@ -71,30 +73,6 @@ class Mynt(object):
         
         self.opts['func']()
     
-    
-    def _archive(self, posts):
-        archives = OrderedDict()
-        
-        for post in posts:
-            year, month = datetime.utcfromtimestamp(post['timestamp']).strftime('%Y %B').decode('utf-8').split()
-            
-            if year not in archives:
-                archives[year] = {
-                    'months': OrderedDict({month: [post]}),
-                    'url': self._get_archive_url(year),
-                    'year': year
-                }
-            elif month not in archives[year]['months']:
-                archives[year]['months'][month] = [post]
-            else:
-                archives[year]['months'][month].append(post)
-        
-        return archives
-    
-    def _get_archive_url(self, year):
-        format = self._get_url_format(self.config['archives_url'].endswith('/'))
-        
-        return format.format(self.config['archives_url'], year)
     
     def _get_opts(self, args):
         opts = {}
@@ -167,81 +145,8 @@ class Mynt(object):
         
         return opts
     
-    def _get_parser(self):
-        try:
-            return load_entry_point('mynt', 'mynt.parsers.{0}'.format(self.config['markup']), self.config['parser'])
-        except ImportError:
-            return __import__('mynt.parsers.{0}.{1}'.format(self.config['markup'], self.config['parser']), globals(), locals(), ['Parser'], -1).Parser
-    
-    def _get_path(self, url):
-        parts = [self.dest.path] + url.split('/')
-        
-        if url.endswith('/'):
-            parts.append('index.html')
-        
-        return normpath(*parts)
-    
-    def _get_post_url(self, date, slug):
-        subs = {
-            '<year>': '%Y',
-            '<month>': '%m',
-            '<day>': '%d',
-            '<i_month>': unicode(date.month),
-            '<i_day>': unicode(date.day),
-            '<title>': self._slugify(slug)
-        }
-        
-        url = self.config['posts_url'].replace('%', '%%')
-        
-        for match, replace in subs.iteritems():
-            url = url.replace(match, replace)
-        
-        return date.strftime(url).decode('utf-8')
-    
-    def _get_renderer(self):
-        try:
-            return load_entry_point('mynt', 'mynt.renderers', self.config['renderer'])
-        except ImportError:
-            return __import__('mynt.renderers.{0}'.format(self.config['renderer']), globals(), locals(), ['Renderer'], -1).Renderer
-    
-    def _get_tag_url(self, name):
-        format = self._get_url_format(self.config['tags_url'].endswith('/'))
-        
-        return format.format(self.config['tags_url'], self._slugify(name))
-    
     def _get_theme(self, theme):
         return resource_filename(__name__, 'themes/{0}'.format(theme))
-    
-    def _get_url_format(self, clean):
-        return '{0}{1}/' if clean else '{0}/{1}.html'
-    
-    def _highlight(self, match):
-            language, code = match.groups()
-            formatter = HtmlFormatter(linenos = 'table')
-            
-            code = h.unescape_html(code.encode('utf-8')).decode('utf-8')
-            
-            try:
-                code = highlight(code, get_lexer_by_name(language), formatter)
-            except ClassNotFound:
-                code = highlight(code, get_lexer_by_name('text'), formatter)
-            
-            return '<div class="code"><div>{0}</div></div>'.format(code)
-    
-    def _pygmentize(self, html):
-        if not self.config['pygmentize']:
-            return html
-        
-        return re.sub(r'<pre><code[^>]+data-lang="([^>]+)"[^>]*>(.+?)</code></pre>', self._highlight, html, flags = re.S)
-    
-    def _slugify(self, text):
-        slug = re.sub(r'\s+', '-', text.strip())
-        slug = re.sub(r'[^a-z0-9\-_.]', '', slug, flags = re.I)
-        
-        if slug == '..':
-            raise PageException('Invalid slug.')
-        
-        return slug
     
     def _update_config(self):
         self.config = deepcopy(self.defaults)
@@ -271,6 +176,18 @@ class Mynt(object):
                     if re.search(r'(?:^\.{2}/|/\.{2}$|/\.{2}/)', self.config[setting]):
                         raise ConfigException('Invalid config setting.', 'setting: {0}'.format(setting), 'path traversal is not allowed')
                 
+                for name, config in self.config['containers'].iteritems():
+                    try:
+                        url = absurl(config['url'])
+                    except KeyError:
+                        raise ConfigException('Invalid config setting.', 'setting: containers:{0}'.format(name), 'url must be set for all containers')
+                    
+                    if re.search(r'(?:^\.{2}/|/\.{2}$|/\.{2}/)', url):
+                        raise ConfigException('Invalid config setting.', 'setting: containers:{0}:url'.format(name), 'path traversal is not allowed')
+                    
+                    config.update((k, v) for k, v in self.container_defaults.iteritems() if k not in config)
+                    config['url'] = url
+                
                 for pattern in self.config['include']:
                     if op.commonprefix((self.src.path, normpath(self.src.path, pattern))) != self.src.path:
                         raise ConfigException('Invalid include path.', 'path: {0}'.format(pattern), 'path traversal is not allowed')
@@ -283,138 +200,26 @@ class Mynt(object):
     def _parse(self):
         logger.info('>> Parsing')
         
-        path = Directory(normpath(self.src.path, '_posts'))
+        self.posts, containers, pages = self.reader.parse()
         
-        logger.debug('..  src: %s', path)
+        self.containers.update(containers)
+        self.pages.extend(pages)
         
-        for f in path:
-            post = Post(f)
-            
-            content = self.parser.parse(self.renderer.from_string(post.bodymatter, post.frontmatter))
-            excerpt = re.search(r'\A.*?(?:<p>(.+?)</p>)?', content, re.M | re.S).group(1)
-            
-            try:
-                data = {
-                    'content': content,
-                    'date': post.date.strftime(self.config['date_format']).decode('utf-8'),
-                    'excerpt': excerpt,
-                    'tags': [],
-                    'timestamp': timegm(post.date.utctimetuple()),
-                    'url': self._get_post_url(post.date, post.slug)
-                }
-            except PageException:
-                raise PageException('Invalid post slug.', 'src: {0}'.format(post.path))
-            
-            data.update(post.frontmatter)
-            data['tags'].sort(key = unicode.lower)
-            
-            self.posts.append(data)
-            
-            for tag in data['tags']:
-                if tag not in self.tags:
-                    self.tags[tag] = []
-                
-                self.tags[tag].append(data)
-    
-    def _process(self):
-        self._parse()
+        self.data['posts'] = self.posts.data
+        self.data['containers'] = {}
         
-        logger.info('>> Processing')
-        
-        if self.posts:
-            logger.debug('..  ordering posts')
-            
-            self.posts.sort(key = lambda post: post['timestamp'], reverse = True)
-            
-            logger.debug('..  generating archives')
-            
-            self.archives = self._archive(self.posts)
-            
-            logger.debug('..  sorting tags')
-            
-            tags = []
-            
-            for name, posts in self.tags:
-                posts.sort(key = lambda post: post['timestamp'], reverse = True)
-                
-                try:
-                    tags.append({
-                        'archives': self._archive(posts),
-                        'count': len(posts),
-                        'name': name,
-                        'posts': posts,
-                        'url': self._get_tag_url(name)
-                    })
-                except PageException:
-                    message = ['tag: {0}'.format(name)]
-                    
-                    for post in posts:
-                        message.append('post: {0}'.format(post.get('title', post['url'])))
-                    
-                    raise PageException('Invalid tag slug.', *message)
-            
-            tags.sort(key = lambda tag: tag['name'].lower())
-            tags.sort(key = lambda tag: tag['count'], reverse = True)
-            
-            self.tags.clear()
-            
-            for tag in tags:
-                self.tags[tag['name']] = tag
-        else:
-            logger.debug('..  no posts found')
+        for name, container in self.containers.iteritems():
+            self.data['containers'][name] = container.data
     
     def _render(self):
-        self._process()
+        self._parse()
         
         logger.info('>> Rendering')
         
-        self.renderer.register({
-            'archives': self.archives,
-            'posts': self.posts,
-            'tags': self.tags
-        })
+        self.writer.register(self.data)
         
-        logger.debug('..  posts')
-        
-        for post in self.posts:
-            try:
-                self.pages.append(Page(
-                    self._get_path(post['url']),
-                    self._pygmentize(self.renderer.render(post['layout'], {'post': post}))
-                ))
-            except RendererException as e:
-                raise RendererException(e.message, '{0} in post \'{1}\''.format(post['layout'], post['title']))
-        
-        logger.debug('..  pages')
-        
-        for f in self.src:
-            if f.extension not in ('.html', '.htm', '.xml'):
-                continue
-            
-            template = f.path.replace(self.src.path, '')
-            
-            self.pages.append(Page(
-                normpath(self.dest.path, template),
-                self._pygmentize(self.renderer.render(template))
-            ))
-        
-        if self.config['tag_layout'] and self.tags:
-            logger.debug('..  tags')
-            
-            for name, data in self.tags:
-                self.pages.append(Page(
-                    self._get_path(data['url']),
-                    self._pygmentize(self.renderer.render(self.config['tag_layout'], {'tag': data}))
-                ))
-        
-        if self.config['archive_layout'] and self.archives:
-            logger.debug('..  archives')
-            
-            for year, data in self.archives:
-                self.pages.append(Page(
-                    self._get_path(data['url']),
-                    self._pygmentize(self.renderer.render(self.config['archive_layout'], {'archive': data}))
-                ))
+        for i, page in enumerate(self.pages):
+            self.pages[i] = self.writer.render(*page)
     
     def _generate(self):
         logger.debug('>> Initializing\n..  src:  %s\n..  dest: %s', self.src.path, self.dest.path)
@@ -427,7 +232,7 @@ class Mynt(object):
             except locale.Error:
                 raise ConfigException('Locale not available.', 'run `locale -a` to see available locales')
         
-        self.renderer.register({'site': self.config})
+        self.writer.register({'site': self.config})
         
         self._render()
         
@@ -458,22 +263,25 @@ class Mynt(object):
                 elif op.isfile(path):
                     File(path).cp(dest)
         
-        logger.info('Completed in %.3fs', time() - self._start)
+        logger.info('Completed in %.3fs', Timer.stop())
     
     def _regenerate(self):
-        self._parser = None
-        self._renderer = None
-        self._start = time()
+        Timer.start()
         
-        self.archives = OrderedDict()
-        self.config = {}
-        self.pages = []
-        self.posts = []
-        self.tags = OrderedDict()
+        self._reader = None
+        self._writer = None
+        
+        self.posts = None
+        
+        self.config.clear()
+        self.containers.clear()
+        self.data.clear()
+        
+        del self.pages[:]
         
         self._generate()
         
-        logger.info('Regenerated in %.3fs', time() - self._start)
+        logger.info('Regenerated in %.3fs', Timer.stop())
     
     
     def generate(self):
@@ -510,7 +318,7 @@ class Mynt(object):
         else:
             self.src.cp(self.dest.path, False)
         
-        logger.info('Completed in %.3fs', time() - self._start)
+        logger.info('Completed in %.3fs', Timer.stop())
     
     def serve(self):
         self.src = Directory(self.opts['src'])
@@ -566,15 +374,15 @@ class Mynt(object):
     
     
     @property
-    def parser(self):
-        if self._parser is None:
-            self._parser = self._get_parser()(self.config.get(self.config['parser'], {}))
+    def reader(self):
+        if self._reader is None:
+            self._reader = Reader(self.src, self.dest, self.config, self.writer)
         
-        return self._parser
+        return self._reader
     
     @property
-    def renderer(self):
-        if self._renderer is None:
-            self._renderer = self._get_renderer()(self.src.path, self.config.get(self.config['renderer'], {}))
+    def writer(self):
+        if self._writer is None:
+            self._writer = Writer(self.src, self.dest, self.config)
         
-        return self._renderer
+        return self._writer

@@ -2,10 +2,10 @@
 
 from __future__ import unicode_literals
 
-from collections import OrderedDict as _OrderedDict
 import logging
 from os import path as op
-from re import match, sub
+import re
+from time import time
 
 
 def _cleanpath(*args):
@@ -29,10 +29,10 @@ def abspath(*args):
 def absurl(*args):
     url = '/'.join(args)
     
-    if not match(r'[^/]+://', url):
+    if not re.match(r'[^/]+://', url):
         url = '/' + url
     
-    return sub(r'(?<!:)//+', '/', url)
+    return re.sub(r'(?<!:)//+', '/', url)
 
 def get_logger(name):
     logger = logging.getLogger(name)
@@ -51,8 +51,51 @@ def normpath(*args):
         )
     )
 
+def slugify(string):
+    slug = re.sub(r'\s+', '-', string.strip())
+    slug = re.sub(r'[^a-z0-9\-_.]', '', slug, flags = re.I)
+    
+    return slug
 
-class OrderedDict(_OrderedDict):
+
+def format_url(url, clean):
+    if clean:
+        return absurl(url, '')
+    
+    return '{0}.html'.format(url)
+
+
+class Data(object):
+    def __init__(self, container, archives, tags):
+        self.container = container
+        self.archives = archives
+        self.tags = tags
+    
+    
     def __iter__(self):
-        for key in super(OrderedDict, self).__iter__():
-            yield (key, self[key])
+        return self.container.__iter__()
+
+class Item(dict):
+    def __init__(self, src, *args, **kwargs):
+        super(Item, self).__init__(*args, **kwargs)
+        
+        self.__src = src
+    
+    
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+    
+    def __unicode__(self):
+        return self.__src
+
+class Timer(object):
+    _start = []
+    
+    
+    @classmethod
+    def start(cls):
+        cls._start.append(time())
+    
+    @classmethod
+    def stop(cls):
+        return time() - cls._start.pop()

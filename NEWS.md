@@ -2,7 +2,17 @@
 
 ### 0.3 (unreleased)
 
-_In development._
++ __New__
+    + A mechanism for defining content containers.
+    + Two new filters for the Jinja renderer, `items` and `values`, that act as syntactic sugar for `iteritems()` and `itervalues()`.
++ __Changed__
+    + Global and local dictionaries no longer behave different from ordinary Python dictionaries when iterating over them.
+    + The `archives` and `tags` globals are now properties of the `posts` global to maintain consistency between content containers.
+    + The `post` local has been renamed `item` to maintain consistency between content containers.
+    + The `<title>` replacement in URL formats has been renamed to `<slug>`.
+    + Frontmatter attributes that contain string values can now be used in URL formats.
+    + The `markup` and `parser` config settings have been removed.
+    + Which parser used is now determined by _(in order of precedence)_ the `parser` frontmatter attribute, the `parser` container config setting, and lastly the filename.
 
 
 ### 0.2.3 (June 13th, 2013)
