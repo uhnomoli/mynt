@@ -13,7 +13,7 @@ import traceback
 from watchdog.events import FileSystemEventHandler
 
 from mynt.exceptions import FileSystemException
-from mynt.utils import abspath, get_logger, normpath
+from mynt.utils import abspath, get_logger, normpath, Timer
 
 
 logger = get_logger('mynt')
@@ -117,7 +117,11 @@ class EventHandler(FileSystemEventHandler):
             logger.info('>> Change detected in: %s', path)
             
             try:
+                Timer.start()
+                
                 self._callback()
+                
+                logger.info('Regenerated in %.3fs', Timer.stop())
             except:
                 t, v, tb = exc_info()
                 lc = traceback.extract_tb(tb)[-1:][0]

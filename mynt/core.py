@@ -56,8 +56,6 @@ class Mynt(object):
     
     
     def __init__(self, args = None):
-        Timer.start()
-        
         self._reader = None
         self._writer = None
         
@@ -262,12 +260,8 @@ class Mynt(object):
                     Directory(path).cp(dest, False)
                 elif op.isfile(path):
                     File(path).cp(dest)
-        
-        logger.info('Completed in %.3fs', Timer.stop())
     
     def _regenerate(self):
-        Timer.start()
-        
         self._reader = None
         self._writer = None
         
@@ -280,11 +274,11 @@ class Mynt(object):
         del self.pages[:]
         
         self._generate()
-        
-        logger.info('Regenerated in %.3fs', Timer.stop())
     
     
     def generate(self):
+        Timer.start()
+        
         self.src = Directory(self.opts['src'])
         self.dest = Directory(self.opts['dest'])
         
@@ -296,8 +290,12 @@ class Mynt(object):
             raise OptionException('Destination already exists.', 'the -c or -f flag must be passed to force generation by deleting or emptying the destination')
         
         self._generate()
+        
+        logger.info('Completed in %.3fs', Timer.stop())
     
     def init(self):
+        Timer.start()
+        
         self.src = Directory(self._get_theme(self.opts['theme']))
         self.dest = Directory(self.opts['dest'])
         
