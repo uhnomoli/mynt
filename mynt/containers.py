@@ -86,6 +86,18 @@ class Container(object):
         
         return pages
     
+    def _relate(self):
+        for index, item in enumerate(self.container):
+            if index:
+                item['prev'] = self.container[index - 1]
+            else:
+                item['prev'] = None
+            
+            try:
+                item['next'] = self.container[index + 1]
+            except IndexError:
+                item['next'] = None
+    
     def _sort(self, container, key, reverse = False):
         def sort(item):
             attribute = item.get(key, item)
@@ -109,6 +121,7 @@ class Container(object):
     
     def sort(self):
         self._sort(self.container, self.config['sort'], self.config['reverse'])
+        self._relate()
     
     def tag(self):
         tags = []
