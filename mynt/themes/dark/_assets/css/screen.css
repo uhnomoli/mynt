@@ -79,23 +79,35 @@ h6 {
 }
 
 li {
+  position: relative;
   line-height: 18px;
 }
 ol > li:before, ul > li:before {
-  padding-right: 8px;
+  position: absolute;
   color: #e6db74;
 }
 ol > li {
+  left: 22px;
   counter-increment: item;
 }
 ol > li:before {
+  left: -22px;
+  width: 17px;
+  text-align: right;
   content: counter(item, decimal) ".";
 }
+ul > li {
+  left: 12px;
+}
 ul > li:before {
+  left: -12px;
   content: "\2022";
 }
+ul.unstyled > li {
+  position: static;
+}
 ul.unstyled > li:before {
-  padding-right: 0px;
+  position: static;
   content: none;
 }
 
@@ -289,9 +301,10 @@ a > img {
 }
 #breadcrumbs > li {
   float: left;
+  position: static;
 }
 #breadcrumbs > li:before {
-  padding-right: 0px;
+  position: static;
   content: none;
 }
 #breadcrumbs span {

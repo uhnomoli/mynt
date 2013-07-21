@@ -84,26 +84,44 @@ h6
     font-size: 12px
 
 li
+    position: relative
+    
     line-height: 18px
     
     ol > &:before, ul > &:before
-        padding-right: 8px
+        position: absolute
         
         color: $hlt-l
     
     ol > &
+        left: 22px
+        
         counter-increment: item
         
         &:before
+            left: -22px
+            
+            width: 17px
+            
+            text-align: right
+            
             content: counter(item, decimal) '.'
     
-    ul > &:before
-        content: '\2022'
-    
-    ul.unstyled > &:before
-        padding-right: 0px
+    ul > &
+        left: 12px
         
-        content: none
+        &:before
+            left: -12px
+            
+            content: '\2022'
+    
+    ul.unstyled > &
+        position: static
+        
+        &:before
+            position: static
+            
+            content: none
 
 ol, ul
     list-style:
@@ -316,8 +334,10 @@ img
     & > li
         float: left
         
+        position: static
+        
         &:before
-            padding-right: 0px
+            position: static
             
             content: none
     
