@@ -69,7 +69,7 @@ class Renderer(_Renderer):
     
     def _get_asset(self, asset):
         if self.globals['site']['assets_url'].startswith(('http://', 'https://')):
-            return self.globals['site']['assets_url']
+            return absurl(self.globals['site']['assets_url'], asset)
         return absurl(self.globals['site']['base_url'], self.globals['site']['assets_url'], asset)
     
     def _get_url(self, url = '', absolute = False):
