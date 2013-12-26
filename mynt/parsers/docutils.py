@@ -280,7 +280,7 @@ class _Writer(Writer):
 
 
 class Parser(_Parser):
-    accepts = ('.rst',)
+    accepts = (u'.rst',)
     
     
     defaults = {
