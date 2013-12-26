@@ -111,7 +111,7 @@ class EventHandler(FileSystemEventHandler):
     def _regenerate(self, path):
         path = path.replace(self._src, '')
         
-        if search(r'/[._](?!assets|posts|templates)', path):
+        if search(r'/[._](?!assets|containers|posts|templates)', path):
             logger.debug('>> Skipping: %s', path)
         else:
             logger.info('>> Change detected in: %s', path)
