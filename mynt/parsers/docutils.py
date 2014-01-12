@@ -2,17 +2,33 @@
 
 from __future__ import absolute_import
 
+import subprocess
 from copy import deepcopy
 
 from docutils import nodes, utils
 from docutils.core import publish_parts
-from docutils.parsers.rst import directives
+from docutils.parsers.rst import directives, Directive
 from docutils.parsers.rst.directives.body import CodeBlock
 from docutils.parsers.rst.roles import register_canonical_role, set_classes
 from docutils.utils.code_analyzer import Lexer, LexerError
 from docutils.writers.html4css1 import HTMLTranslator, Writer
 
 from mynt.base import Parser as _Parser
+
+
+class Diagram(nodes.General, nodes.Element):
+    pass
+
+
+class _Diagram(Directive):
+
+    has_content = True
+
+    def run(self):
+        return [Diagram('\n'.join(self.content))]
+
+
+directives.register_directive('diagram', _Diagram)
 
 
 def code_role(role, rawtext, text, lineno, inliner, options = {}, content = []):
@@ -272,6 +288,20 @@ class _Translator(HTMLTranslator):
         
         self.context.append(close_tag)
 
+    def visit_Diagram(self, node):
+        a2s_binary_path = self.settings.a2s_binary_path
+        a2s_container_class = self.settings.a2s_container_class
+        if a2s_binary_path is not None:
+            a2s = subprocess.Popen([a2s_binary_path], stdin=subprocess.PIPE,
+                                   stdout=subprocess.PIPE)
+            stdout, _ = a2s.communicate(node.rawsource.encode('utf-8'))
+            stdout = ''.join(stdout.split('\n')[3:])  # Strip xml header and doctype
+            self.body.append('<div class="%s">%s</div>' % (a2s_container_class, stdout))
+
+    def depart_Diagram(self, node):
+        pass
+
+
 class _Writer(Writer):
     def __init__(self):
         Writer.__init__(self)
@@ -289,7 +319,9 @@ class Parser(_Parser):
         'output_encoding': 'utf-8',
         'report_level': 4,
         'smart_quotes': 1,
-        'syntax_highlight': 'none'
+        'syntax_highlight': 'none',
+        'a2s_binary_path': None,
+        'a2s_container_class': 'diagram'
     }
     
     
