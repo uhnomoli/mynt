@@ -52,7 +52,7 @@ class _PrefixLoader(PrefixLoader):
 
 
 class Renderer(_Renderer):
-    config = {}
+    config = {'extensions': ['jinja2.ext.loopcontrols']}
     
     
     def _absolutize(self, html):
