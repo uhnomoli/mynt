@@ -65,7 +65,7 @@ class _Renderer(m.HtmlRenderer):
 
 
 class Parser(_Parser):
-    accepts = ('.md',)
+    accepts = ('.md', '.markdown', '.mdown', '.mkdn', '.mkd', '.mdwn', '.mdtxt', '.mdtext')
     
     
     lookup = {
