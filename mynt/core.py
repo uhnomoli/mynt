@@ -19,6 +19,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 from pygments.util import ClassNotFound
 from watchdog.observers import Observer
+from slugify import slugify
 
 from mynt import __version__
 from mynt.containers import Config, Page, Post
@@ -234,8 +235,7 @@ class Mynt(object):
         return re.sub(r'<pre><code[^>]+data-lang="([^>]+)"[^>]*>(.+?)</code></pre>', self._highlight, html, flags = re.S)
     
     def _slugify(self, text):
-        slug = re.sub(r'\s+', '-', text.strip())
-        slug = re.sub(r'[^a-z0-9\-_.]', '', slug, flags = re.I)
+        slug = slugify(text)
         
         if slug == '..':
             raise PageException('Invalid slug.')

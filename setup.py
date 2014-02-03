@@ -35,6 +35,7 @@ Dependencies
 -  `Pygments`_
 -  `PyYAML`_
 -  `watchdog`_
+-  `python-slugify`_
 
 Support
 -------
@@ -50,6 +51,7 @@ hop in #mynt on irc.freenode.net.
 .. _PyYAML: http://pyyaml.org/
 .. _quickstart: http://mynt.mirroredwhite.com/docs/quickstart/
 .. _watchdog: http://packages.python.org/watchdog/
+.. _python-slugify: https://github.com/un33k/python-slugify
 '''
 from setuptools import find_packages, setup
 
@@ -81,7 +83,8 @@ setup(
         'misaka>=1.0.2',
         'Pygments',
         'PyYAML',
-        'watchdog'
+        'watchdog',
+        'python-slugify'
     ],
     platforms = 'any',
     zip_safe = False,
