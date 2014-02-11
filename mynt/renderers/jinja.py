@@ -71,7 +71,7 @@ class Renderer(_Renderer):
         return absurl(self.globals['site']['base_url'], self.globals['site']['assets_url'], asset)
     
     def _get_url(self, url = '', absolute = False):
-        parts = [self.globals['site']['base_url'], url]
+        parts = [self.globals['site']['base_url'], url.replace(' ', '-')]
         domain = self.globals['site']['domain']
         
         if absolute and domain:
