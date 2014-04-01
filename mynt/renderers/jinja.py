@@ -11,7 +11,6 @@ from re import sub
 
 from jinja2 import Environment, FileSystemLoader, PrefixLoader
 from jinja2.exceptions import TemplateNotFound
-from jinja2.utils import internalcode
 
 from mynt.base import Renderer as _Renderer
 from mynt.exceptions import RendererException
@@ -41,14 +40,6 @@ class _PrefixLoader(PrefixLoader):
             name = name.replace(op.sep, '/')
         
         return loader, name
-    
-    @internalcode
-    def load(self, environment, name, globals=None):
-        loader, local_name = self.get_loader(name)
-        try:
-            return loader.load(environment, local_name, globals)
-        except TemplateNotFound:
-            raise TemplateNotFound(name)
 
 
 class Renderer(_Renderer):
