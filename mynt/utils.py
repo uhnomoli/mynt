@@ -8,6 +8,16 @@ import re
 from time import time
 
 
+_ENTITIES = [
+    ('&', ['&amp;', '&#x26;', '&#38;']),
+    ('<', ['&lt;', '&#x3C;', '&#60;']),
+    ('>', ['&gt;', '&#x3E;', '&#62;']),
+    ('"', ['&quot;', '&#x22;', '&#34;']),
+    ('\'', ['&#x27;', '&#39;']),
+    ('/', ['&#x2F;', '&#47;']),
+]
+
+
 def _cleanpath(*args):
     parts = [args[0].strip()]
     
@@ -34,6 +44,12 @@ def absurl(*args):
     
     return re.sub(r'(?<!:)//+', '/', url)
 
+def escape(html):
+    for match, replacements in _ENTITIES:
+        html = html.replace(match, replacements[0])
+    
+    return html
+
 def get_logger(name):
     logger = logging.getLogger(name)
     
@@ -56,6 +72,13 @@ def slugify(string):
     slug = re.sub(r'[^a-z0-9\-_.]', '', slug, flags = re.I)
     
     return slug
+
+def unescape(html):
+    for replace, matches in _ENTITIES:
+        for match in matches:
+            html = html.replace(match, replace)
+    
+    return html
 
 
 def format_url(url, clean):

@@ -25,7 +25,6 @@ After installing mynt head on over and give the [quickstart][quickstart] page an
 
 ### Dependencies
 
-+ [houdini.py][houdini]
 + [Jinja2][jinja]
 + [misaka][misaka]
 + [Pygments][pygments]
@@ -44,7 +43,6 @@ If you run into any issues or have any questions, either open an [issue][issues]
 
 [docs]: http://mynt.mirroredwhite.com/
 [docutils]: http://docutils.sourceforge.net/
-[houdini]: http://python-houdini.61924.nl/
 [issues]: https://github.com/Anomareh/mynt/issues
 [jinja]: http://jinja.pocoo.org/
 [misaka]: http://misaka.61924.nl/
