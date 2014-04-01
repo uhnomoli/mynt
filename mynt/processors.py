@@ -8,7 +8,6 @@ from importlib import import_module
 from os import path as op
 import re
 
-import houdini as h
 from pkg_resources import DistributionNotFound, iter_entry_points, load_entry_point
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
@@ -18,7 +17,7 @@ from pygments.util import ClassNotFound
 from mynt.containers import Config, Container, Posts
 from mynt.exceptions import ConfigException, ContentException, ParserException, RendererException
 from mynt.fs import File
-from mynt.utils import format_url, get_logger, Item, normpath, slugify, Timer
+from mynt.utils import format_url, get_logger, Item, normpath, slugify, Timer, unescape
 
 
 logger = get_logger('mynt')
@@ -231,8 +230,7 @@ class Writer(object):
     def _highlight(self, match):
         language, code = match.groups()
         formatter = HtmlFormatter(linenos = 'table')
-        
-        code = h.unescape_html(code.encode('utf-8')).decode('utf-8')
+        code = unescape(code)
         
         try:
             code = highlight(code, get_lexer_by_name(language), formatter)
