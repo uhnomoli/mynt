@@ -43,7 +43,7 @@ If you run into any issues or have any questions, either open an [issue][issues]
 
 [docs]: http://mynt.uhnomoli.com/
 [docutils]: http://docutils.sourceforge.net/
-[hoep]: https://github.com/Anomarh/Hoep
+[hoep]: https://github.com/Anomareh/Hoep
 [issues]: https://github.com/Anomareh/mynt/issues
 [jinja]: http://jinja.pocoo.org/
 [pygments]: http://pygments.org/
