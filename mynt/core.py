@@ -80,54 +80,94 @@ class Mynt(object):
         
         level = parser.add_mutually_exclusive_group()
         
-        level.add_argument('-l', '--level', default = b'INFO', type = str.upper, choices = [b'DEBUG', b'INFO', b'WARNING', b'ERROR'], help = 'Sets %(prog)s\'s log level.')
-        level.add_argument('-q', '--quiet', action = 'store_const', const = 'ERROR', dest = 'level', help = 'Sets %(prog)s\'s log level to ERROR.')
-        level.add_argument('-v', '--verbose', action = 'store_const', const = 'DEBUG', dest = 'level', help = 'Sets %(prog)s\'s log level to DEBUG.')
+        level.add_argument('-l', '--level',
+            default = b'INFO', type = str.upper, choices = [b'DEBUG', b'INFO', b'WARNING', b'ERROR'],
+            help = 'Sets %(prog)s\'s log level.')
+        level.add_argument('-q', '--quiet',
+            action = 'store_const', const = 'ERROR', dest = 'level',
+            help = 'Sets %(prog)s\'s log level to ERROR.')
+        level.add_argument('-v', '--verbose',
+            action = 'store_const', const = 'DEBUG', dest = 'level',
+            help = 'Sets %(prog)s\'s log level to DEBUG.')
         
-        parser.add_argument('-V', '--version', action = 'version', version = '%(prog)s v{0}'.format(__version__), help = 'Prints %(prog)s\'s version and exits.')
+        parser.add_argument('-V', '--version',
+            action = 'version', version = '%(prog)s v{0}'.format(__version__),
+            help = 'Prints %(prog)s\'s version and exits.')
         
         gen = sub.add_parser('gen')
         
-        gen.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The directory %(prog)s looks in for source files.')
-        gen.add_argument('dest', metavar = 'destination', help = 'The directory %(prog)s outputs to.')
+        gen.add_argument('src',
+            nargs = '?', default = '.', metavar = 'source',
+            help = 'The directory %(prog)s looks in for source files.')
+        gen.add_argument('dest',
+            metavar = 'destination',
+            help = 'The directory %(prog)s outputs to.')
         
-        gen.add_argument('--base-url', help = 'Sets the site\'s base URL overriding the config setting.')
-        gen.add_argument('--locale', help = 'Sets the locale used by the renderer.')
+        gen.add_argument('--base-url',
+            help = 'Sets the site\'s base URL overriding the config setting.')
+        gen.add_argument('--locale',
+            help = 'Sets the locale used by the renderer.')
         
         force = gen.add_mutually_exclusive_group()
         
-        force.add_argument('-c', '--clean', action = 'store_true', help = 'Forces generation by deleting the destination if it exists.')
-        force.add_argument('-f', '--force', action = 'store_true', help = 'Forces generation by emptying the destination if it exists.')
+        force.add_argument('-c', '--clean',
+            action = 'store_true',
+            help = 'Forces generation by deleting the destination if it exists.')
+        force.add_argument('-f', '--force',
+            action = 'store_true',
+            help = 'Forces generation by emptying the destination if it exists.')
         
         gen.set_defaults(func = self.generate)
         
         init = sub.add_parser('init')
         
-        init.add_argument('dest', metavar = 'destination', help = 'The directory %(prog)s outputs to.')
+        init.add_argument('dest',
+            metavar = 'destination',
+            help = 'The directory %(prog)s outputs to.')
         
-        init.add_argument('--bare', action = 'store_true', help = 'Initializes a new site without using a theme.')
-        init.add_argument('-f', '--force', action = 'store_true', help = 'Forces initialization by deleting the destination if it exists.')
-        init.add_argument('-t', '--theme', default = 'dark', help = 'Sets which theme will be used.')
+        init.add_argument('--bare',
+            action = 'store_true',
+            help = 'Initializes a new site without using a theme.')
+        init.add_argument('-f', '--force',
+            action = 'store_true',
+            help = 'Forces initialization by deleting the destination if it exists.')
+        init.add_argument('-t', '--theme',
+            default = 'dark',
+            help = 'Sets which theme will be used.')
         
         init.set_defaults(func = self.init)
         
         serve = sub.add_parser('serve')
         
-        serve.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The directory %(prog)s will serve.')
+        serve.add_argument('src',
+            nargs = '?', default = '.', metavar = 'source',
+            help = 'The directory %(prog)s will serve.')
         
-        serve.add_argument('--base-url', default = '/', help = 'Sets the site\'s base URL overriding the config setting.')
-        serve.add_argument('-p', '--port', default = 8080, type = int, help = 'Sets the port used by the server.')
+        serve.add_argument('--base-url',
+            default = '/',
+            help = 'Sets the site\'s base URL overriding the config setting.')
+        serve.add_argument('-p', '--port',
+            default = 8080, type = int,
+            help = 'Sets the port used by the server.')
         
         serve.set_defaults(func = self.serve)
         
         watch = sub.add_parser('watch')
         
-        watch.add_argument('src', nargs = '?', default = '.', metavar = 'source', help = 'The directory %(prog)s looks in for source files.')
-        watch.add_argument('dest', metavar = 'destination', help = 'The directory %(prog)s outputs to.')
+        watch.add_argument('src',
+            nargs = '?', default = '.', metavar = 'source',
+            help = 'The directory %(prog)s looks in for source files.')
+        watch.add_argument('dest',
+            metavar = 'destination',
+            help = 'The directory %(prog)s outputs to.')
         
-        watch.add_argument('--base-url', help = 'Sets the site\'s base URL overriding the config setting.')
-        watch.add_argument('-f', '--force', action = 'store_true', help = 'Forces watching by emptying the destination every time a change is made if it exists.')
-        watch.add_argument('--locale', help = 'Sets the locale used by the renderer.')
+        watch.add_argument('--base-url',
+            help = 'Sets the site\'s base URL overriding the config setting.')
+        watch.add_argument('-f', '--force',
+            action = 'store_true',
+            help = 'Forces watching by emptying the destination every time a change is made if it exists.')
+        watch.add_argument('--locale',
+            help = 'Sets the locale used by the renderer.')
         
         watch.set_defaults(func = self.watch)
         
@@ -172,23 +212,31 @@ class Mynt(object):
                 
                 for setting in ('archives_url', 'assets_url', 'base_url', 'posts_url', 'tags_url'):
                     if re.search(r'(?:^\.{2}/|/\.{2}$|/\.{2}/)', self.config[setting]):
-                        raise ConfigException('Invalid config setting.', 'setting: {0}'.format(setting), 'path traversal is not allowed')
+                        raise ConfigException('Invalid config setting.',
+                            'setting: {0}'.format(setting),
+                            'path traversal is not allowed')
                 
                 for name, config in self.config['containers'].iteritems():
                     try:
                         url = absurl(config['url'])
                     except KeyError:
-                        raise ConfigException('Invalid config setting.', 'setting: containers:{0}'.format(name), 'url must be set for all containers')
+                        raise ConfigException('Invalid config setting.',
+                            'setting: containers:{0}'.format(name),
+                            'url must be set for all containers')
                     
                     if re.search(r'(?:^\.{2}/|/\.{2}$|/\.{2}/)', url):
-                        raise ConfigException('Invalid config setting.', 'setting: containers:{0}:url'.format(name), 'path traversal is not allowed')
+                        raise ConfigException('Invalid config setting.',
+                            'setting: containers:{0}:url'.format(name),
+                            'path traversal is not allowed')
                     
                     config.update((k, v) for k, v in self.container_defaults.iteritems() if k not in config)
                     config['url'] = url
                 
                 for pattern in self.config['include']:
                     if op.commonprefix((self.src.path, normpath(self.src.path, pattern))) != self.src.path:
-                        raise ConfigException('Invalid include path.', 'path: {0}'.format(pattern), 'path traversal is not allowed')
+                        raise ConfigException('Invalid include path.',
+                            'path: {0}'.format(pattern),
+                            'path traversal is not allowed')
                 
                 break
         else:
@@ -228,7 +276,8 @@ class Mynt(object):
             try:
                 locale.setlocale(locale.LC_ALL, (self.config['locale'], 'utf-8'))
             except locale.Error:
-                raise ConfigException('Locale not available.', 'run `locale -a` to see available locales')
+                raise ConfigException('Locale not available.',
+                    'run `locale -a` to see available locales')
         
         self.writer.register({'site': self.config})
         
@@ -287,7 +336,8 @@ class Mynt(object):
         elif self.src == self.dest:
             raise OptionException('Source and destination must differ.')
         elif self.dest.exists and not (self.opts['force'] or self.opts['clean']):
-            raise OptionException('Destination already exists.', 'the -c or -f flag must be passed to force generation by deleting or emptying the destination')
+            raise OptionException('Destination already exists.',
+                'the -c or -f flag must be passed to force generation by deleting or emptying the destination')
         
         self._generate()
         
@@ -302,7 +352,8 @@ class Mynt(object):
         if not self.src.exists:
             raise OptionException('Theme not found.')
         elif self.dest.exists and not self.opts['force']:
-            raise OptionException('Destination already exists.', 'the -f flag must be passed to force initialization by deleting the destination')
+            raise OptionException('Destination already exists.',
+                'the -f flag must be passed to force initialization by deleting the destination')
         
         logger.info('>> Initializing')
         
@@ -350,7 +401,8 @@ class Mynt(object):
         elif self.src == self.dest:
             raise OptionException('Source and destination must differ.')
         elif self.dest.exists and not self.opts['force']:
-            raise OptionException('Destination already exists.', 'the -f flag must be passed to force watching by emptying the destination every time a change is made')
+            raise OptionException('Destination already exists.',
+                'the -f flag must be passed to force watching by emptying the destination every time a change is made')
         
         logger.info('>> Watching')
         logger.info('Press ctrl+c to stop.')
