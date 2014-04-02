@@ -40,22 +40,25 @@ class Reader(object):
     
     def _find_parsers(self):
         for parser in iter_entry_points('mynt.parsers'):
+            name = parser.name.decode('utf-8')
+            
             try:
                 Parser = parser.load()
             except DistributionNotFound as e:
-                logger.debug('@@ The %s parser could not be loaded due to a missing requirement: %s.', parser.name, unicode(e))
+                logger.debug('@@ The %s parser could not be loaded due to a missing requirement: %s.', name, unicode(e))
                 
                 continue
             
             for extension in Parser.accepts:
                 if extension in self._extensions:
-                    logger.debug('@@ Multiple parsers for \'%s\' files found, skipping %s.', extension, parser.name)
-                    
-                    continue
-                
-                self._extensions[extension] = parser.name
+                    self._extensions[extension].append(name)
+                else:
+                    self._extensions[extension] = [name]
             
-            self._parsers[parser.name] = Parser
+            self._parsers[name] = Parser
+        
+        for parsers in self._extensions.itervalues():
+            parsers.sort(key = unicode.lower)
     
     def _get_content_url(self, url, slug, date, frontmatter):
         subs = {
@@ -99,7 +102,7 @@ class Reader(object):
     def _get_parser(self, f, parser = None):
         if not parser:
             try:
-                parser = self._extensions[f.extension]
+                parser = self._extensions[f.extension][0]
             except KeyError:
                 raise ParserException('No parser found that accepts \'{0}\' files.'.format(f.extension), 'src: {0}'.format(f.path))
         
@@ -114,7 +117,7 @@ class Reader(object):
             try:
                 Parser = import_module('mynt.parsers.{0}'.format(parser)).Parser(options)
             except ImportError:
-                raise ParserException('The {0} parser could not be found.'.format(parser.name))
+                raise ParserException('The {0} parser could not be found.'.format(parser))
         
         self._cache[parser] = Parser
         
