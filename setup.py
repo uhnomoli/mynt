@@ -86,7 +86,7 @@ setup(
         'console_scripts': 'mynt = mynt.main:main'
     },
     install_requires = [
-        'Hoep',
+        'hoep',
         'Jinja2>=2.7.2',
         'Pygments',
         'PyYAML',
