@@ -33,8 +33,8 @@ After installing mynt head on over and give the `quickstart`_ page and `docs`_ a
 Dependencies
 ============
 
++ `Hoep`_
 + `Jinja2`_
-+ `misaka`_
 + `Pygments`_
 + `PyYAML`_
 + `watchdog`_
@@ -53,9 +53,9 @@ hop in #mynt on irc.freenode.net.
 
 .. _docs: http://mynt.mirroredwhite.com/
 .. _Docutils: http://docutils.sourceforge.net/
+.. _Hoep: https://github.com/Anomareh/Hoep
 .. _issue: https://github.com/Anomareh/mynt/issues
 .. _Jinja2: http://jinja.pocoo.org/
-.. _misaka: http://misaka.61924.nl/
 .. _Pygments: http://pygments.org/
 .. _PyYAML: http://pyyaml.org/
 .. _quickstart: http://mynt.mirroredwhite.com/docs/quickstart/
@@ -80,7 +80,7 @@ setup(
     entry_points = {
         'mynt.parsers' : [
             'docutils = mynt.parsers.docutils:Parser [reST]',
-            'misaka = mynt.parsers.misaka:Parser'
+            'hoep = mynt.parsers.hoep:Parser'
         ],
         'mynt.renderers': [
             'jinja = mynt.renderers.jinja:Renderer'
@@ -88,8 +88,8 @@ setup(
         'console_scripts': 'mynt = mynt.main:main'
     },
     install_requires = [
+        'Hoep',
         'Jinja2>=2.7.2',
-        'misaka>=1.0.2',
         'Pygments',
         'PyYAML',
         'watchdog'
