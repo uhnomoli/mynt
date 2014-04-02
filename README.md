@@ -25,8 +25,8 @@ After installing mynt head on over and give the [quickstart][quickstart] page an
 
 ### Dependencies
 
++ [Hoep][hoep]
 + [Jinja2][jinja]
-+ [misaka][misaka]
 + [Pygments][pygments]
 + [PyYAML][pyyaml]
 + [watchdog][watchdog]
@@ -43,9 +43,9 @@ If you run into any issues or have any questions, either open an [issue][issues]
 
 [docs]: http://mynt.mirroredwhite.com/
 [docutils]: http://docutils.sourceforge.net/
+[hoep]: https://github.com/Anomarh/Hoep
 [issues]: https://github.com/Anomareh/mynt/issues
 [jinja]: http://jinja.pocoo.org/
-[misaka]: http://misaka.61924.nl/
 [pygments]: http://pygments.org/
 [pyyaml]: http://pyyaml.org/
 [quickstart]: http://mynt.mirroredwhite.com/docs/quickstart/
