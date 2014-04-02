@@ -47,14 +47,14 @@ Support
 
 If you run into any issues or have any questions, either open an `issue`_ or hop in #mynt on irc.freenode.net.
 
-.. _docs: http://mynt.mirroredwhite.com/
+.. _docs: http://mynt.uhnomoli.com/
 .. _Docutils: http://docutils.sourceforge.net/
 .. _Hoep: https://github.com/Anomareh/Hoep
 .. _issue: https://github.com/Anomareh/mynt/issues
 .. _Jinja2: http://jinja.pocoo.org/
 .. _Pygments: http://pygments.org/
 .. _PyYAML: http://pyyaml.org/
-.. _quickstart: http://mynt.mirroredwhite.com/docs/quickstart/
+.. _quickstart: http://mynt.uhnomoli.com/docs/quickstart/
 .. _watchdog: http://packages.python.org/watchdog/
 '''
 from setuptools import find_packages, setup
@@ -66,8 +66,8 @@ setup(
     name = 'mynt',
     version = str(__version__),
     author = 'Andrew Fricke',
-    author_email = 'andrew@mirroredwhite.com',
-    url = 'http://mynt.mirroredwhite.com/',
+    author_email = 'andrew@uhnomoli.com',
+    url = 'http://mynt.uhnomoli.com/',
     description = 'A static site generator.',
     long_description = __doc__,
     license = 'BSD',
