@@ -104,7 +104,8 @@ class Reader(object):
             try:
                 parser = self._extensions[f.extension][0]
             except KeyError:
-                raise ParserException('No parser found that accepts \'{0}\' files.'.format(f.extension), 'src: {0}'.format(f.path))
+                raise ParserException('No parser found that accepts \'{0}\' files.'.format(f.extension),
+                    'src: {0}'.format(f.path))
         
         if parser in self._cache:
             return self._cache[parser]
@@ -142,12 +143,18 @@ class Reader(object):
                 frontmatter, bodymatter = re.search(r'\A---\s+^(.+?)$\s+---\s*(.*)\Z', f.content, re.M | re.S).groups()
                 frontmatter = Config(frontmatter)
             except AttributeError:
-                raise ContentException('Invalid frontmatter.', 'src: {0}'.format(f.path), 'frontmatter must not be empty')
+                raise ContentException('Invalid frontmatter.',
+                    'src: {0}'.format(f.path),
+                    'frontmatter must not be empty')
             except ConfigException:
-                raise ConfigException('Invalid frontmatter.', 'src: {0}'.format(f.path), 'fontmatter contains invalid YAML')
+                raise ConfigException('Invalid frontmatter.',
+                    'src: {0}'.format(f.path),
+                    'fontmatter contains invalid YAML')
             
             if 'layout' not in frontmatter:
-                raise ContentException('Invalid frontmatter.', 'src: {0}'.format(f.path), 'layout must be set')
+                raise ContentException('Invalid frontmatter.',
+                    'src: {0}'.format(f.path),
+                    'layout must be set')
             
             parser = self._get_parser(f, frontmatter.get('parser', container.config.get('parser', None)))
             
@@ -210,7 +217,9 @@ class Writer(object):
         path = normpath(*parts)
         
         if op.commonprefix((self.dest.path, path)) != self.dest.path:
-            raise ConfigException('Invalid URL.', 'url: {0}'.format(url), 'path traversal is not allowed')
+            raise ConfigException('Invalid URL.',
+                'url: {0}'.format(url),
+                'path traversal is not allowed')
         
         return path
     
@@ -266,6 +275,7 @@ class Writer(object):
             
             logger.debug('..  (%.3fs) %s', Timer.stop(), path.replace(self.dest.path, ''))
         except RendererException as e:
-            raise RendererException(e.message, '{0} in container item {1}'.format(template, data.get('item', url)))
+            raise RendererException(e.message,
+                '{0} in container item {1}'.format(template, data.get('item', url)))
         
         return File(path, content)

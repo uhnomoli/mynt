@@ -4,12 +4,9 @@ mynt
 
 *Another static site generator?*
 
-With the ever growing population of static site generators, all filling a
-certain need, I've yet to find one that allows the generation of anything but
-the simplest of blogs.
+With the ever growing population of static site generators, all filling a certain need, I've yet to find one that allows the generation of anything but the simplest of blogs.
 
-That's where mynt comes in, being designed to give you all the features of a
-CMS with none of the often rigid implementations of those features.
+That's where mynt comes in, being designed to give you all the features of a CMS with none of the often rigid implementations of those features.
 
 
 Install
@@ -48,8 +45,7 @@ Optional
 Support
 =======
 
-If you run into any issues or have any questions, either open an `issue`_ or
-hop in #mynt on irc.freenode.net.
+If you run into any issues or have any questions, either open an `issue`_ or hop in #mynt on irc.freenode.net.
 
 .. _docs: http://mynt.mirroredwhite.com/
 .. _Docutils: http://docutils.sourceforge.net/
@@ -75,6 +71,8 @@ setup(
     description = 'A static site generator.',
     long_description = __doc__,
     license = 'BSD',
+    platforms = 'any',
+    zip_safe = False,
     packages = find_packages(),
     include_package_data = True,
     entry_points = {
@@ -97,8 +95,6 @@ setup(
     extras_require = {
         'reST': 'docutils>=0.10'
     },
-    platforms = 'any',
-    zip_safe = False,
     classifiers = [
         'Development Status :: 4 - Beta',
         'Environment :: Console',
