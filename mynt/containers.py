@@ -66,6 +66,9 @@ class Container(object):
         pages = []
         
         for item in self.container:
+            if item['layout'] is None:
+                continue
+            
             pages.append((item['layout'], {'item': item}, item['url']))
         
         if self.config['archive_layout'] and self.archives:
