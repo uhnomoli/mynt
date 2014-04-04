@@ -15,6 +15,7 @@
     + The `markup` and `parser` config settings have been removed.
     + Which parser used is now determined by _(in order of precedence)_ the `parser` frontmatter attribute, the `parser` container config setting, and lastly the filename.
     + In Markdown, the bracket fenced code block syntax is no longer supported.
+    + The `layout` frontmatter attribute can now be set to `None` to skip rendering.
 
 
 ### 0.2.3 (June 13th, 2013)
