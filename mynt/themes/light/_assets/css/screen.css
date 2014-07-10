@@ -94,7 +94,7 @@ ol > li:before {
   left: -22px;
   width: 17px;
   text-align: right;
-  content: counter(item, decimal) ".";
+  content: counter(item,decimal) ".";
 }
 ul > li {
   left: 12px;
@@ -182,6 +182,7 @@ a:hover {
 }
 
 code {
+  vertical-align: bottom;
   padding: 0px 3px 0px 3px;
   background-color: #dedede;
   color: #262626;
