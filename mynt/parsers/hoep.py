@@ -57,7 +57,7 @@ class _Renderer(h.Hoep):
 
 
 class Parser(_Parser):
-    accepts = ('.md',)
+    accepts = ('.md', '.markdown')
     
     
     lookup = {
