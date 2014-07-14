@@ -14,7 +14,7 @@ from jinja2.exceptions import TemplateNotFound
 
 from mynt.base import Renderer as _Renderer
 from mynt.exceptions import RendererException
-from mynt.utils import absurl, normpath
+from mynt.utils import normpath, Url
 
 
 class _PrefixLoader(PrefixLoader):
@@ -59,7 +59,7 @@ class Renderer(_Renderer):
         return datetime.utcfromtimestamp(ts).strftime(format).decode('utf-8')
     
     def _get_asset(self, asset):
-        return absurl(self.globals['site']['base_url'], self.globals['site']['assets_url'], asset)
+        return Url.join(self.globals['site']['base_url'], self.globals['site']['assets_url'], asset)
     
     def _get_url(self, url = '', absolute = False):
         parts = [self.globals['site']['base_url'], url]
@@ -71,7 +71,7 @@ class Renderer(_Renderer):
             
             parts.insert(0, domain)
         
-        return absurl(*parts)
+        return Url.join(*parts)
     
     def _items(self, dict_):
         return dict_.iteritems()

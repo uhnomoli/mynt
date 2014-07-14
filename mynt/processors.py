@@ -14,10 +14,10 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 from pygments.util import ClassNotFound
 
-from mynt.containers import Config, Container, Posts
+from mynt.containers import Config, Container, Item, Items, Posts
 from mynt.exceptions import ConfigException, ContentException, ParserException, RendererException
 from mynt.fs import File
-from mynt.utils import format_url, get_logger, Item, normpath, slugify, Timer, unescape
+from mynt.utils import get_logger, normpath, Timer, unescape, Url
 
 
 logger = get_logger('mynt')
@@ -59,29 +59,6 @@ class Reader(object):
         
         for parsers in self._extensions.itervalues():
             parsers.sort(key = unicode.lower)
-    
-    def _get_content_url(self, url, slug, date, frontmatter):
-        subs = {
-            '<year>': '%Y',
-            '<month>': '%m',
-            '<day>': '%d',
-            '<i_month>': unicode(date.month),
-            '<i_day>': unicode(date.day),
-            '<slug>': slug
-        }
-        
-        url = url.replace('%', '%%')
-        
-        for match, replace in subs.iteritems():
-            url = url.replace(match, replace)
-        
-        for attribute, value in frontmatter.iteritems():
-            if isinstance(value, basestring):
-                url = url.replace('<{0}>'.format(attribute), slugify(value))
-        
-        url = date.strftime(url).decode('utf-8')
-        
-        return format_url(url, url.endswith('/'))
     
     def _get_date(self, mtime, date):
         if not date:
@@ -125,55 +102,17 @@ class Reader(object):
         return Parser
     
     def _parse_filename(self, f):
-        date, slug = re.match(r'(?:(\d{4}(?:-\d{2}-\d{2}){1,2})-)?(.+)', f.name).groups()
+        date, text = re.match(r'(?:(\d{4}(?:-\d{2}-\d{2}){1,2})-)?(.+)', f.name).groups()
         
         return (
-            slugify(slug),
+            text,
             self._get_date(f.mtime, date)
         )
     
     
-    def _parse(self, container):
+    def _parse_container(self, container):
         for f in container.path:
-            Timer.start()
-            
-            item = Item(f.path)
-            
-            try:
-                frontmatter, bodymatter = re.search(r'\A---\s+^(.+?)$\s+---\s*(.*)\Z', f.content, re.M | re.S).groups()
-                frontmatter = Config(frontmatter)
-            except AttributeError:
-                raise ContentException('Invalid frontmatter.',
-                    'src: {0}'.format(f.path),
-                    'frontmatter must not be empty')
-            except ConfigException:
-                raise ConfigException('Invalid frontmatter.',
-                    'src: {0}'.format(f.path),
-                    'fontmatter contains invalid YAML')
-            
-            if 'layout' not in frontmatter:
-                raise ContentException('Invalid frontmatter.',
-                    'src: {0}'.format(f.path),
-                    'layout must be set')
-            
-            parser = self._get_parser(f, frontmatter.get('parser', container.config.get('parser', None)))
-            
-            slug, date = self._parse_filename(f)
-            content = parser.parse(self._writer.from_string(bodymatter, frontmatter))
-            
-            item['content'] = content
-            item['date'] = date.strftime(self.site['date_format']).decode('utf-8')
-            item['excerpt'] = re.search(r'\A.*?(?:<p>(.+?)</p>)?', content, re.M | re.S).group(1)
-            item['tags'] = []
-            item['timestamp'] = timegm(date.utctimetuple())
-            
-            item.update(frontmatter)
-            
-            item['url'] = self._get_content_url(container.config['url'], slug, date, frontmatter)
-            
-            container.add(item)
-            
-            logger.debug('..  (%.3fs) %s', Timer.stop(), f.path.replace(self.src.path, ''))
+            container.add(self._parse_item(container.config, f))
         
         container.sort()
         container.tag()
@@ -181,21 +120,72 @@ class Reader(object):
         
         return container
     
+    def _parse_item(self, config, f, simple = False):
+        Timer.start()
+        
+        item = Item(f.path)
+        
+        try:
+            frontmatter, bodymatter = re.search(r'\A---\s+^(.+?)$\s+---\s*(.*)\Z', f.content, re.M | re.S).groups()
+            frontmatter = Config(frontmatter)
+        except AttributeError:
+            raise ContentException('Invalid frontmatter.',
+                'src: {0}'.format(f.path),
+                'frontmatter must not be empty')
+        except ConfigException:
+            raise ConfigException('Invalid frontmatter.',
+                'src: {0}'.format(f.path),
+                'fontmatter contains invalid YAML')
+        
+        if 'layout' not in frontmatter:
+            raise ContentException('Invalid frontmatter.',
+                'src: {0}'.format(f.path),
+                'layout must be set')
+        
+        frontmatter.pop('url', None)
+        
+        parser = self._get_parser(f, frontmatter.get('parser', config.get('parser', None)))
+        
+        text, date = self._parse_filename(f)
+        content = parser.parse(self._writer.from_string(bodymatter, frontmatter))
+        
+        item['content'] = content
+        item['date'] = date.strftime(self.site['date_format']).decode('utf-8')
+        item['timestamp'] = timegm(date.utctimetuple())
+        
+        if simple:
+            item['url'] = Url.from_path(f.root.path.replace(self.src.path, ''), text)
+        else:
+            item['excerpt'] = re.search(r'\A.*?(?:<p>(.+?)</p>)?', content, re.M | re.S).group(1)
+            item['tags'] = []
+            item['url'] = Url.from_format(config['url'], text, date, frontmatter)
+        
+        item.update(frontmatter)
+        
+        logger.debug('..  (%.3fs) %s', Timer.stop(), f.path.replace(self.src.path, ''))
+        
+        return item
+    
     
     def parse(self):
-        posts = self._parse(Posts(self.src, self.site))
+        posts = self._parse_container(Posts(self.src, self.site))
         containers = {}
+        miscellany = Container('miscellany', self.src, None)
         pages = posts.pages
         
         for name, config in self.site['containers'].iteritems():
-            container = self._parse(Container(name, self.src, config))
+            container = self._parse_container(Items(name, self.src, config))
             
             containers[name] = container
             pages.extend(container.pages)
         
-        for f in self.src:
-            if f.extension in ('.html', '.htm', '.xml'):
+        for f in miscellany.path:
+            if f.extension in self._extensions:
+                miscellany.add(self._parse_item(miscellany.config, f, True))
+            elif f.extension in ('.html', '.htm', '.xml'):
                 pages.append((f.path.replace(self.src.path, ''), None, None))
+        
+        pages.extend(miscellany.pages)
         
         return (posts, containers, pages)
 
