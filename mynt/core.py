@@ -20,7 +20,7 @@ from mynt.exceptions import ConfigException, OptionException
 from mynt.fs import Directory, EventHandler, File
 from mynt.processors import Reader, Writer
 from mynt.server import RequestHandler, Server
-from mynt.utils import absurl, get_logger, normpath, Timer
+from mynt.utils import get_logger, normpath, Timer, Url
 
 
 logger = get_logger('mynt')
@@ -37,6 +37,8 @@ class Mynt(object):
         'domain': None,
         'include': [],
         'locale': None,
+        'posts_order': 'desc',
+        'posts_sort': 'timestamp',
         'posts_url': '/<year>/<month>/<day>/<slug>/',
         'pygmentize': True,
         'renderer': 'jinja',
@@ -48,7 +50,7 @@ class Mynt(object):
     container_defaults = {
         'archive_layout': None,
         'archives_url': '/',
-        'reverse': False,
+        'order': 'asc',
         'sort': 'title',
         'tag_layout': None,
         'tags_url': '/'
@@ -59,11 +61,11 @@ class Mynt(object):
         self._reader = None
         self._writer = None
         
-        self.config = {}
+        self.config = None
         self.posts = None
-        self.containers = {}
+        self.containers = None
         self.data = {}
-        self.pages = []
+        self.pages = None
         
         self.opts = self._get_opts(args)
         
@@ -204,11 +206,11 @@ class Mynt(object):
                 
                 self.config['locale'] = self.opts.get('locale', self.config['locale'])
                 
-                self.config['assets_url'] = absurl(self.config['assets_url'], '')
-                self.config['base_url'] = absurl(self.opts.get('base_url', self.config['base_url']), '')
+                self.config['assets_url'] = Url.join(self.config['assets_url'], '')
+                self.config['base_url'] = Url.join(self.opts.get('base_url', self.config['base_url']), '')
                 
                 for setting in ('archives_url', 'posts_url', 'tags_url'):
-                    self.config[setting] = absurl(self.config[setting])
+                    self.config[setting] = Url.join(self.config[setting])
                 
                 for setting in ('archives_url', 'assets_url', 'base_url', 'posts_url', 'tags_url'):
                     if re.search(r'(?:^\.{2}/|/\.{2}$|/\.{2}/)', self.config[setting]):
@@ -216,9 +218,16 @@ class Mynt(object):
                             'setting: {0}'.format(setting),
                             'path traversal is not allowed')
                 
+                containers_src = normpath(self.src.path, '_containers')
+                
                 for name, config in self.config['containers'].iteritems():
+                    if op.commonprefix((containers_src, normpath(containers_src, name))) != containers_src:
+                        raise ConfigException('Invalid config setting.',
+                            'setting: containers:{0}'.format(name),
+                            'container name contains illegal characters')
+                    
                     try:
-                        url = absurl(config['url'])
+                        url = Url.join(config['url'])
                     except KeyError:
                         raise ConfigException('Invalid config setting.',
                             'setting: containers:{0}'.format(name),
@@ -243,31 +252,7 @@ class Mynt(object):
             logger.debug('..  no config file found')
     
     
-    def _parse(self):
-        logger.info('>> Parsing')
-        
-        self.posts, containers, pages = self.reader.parse()
-        
-        self.containers.update(containers)
-        self.pages.extend(pages)
-        
-        self.data['posts'] = self.posts.data
-        self.data['containers'] = {}
-        
-        for name, container in self.containers.iteritems():
-            self.data['containers'][name] = container.data
-    
-    def _render(self):
-        self._parse()
-        
-        logger.info('>> Rendering')
-        
-        self.writer.register(self.data)
-        
-        for i, page in enumerate(self.pages):
-            self.pages[i] = self.writer.render(*page)
-    
-    def _generate(self):
+    def _initialize(self):
         logger.debug('>> Initializing\n..  src:  %s\n..  dest: %s', self.src.path, self.dest.path)
         
         self._update_config()
@@ -280,7 +265,29 @@ class Mynt(object):
                     'run `locale -a` to see available locales')
         
         self.writer.register({'site': self.config})
+    
+    def _parse(self):
+        logger.info('>> Parsing')
         
+        self.posts, self.containers, self.pages = self.reader.parse()
+        
+        self.data['posts'] = self.posts.data
+        self.data['containers'] = {}
+        
+        for name, container in self.containers.iteritems():
+            self.data['containers'][name] = container.data
+    
+    def _render(self):
+        logger.info('>> Rendering')
+        
+        self.writer.register(self.data)
+        
+        for i, page in enumerate(self.pages):
+            self.pages[i] = self.writer.render(*page)
+    
+    def _generate(self):
+        self._initialize()
+        self._parse()
         self._render()
         
         logger.info('>> Generating')
@@ -314,13 +321,11 @@ class Mynt(object):
         self._reader = None
         self._writer = None
         
+        self.config = None
         self.posts = None
-        
-        self.config.clear()
-        self.containers.clear()
+        self.containers = None
         self.data.clear()
-        
-        del self.pages[:]
+        self.pages = None
         
         self._generate()
     
@@ -371,7 +376,7 @@ class Mynt(object):
     
     def serve(self):
         self.src = Directory(self.opts['src'])
-        base_url = absurl(self.opts['base_url'], '')
+        base_url = Url.join(self.opts['base_url'], '')
         
         if not self.src.exists:
             raise OptionException('Source must exist.')

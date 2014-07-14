@@ -6,6 +6,8 @@
     + A mechanism for defining content containers.
     + Two new filters for the Jinja renderer, `items` and `values`, that act as syntactic sugar for `iteritems()` and `itervalues()`.
     + A reStructuredText parser.
+    + Files outside of the special directories will now be parsed if a parser is available.
+    + Two config settings for controlling how posts are sorted: `posts_order` and `posts_sort`.
 + __Changed__
     + Global and local dictionaries no longer behave different from ordinary Python dictionaries when iterating over them.
     + The `archives` and `tags` globals are now properties of the `posts` global to maintain consistency between content containers.

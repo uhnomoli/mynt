@@ -36,14 +36,6 @@ def abspath(*args):
         )
     )
 
-def absurl(*args):
-    url = '/'.join(args)
-    
-    if not re.match(r'[^/]+://', url):
-        url = '/' + url
-    
-    return re.sub(r'(?<!:)//+', '/', url)
-
 def escape(html):
     for match, replacements in _ENTITIES:
         html = html.replace(match, replacements[0])
@@ -67,12 +59,6 @@ def normpath(*args):
         )
     )
 
-def slugify(string):
-    slug = re.sub(r'\s+', '-', string.strip())
-    slug = re.sub(r'[^a-z0-9\-_.]', '', slug, flags = re.I)
-    
-    return slug
-
 def unescape(html):
     for replace, matches in _ENTITIES:
         for match in matches:
@@ -80,36 +66,6 @@ def unescape(html):
     
     return html
 
-
-def format_url(url, clean):
-    if clean:
-        return absurl(url, '')
-    
-    return '{0}.html'.format(url)
-
-
-class Data(object):
-    def __init__(self, container, archives, tags):
-        self.container = container
-        self.archives = archives
-        self.tags = tags
-    
-    
-    def __iter__(self):
-        return self.container.__iter__()
-
-class Item(dict):
-    def __init__(self, src, *args, **kwargs):
-        super(Item, self).__init__(*args, **kwargs)
-        
-        self.__src = src
-    
-    
-    def __str__(self):
-        return unicode(self).encode('utf-8')
-    
-    def __unicode__(self):
-        return self.__src
 
 class Timer(object):
     _start = []
@@ -122,3 +78,70 @@ class Timer(object):
     @classmethod
     def stop(cls):
         return time() - cls._start.pop()
+
+class Url(object):
+    @staticmethod
+    def join(*args):
+        url = '/'.join(args)
+        
+        if not re.match(r'[^/]+://', url):
+            url = '/' + url
+        
+        return re.sub(r'(?<!:)//+', '/', url)
+    
+    @staticmethod
+    def slugify(string):
+        slug = re.sub(r'\s+', '-', string.strip())
+        slug = re.sub(r'[^a-z0-9\-_.]', '', slug, flags = re.I)
+        
+        return slug
+    
+    
+    @classmethod
+    def format(cls, url, clean):
+        if clean:
+            return cls.join(url, '')
+        
+        return '{0}.html'.format(url)
+    
+    @classmethod
+    def from_format(cls, format, text, date = None, data = None):
+        clean = format.endswith('/')
+        slug = cls.slugify(text)
+        
+        if '<slug>' in format:
+            url = format.replace('<slug>', slug)
+        else:
+            url = cls.join(format, slug)
+        
+        if data is not None:
+            for attribute, value in data.iteritems():
+                if isinstance(value, basestring):
+                    url = url.replace('<{0}>'.format(attribute), cls.slugify(value))
+        
+        if date is not None:
+            subs = {
+                '<year>': '%Y',
+                '<month>': '%m',
+                '<day>': '%d',
+                '<i_month>': unicode(date.month),
+                '<i_day>': unicode(date.day)
+            }
+            
+            url = url.replace('%', '%%')
+            
+            for match, replace in subs.iteritems():
+                url = url.replace(match, replace)
+            
+            url = date.strftime(url).decode('utf-8')
+        
+        if clean:
+            return cls.join(url, '')
+        
+        return '{0}.html'.format(url)
+    
+    @classmethod
+    def from_path(cls, root, text):
+        name = '{0}.html'.format(cls.slugify(text))
+        
+        return normpath(root, name)
