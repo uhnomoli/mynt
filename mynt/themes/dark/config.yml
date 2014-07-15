@@ -40,11 +40,3 @@ archive_layout: archive.html
 archives_url: /archives/
 tag_layout: tag.html
 tags_url: /archives/
-
-
-#
-# THIRD PARTY SETTINGS
-#
-
-# If you'd like to enable Google Analytics for your site, set this to your tracking code.
-analytics:
