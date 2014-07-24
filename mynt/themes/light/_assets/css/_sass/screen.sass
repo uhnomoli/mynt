@@ -4,12 +4,46 @@
 //
 // RESET
 //
-*
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video
+    vertical-align: baseline
+    
     margin: 0px
     padding: 0px
     
     border-width: 0px
-    outline: invert none 0px
+    
+    font: inherit
+    font-size: 100%
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section
+    display: block
+
+blockquote, q
+    quotes: none
+
+blockquote:before, blockquote:after,
+q:before, q:after
+    content: ''
+    content: none
+
+ol, ul
+    list-style: none
+
+table
+    border-collapse: collapse
 
 
 //
@@ -26,29 +60,27 @@ body
     font:
         family: 'Ubuntu', sans-serif
         size: 13px
+    line-height: $baseline
 
 blockquote, dl, ol, p, pre, table, ul
-    margin: 18px 0px 18px 0px
+    margin: $baseline 0px
 
 blockquote
     overflow: hidden
     
-    padding: 0px 18px 0px 18px
+    padding: 0px $baseline
     
     background-color: $sbg-l
-
-dd, dt
-    line-height: 18px
 
 dl.horizontal
     & > dd
         margin-left: 65px
         
         & + dt
-            margin-top: 18px
+            margin-top: $baseline
             
             & + dd
-                margin-top: 18px
+                margin-top: $baseline
     
     & > dt
         float: left
@@ -60,10 +92,9 @@ h1, h2, h3, h4, h5, h6
     font:
         style: italic
         weight: normal
-    line-height: 18px
 
 h1, h2
-    line-height: 36px
+    line-height: $baseline * 2
 
 h1
     font-size: 28px
@@ -85,8 +116,6 @@ h6
 
 li
     position: relative
-    
-    line-height: 18px
     
     ol > &:before, ul > &:before
         position: absolute
@@ -130,38 +159,31 @@ ol, ul
         type: none
     
     ol, ul
-        margin: 0px 0px 0px 20px
+        margin: 0px
+        margin-left: 20px
 
 ol
     counter-reset: item
 
 p
-    line-height: 18px
     text-align: justify
 
 pre
-    padding: 0px 3px 0px 3px
+    padding: 0px 3px
     
     background-color: $pygments
     
     font-family: 'Envy Code R', 'Ubuntu Mono', monospace
-    line-height: 18px
 
 table
     background-color: $sbg-l
     border-collapse: collapse
 
 td, th
-    padding: 9px
-    
-    line-height: 18px
+    padding: $baseline / 2
 
 td
-    & > :first-child
-        margin-top: 0px
-    
-    & > :last-child
-        margin-bottom: 0px
+    +compact-children
     
     tr:nth-child(2n) > &
         background-color: $bg-d
@@ -176,34 +198,24 @@ th
     text-align: left
 
 a
+    +transition(color 0.2s)
+    
     border-bottom: 1px solid rgba(#000000, 0.1)
     
     color: $hlt
     text-decoration: none
     
-    +transition(color 0.2s)
-    
     &:hover
         color: $hlt-l
-    
-    #header &,
-    .module-nav &,
-    #breadcrumbs &,
-    .item-header-posts > h1 &,
-    .archives-year &,
-    .archives-post-title &
-        border-bottom-width: 0px
 
 code
-    vertical-align: bottom
-    
-    padding: 0px 3px 0px 3px
+    padding: 0px 3px
     
     background-color: $sbg
     
     color: $fg-d
     font-family: 'Envy Code R', 'Ubuntu Mono', monospace
-    line-height: 18px
+    line-height: 17px
     white-space: pre
     
     pre &
@@ -212,26 +224,43 @@ code
         background-color: transparent
         
         color: $pygments-fg
+        line-height: $baseline
     
     table &
         background-color: $sbg
 
+em
+    font-style: italic
+
 img
+    vertical-align: bottom
+    
     a > &
-        vertical-align: text-bottom
-        
         margin-bottom: -1px
         padding: 5px
         
         background-color: $sbg
         border-bottom: 1px solid $bg
 
+strong
+    font-weight: bold
+
+sub, sup
+    font-size: 11px
+    line-height: 0px
+
+sub
+    vertical-align: sub
+
+sup
+    vertical-align: super
+
 
 //
 // LAYOUT
 //
 #container
-    margin-top: $spacer
+    margin-top: $baseline
     
     width: $container
 
@@ -241,49 +270,97 @@ img
     bottom: 0px
     left: 0px
     
-    padding: 0px $spacer 0px $spacer
+    padding: 0px $baseline
     
     width: $sidebar
 
-#header
-    margin: $spacer 0px $spacer 0px
+#title
+    margin-top: $baseline
+
+#subtitle
+    line-height: $baseline
+
+#nav
+    margin-top: $baseline
 
 #footer
     position: absolute
     bottom: 0px
     left: 0px
     
-    padding: 0px $spacer 0px $spacer
+    padding: 0px $baseline
     
     width: $sidebar
 
 #breadcrumbs
     position: fixed
-    top: 18px
+    top: $baseline
     left: $offset
     
     margin: 0px
-    padding: 9px
+    padding: $baseline / 2
     
-    width: $content - 18px
+    width: $content - $baseline
 
 #content
-    margin: 18px 0px 18px $offset
+    +compact-children
+    
+    margin: $baseline 0px
+    margin-left: $offset
     
     width: $content
     
     #breadcrumbs + &
-        margin-top: 72px
+        margin-top: $baseline * 4
+
+.post-list
+    & > .post-title, & > .post-meta
+        padding: $baseline / 2
     
-    & > :first-child
-        margin-top: 0px
+    & > .post-title
+        padding-bottom: 0px
+        
+        line-height: $baseline
     
-    & > :last-child
-        margin-bottom: 0px
+    & > .post-meta
+        padding-top: 0px
+
+.post-title, .post-meta
+    padding: 12px
+
+.post-title
+    padding-bottom: 0px
+    
+    line-height: 30px
+
+.post-meta
+    margin-bottom: $baseline
+    padding-top: 0px
+    
+    line-height: $baseline
+
+div.code
+    margin: $baseline 0px
+
+.highlighttable
+    margin: 0px
+
+.linenodiv, .highlight
+    & > pre
+        margin: 0px
+
+.archives
+    @extend dl.horizontal
+    
+    padding: $baseline / 2
+    
+    & &
+        margin: 0px
+        padding: 0px
 
 
 //
-// MODULES
+// STYLE
 //
 #sidebar
     background:
@@ -291,42 +368,40 @@ img
         image: url('../images/sbg.png')
         position: left top
         repeat: repeat
-
-#header
-    & > h1
-        font:
-            family: 'Ubuntu Mono', sans-serif
-            size: 36px
-    
-    & > h2
-        color: $fg-l
-        font-size: 16px
-        line-height: 18px
-    
-    a
-        color: $fg-d
-        
-        +transition(color 0.25s)
-        
-        &:hover
-            color: $hlt
-
-.module
-    margin-top: 18px
     
     font-style: italic
 
-.module-nav
+#title
+    +inverted-links($borderless: true)
+    
+    font:
+        family: 'Ubuntu Mono', sans-serif
+        size: 36px
+    
+#subtitle
+    color: $fg-l
+    font-size: 16px
+
+#nav
+    @extend ul.unstyled
+    
     font:
         family: 'Ubuntu Mono', sans-serif
         style: normal
     text-transform: uppercase
+    
+    & > li
+        +borderless-links
 
 #footer
-    font-size: 11px
+    font:
+        size: 11px
+        style: normal
     text-transform: uppercase
 
 #breadcrumbs
+    @extend ul.unstyled
+    
     background-color: $sbg
     
     color: $fg-l
@@ -334,149 +409,85 @@ img
     font-style: italic
     
     & > li
+        +borderless-links
+        
         float: left
         
-        position: static
+        &:after
+            padding: 0px 6px
+            
+            color: $fg
+            font-style: normal
+            
+            content: '\203A'
         
-        &:before
-            position: static
+        &:last-child:after
+            padding: 0px
             
             content: none
-    
-    span
-        padding: 0px 6px 0px 6px
-        
-        color: $fg
-        font-style: normal
 
-.item-header
-    padding: 12px
+.post-list
+    & > .post-title
+        font-size: 16px
     
+    & > .post-meta
+        +inverted-links
+        
+        font-size: 10px
+
+.post-title, .post-meta
     background-color: $sbg-l
+
+.post-title
+    font-size: 24px
+
+.post-meta
+    +post-meta
     
-    & > h1
-        font:
-            size: 24px
-        line-height: 30px
-    
-    & > h2
-        color: $fg-l
-        font:
-            size: 11px
-            style: normal
-        line-height: 18px
-        text-transform: uppercase
-        word-spacing: 2px
-    
-    span
-        position: relative
-        top: -1px
-    
-.item-body
-    margin-top: 18px
-    
-    & > :first-child
-        margin-top: 0px
-    
-    & > :last-child
-        margin-bottom: 0px
-    
-    h1
-        margin: 24px 0px -6px 0px
+    font-size: 11px
 
 div.code
-    margin: 18px 0px 18px 0px
-    
     & > div
         overflow: auto
         
         background-color: $pygments
-    
-    pre
-        margin:
-            top: 0px
-            bottom: 0px
-        padding: 0px
-        
-        background-color: transparent
 
 .highlighttable
-    margin: 0px
-    
     background-color: transparent
-    
-    .linenos, .code
-        padding: 9px
-    
-    .linenos
-        background-color: $sbg
-        
-        color: $fg-d
 
-.item-header-posts
-    margin: 18px 0px 18px 0px
-    padding: 9px
+.linenos
+    background-color: $sbg
     
-    & > h1
-        font-size: 16px
-        line-height: 18px
-    
-    & > h2
-        font-size: 10px
-        line-height: 18px
-        
-        a
-            color: $fg-d
-            
-            &:hover
-                color: $hlt
+    color: $fg-d
 
-.archives
-    padding: 9px
-    
-    background-color: $sbg-l
-    
-    & &
-        margin:
-            top: 0px
-            bottom: 0px
+.linenodiv, .highlight
+    & > pre
         padding: 0px
         
         background-color: transparent
 
+.archives
+    background-color: $sbg-l
+    
+    font-style: italic
+    text-transform: uppercase
+
 .archives-year
-    a
-        color: $fg-d
-        font:
-            size: 18px
-            style: italic
-        line-height: 18px
-        
-        &:hover
-            color: $hlt
+    +inverted-links($borderless: true)
+    
+    font-size: 18px
 
 .archives-post-date
     color: $fg-l
-    font:
-        size: 12px
-        style: italic
-    text-transform: uppercase
+    font-size: 12px
 
 .archives-post-title
-    font-style: italic
+    +borderless-links
+    
+    text-transform: none
 
 .archives-post-tags
-    color: $fg-l
+    +inverted-links
+    +post-meta
+    
     font-size: 10px
-    text-transform: uppercase
-    word-spacing: 2px
-    
-    a
-        color: $fg-d
-        
-        &:hover
-            color: $hlt
-    
-    span
-        position: relative
-        top: -1px

@@ -22,11 +22,11 @@ $pygments: #272727
 $pygments-fg: #F8F8F2
 
 // DIMENSIONS
+$baseline: 18px
 $container: 960px
 $sidebar: 255px
-$spacer: 18px
 
-$offset: $sidebar + ($spacer * 3)
+$offset: $sidebar + ($baseline * 3)
 $content: $container - $offset
 
 
@@ -34,14 +34,36 @@ $content: $container - $offset
 // MIXINS
 //
 
-// CLEAR FIX
-@mixin clearfix
-    &:before, &:after
-        content: ''
-        display: table
+@mixin compact-children
+    & > :first-child
+        margin-top: 0px
     
-    &:after
-        clear: both
+    & > :last-child
+        margin-bottom: 0px
+
+@mixin borderless-links
+    & > a
+        border-bottom-width: 0px
+
+@mixin inverted-links($color: $fg-d, $borderless: false)
+    & > a
+        color: $color
+        
+        &:hover
+            color: $hlt
+        
+        @if $borderless
+            border-bottom-width: 0px
+
+@mixin post-meta
+    color: $fg-l
+    font-style: normal
+    text-transform: uppercase
+    word-spacing: 2px
+    
+    & > span
+        position: relative
+        top: -1px
 
 // VENDOR PREFIXES
 @mixin border-radius($radius, $corner: false)
