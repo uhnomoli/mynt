@@ -5,17 +5,17 @@
 
 {% block breadcrumbs %}
     <ul id="breadcrumbs">
-        <li><a href="{{ get_url() }}">Blog</a><span>&rsaquo;</span></li>
+        <li><a href="{{ get_url() }}">Blog</a></li>
         <li>Archives</li>
     </ul>
 {% endblock %}
 
 {% block content %}
     {% for year, archive in posts.archives|items %}
-        <dl class="horizontal archives">
+        <dl class="archives">
             <dt class="archives-year"><a href="{{ get_url(archive.url) }}">{{ year }}</a></dt>
             <dd>
-                <dl class="horizontal archives">
+                <dl class="archives">
                     {% for month in archive.months|values %}
                         {% for post in month %}
                             <dt class="archives-post-date">{{ post.timestamp|date('%b %d') }}</dt>

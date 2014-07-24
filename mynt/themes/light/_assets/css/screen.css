@@ -1,8 +1,45 @@
-* {
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  vertical-align: baseline;
   margin: 0px;
   padding: 0px;
   border-width: 0px;
-  outline: invert none 0px;
+  font: inherit;
+  font-size: 100%;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: "";
+  content: none;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
 }
 
 body {
@@ -13,32 +50,29 @@ body {
   color: #333333;
   font-family: "Ubuntu", sans-serif;
   font-size: 13px;
+  line-height: 18px;
 }
 
 blockquote, dl, ol, p, pre, table, ul {
-  margin: 18px 0px 18px 0px;
+  margin: 18px 0px;
 }
 
 blockquote {
   overflow: hidden;
-  padding: 0px 18px 0px 18px;
+  padding: 0px 18px;
   background-color: #e6e6e6;
 }
 
-dd, dt {
-  line-height: 18px;
-}
-
-dl.horizontal > dd {
+dl.horizontal > dd, .archives > dd {
   margin-left: 65px;
 }
-dl.horizontal > dd + dt {
+dl.horizontal > dd + dt, .archives > dd + dt {
   margin-top: 18px;
 }
-dl.horizontal > dd + dt + dd {
+dl.horizontal > dd + dt + dd, .archives > dd + dt + dd {
   margin-top: 18px;
 }
-dl.horizontal > dt {
+dl.horizontal > dt, .archives > dt {
   float: left;
   width: 50px;
 }
@@ -47,7 +81,6 @@ h1, h2, h3, h4, h5, h6 {
   color: #262626;
   font-style: italic;
   font-weight: normal;
-  line-height: 18px;
 }
 
 h1, h2 {
@@ -80,7 +113,6 @@ h6 {
 
 li {
   position: relative;
-  line-height: 18px;
 }
 ol > li:before, ul > li:before {
   position: absolute;
@@ -103,10 +135,10 @@ ul > li:before {
   left: -12px;
   content: "\2022";
 }
-ul.unstyled > li {
+ul.unstyled > li, #nav > li, #breadcrumbs > li {
   position: static;
 }
-ul.unstyled > li:before {
+ul.unstyled > li:before, #nav > li:before, #breadcrumbs > li:before {
   position: static;
   content: none;
 }
@@ -117,7 +149,8 @@ ol, ul {
   list-style-type: none;
 }
 ol ol, ol ul, ul ol, ul ul {
-  margin: 0px 0px 0px 20px;
+  margin: 0px;
+  margin-left: 20px;
 }
 
 ol {
@@ -125,15 +158,13 @@ ol {
 }
 
 p {
-  line-height: 18px;
   text-align: justify;
 }
 
 pre {
-  padding: 0px 3px 0px 3px;
+  padding: 0px 3px;
   background-color: #272727;
   font-family: "Envy Code R", "Ubuntu Mono", monospace;
-  line-height: 18px;
 }
 
 table {
@@ -143,7 +174,6 @@ table {
 
 td, th {
   padding: 9px;
-  line-height: 18px;
 }
 
 td > :first-child {
@@ -165,46 +195,66 @@ th {
 }
 
 a {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  color: #cc171d;
-  text-decoration: none;
   -webkit-transition: color 0.2s;
   -moz-transition: color 0.2s;
   -ms-transition: color 0.2s;
   -o-transition: color 0.2s;
   transition: color 0.2s;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: #cc171d;
+  text-decoration: none;
 }
 a:hover {
   color: #99171c;
 }
-#header a, .module-nav a, #breadcrumbs a, .item-header-posts > h1 a, .archives-year a, .archives-post-title a {
-  border-bottom-width: 0px;
-}
 
 code {
-  vertical-align: bottom;
-  padding: 0px 3px 0px 3px;
+  padding: 0px 3px;
   background-color: #dedede;
   color: #262626;
   font-family: "Envy Code R", "Ubuntu Mono", monospace;
-  line-height: 18px;
+  line-height: 17px;
   white-space: pre;
 }
 pre code {
   padding: 0px;
   background-color: transparent;
   color: #f8f8f2;
+  line-height: 18px;
 }
 table code {
   background-color: #dedede;
 }
 
+em {
+  font-style: italic;
+}
+
+img {
+  vertical-align: bottom;
+}
 a > img {
-  vertical-align: text-bottom;
   margin-bottom: -1px;
   padding: 5px;
   background-color: #dedede;
   border-bottom: 1px solid #f2f2f2;
+}
+
+strong {
+  font-weight: bold;
+}
+
+sub, sup {
+  font-size: 11px;
+  line-height: 0px;
+}
+
+sub {
+  vertical-align: sub;
+}
+
+sup {
+  vertical-align: super;
 }
 
 #container {
@@ -217,19 +267,27 @@ a > img {
   top: 0px;
   bottom: 0px;
   left: 0px;
-  padding: 0px 18px 0px 18px;
+  padding: 0px 18px;
   width: 255px;
 }
 
-#header {
-  margin: 18px 0px 18px 0px;
+#title {
+  margin-top: 18px;
+}
+
+#subtitle {
+  line-height: 18px;
+}
+
+#nav {
+  margin-top: 18px;
 }
 
 #footer {
   position: absolute;
   bottom: 0px;
   left: 0px;
-  padding: 0px 18px 0px 18px;
+  padding: 0px 18px;
   width: 255px;
 }
 
@@ -243,11 +301,9 @@ a > img {
 }
 
 #content {
-  margin: 18px 0px 18px 309px;
+  margin: 18px 0px;
+  margin-left: 309px;
   width: 651px;
-}
-#breadcrumbs + #content {
-  margin-top: 72px;
 }
 #content > :first-child {
   margin-top: 0px;
@@ -255,48 +311,93 @@ a > img {
 #content > :last-child {
   margin-bottom: 0px;
 }
+#breadcrumbs + #content {
+  margin-top: 72px;
+}
+
+.post-list > .post-title, .post-list > .post-meta {
+  padding: 9px;
+}
+.post-list > .post-title {
+  padding-bottom: 0px;
+  line-height: 18px;
+}
+.post-list > .post-meta {
+  padding-top: 0px;
+}
+
+.post-title, .post-meta {
+  padding: 12px;
+}
+
+.post-title {
+  padding-bottom: 0px;
+  line-height: 30px;
+}
+
+.post-meta {
+  margin-bottom: 18px;
+  padding-top: 0px;
+  line-height: 18px;
+}
+
+div.code {
+  margin: 18px 0px;
+}
+
+.highlighttable {
+  margin: 0px;
+}
+
+.linenodiv > pre, .highlight > pre {
+  margin: 0px;
+}
+
+.archives {
+  padding: 9px;
+}
+.archives .archives {
+  margin: 0px;
+  padding: 0px;
+}
 
 #sidebar {
   background-color: #dedede;
   background-image: url("../images/sbg.png");
   background-position: left top;
   background-repeat: repeat;
-}
-
-#header > h1 {
-  font-family: "Ubuntu Mono", sans-serif;
-  font-size: 36px;
-}
-#header > h2 {
-  color: gray;
-  font-size: 16px;
-  line-height: 18px;
-}
-#header a {
-  color: #262626;
-  -webkit-transition: color 0.25s;
-  -moz-transition: color 0.25s;
-  -ms-transition: color 0.25s;
-  -o-transition: color 0.25s;
-  transition: color 0.25s;
-}
-#header a:hover {
-  color: #cc171d;
-}
-
-.module {
-  margin-top: 18px;
   font-style: italic;
 }
 
-.module-nav {
+#title {
+  font-family: "Ubuntu Mono", sans-serif;
+  font-size: 36px;
+}
+#title > a {
+  color: #262626;
+  border-bottom-width: 0px;
+}
+#title > a:hover {
+  color: #cc171d;
+}
+
+#subtitle {
+  color: gray;
+  font-size: 16px;
+}
+
+#nav {
   font-family: "Ubuntu Mono", sans-serif;
   font-style: normal;
   text-transform: uppercase;
 }
+#nav > li > a {
+  border-bottom-width: 0px;
+}
 
 #footer {
   font-size: 11px;
+  font-style: normal;
   text-transform: uppercase;
 }
 
@@ -308,142 +409,116 @@ a > img {
 }
 #breadcrumbs > li {
   float: left;
-  position: static;
 }
-#breadcrumbs > li:before {
-  position: static;
-  content: none;
+#breadcrumbs > li > a {
+  border-bottom-width: 0px;
 }
-#breadcrumbs span {
-  padding: 0px 6px 0px 6px;
+#breadcrumbs > li:after {
+  padding: 0px 6px;
   color: #333333;
   font-style: normal;
+  content: "\203A";
+}
+#breadcrumbs > li:last-child:after {
+  padding: 0px;
+  content: none;
 }
 
-.item-header {
-  padding: 12px;
+.post-list > .post-title {
+  font-size: 16px;
+}
+.post-list > .post-meta {
+  font-size: 10px;
+}
+.post-list > .post-meta > a {
+  color: #262626;
+}
+.post-list > .post-meta > a:hover {
+  color: #cc171d;
+}
+
+.post-title, .post-meta {
   background-color: #e6e6e6;
 }
-.item-header > h1 {
+
+.post-title {
   font-size: 24px;
-  line-height: 30px;
 }
-.item-header > h2 {
+
+.post-meta {
   color: gray;
-  font-size: 11px;
   font-style: normal;
-  line-height: 18px;
   text-transform: uppercase;
   word-spacing: 2px;
+  font-size: 11px;
 }
-.item-header span {
+.post-meta > span {
   position: relative;
   top: -1px;
 }
 
-.item-body {
-  margin-top: 18px;
-}
-.item-body > :first-child {
-  margin-top: 0px;
-}
-.item-body > :last-child {
-  margin-bottom: 0px;
-}
-.item-body h1 {
-  margin: 24px 0px -6px 0px;
-}
-
-div.code {
-  margin: 18px 0px 18px 0px;
-}
 div.code > div {
   overflow: auto;
   background-color: #272727;
 }
-div.code pre {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  padding: 0px;
+
+.highlighttable {
   background-color: transparent;
 }
 
-.highlighttable {
-  margin: 0px;
-  background-color: transparent;
-}
-.highlighttable .linenos, .highlighttable .code {
-  padding: 9px;
-}
-.highlighttable .linenos {
+.linenos {
   background-color: #dedede;
   color: #262626;
 }
 
-.item-header-posts {
-  margin: 18px 0px 18px 0px;
-  padding: 9px;
-}
-.item-header-posts > h1 {
-  font-size: 16px;
-  line-height: 18px;
-}
-.item-header-posts > h2 {
-  font-size: 10px;
-  line-height: 18px;
-}
-.item-header-posts > h2 a {
-  color: #262626;
-}
-.item-header-posts > h2 a:hover {
-  color: #cc171d;
-}
-
-.archives {
-  padding: 9px;
-  background-color: #e6e6e6;
-}
-.archives .archives {
-  margin-top: 0px;
-  margin-bottom: 0px;
+.linenodiv > pre, .highlight > pre {
   padding: 0px;
   background-color: transparent;
 }
 
-.archives-year a {
-  color: #262626;
-  font-size: 18px;
+.archives {
+  background-color: #e6e6e6;
   font-style: italic;
-  line-height: 18px;
+  text-transform: uppercase;
 }
-.archives-year a:hover {
+
+.archives-year {
+  font-size: 18px;
+}
+.archives-year > a {
+  color: #262626;
+  border-bottom-width: 0px;
+}
+.archives-year > a:hover {
   color: #cc171d;
 }
 
 .archives-post-date {
   color: gray;
   font-size: 12px;
-  font-style: italic;
-  text-transform: uppercase;
 }
 
 .archives-post-title {
-  font-style: italic;
+  text-transform: none;
+}
+.archives-post-title > a {
+  border-bottom-width: 0px;
 }
 
 .archives-post-tags {
   color: gray;
-  font-size: 10px;
+  font-style: normal;
   text-transform: uppercase;
   word-spacing: 2px;
+  font-size: 10px;
 }
-.archives-post-tags a {
+.archives-post-tags > a {
   color: #262626;
 }
-.archives-post-tags a:hover {
+.archives-post-tags > a:hover {
   color: #cc171d;
 }
-.archives-post-tags span {
+.archives-post-tags > span {
   position: relative;
   top: -1px;
 }
