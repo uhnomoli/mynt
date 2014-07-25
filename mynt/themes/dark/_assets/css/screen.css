@@ -341,6 +341,10 @@ sup {
 div.code {
   margin: 18px 0px;
 }
+div.code > div {
+  overflow: auto;
+  max-height: 486px;
+}
 
 .highlighttable {
   margin: 0px;
@@ -448,7 +452,6 @@ div.code {
 }
 
 div.code > div {
-  overflow: auto;
   background-color: #1f1f1f;
 }
 

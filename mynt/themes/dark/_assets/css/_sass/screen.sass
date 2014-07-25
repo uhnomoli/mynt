@@ -337,6 +337,11 @@ sup
 
 div.code
     margin: $baseline 0px
+    
+    & > div
+        overflow: auto
+        
+        max-height: $baseline * 27
 
 .highlighttable
     margin: 0px
@@ -439,8 +444,6 @@ div.code
 
 div.code
     & > div
-        overflow: auto
-        
         background-color: $sbg-l
 
 .highlighttable
