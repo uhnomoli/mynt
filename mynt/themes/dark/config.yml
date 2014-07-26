@@ -35,7 +35,6 @@ title: title
 #
 # CONTENT SETTINGS
 #
-
 archive_layout: archive.html
 archives_url: /archives/
 tag_layout: tag.html
