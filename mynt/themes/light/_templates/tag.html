@@ -12,9 +12,9 @@
 {% endblock %}
 
 {% block content %}
-    {% for year, archive in tag.archives|items %}
+    {% for archive in tag.archives|values %}
         <dl class="archives">
-            <dt class="archives-year"><a href="{{ get_url(archive.url) }}">{{ year }}</a></dt>
+            <dt class="archives-year"><a href="{{ get_url(archive.url) }}">{{ archive.year }}</a></dt>
             <dd>
                 <dl class="archives-records">
                     {% for month in archive.months|values %}
