@@ -31,14 +31,14 @@ class Config(dict):
             pass
 
 class Data(object):
-    def __init__(self, container, archives, tags):
-        self.container = container
+    def __init__(self, items, archives, tags):
+        self.items = items
         self.archives = archives
         self.tags = tags
     
     
     def __iter__(self):
-        return self.container.__iter__()
+        return self.items.__iter__()
 
 class Item(dict):
     def __init__(self, src, *args, **kwargs):
@@ -67,7 +67,7 @@ class Container(object):
     def _get_pages(self):
         pages = []
         
-        for item in self.container:
+        for item in self.items:
             if item['layout'] is None:
                 continue
             
@@ -77,7 +77,7 @@ class Container(object):
     
     
     def add(self, item):
-        self.container.append(item)
+        self.items.append(item)
     
     def archive(self):
         pass
@@ -94,8 +94,8 @@ class Container(object):
         return self.data.archives
     
     @property
-    def container(self):
-        return self.data.container
+    def items(self):
+        return self.data.items
     
     @property
     def pages(self):
@@ -122,8 +122,8 @@ class Items(Container):
         self.path = Directory(normpath(src.path, '_containers', self.name))
     
     
-    def _archive(self, container, archive):
-        for item in container:
+    def _archive(self, items, archive):
+        for item in items:
             year, month = datetime.utcfromtimestamp(item['timestamp']).strftime('%Y %B').decode('utf-8').split()
             
             if year not in archive:
@@ -159,14 +159,14 @@ class Items(Container):
         return pages
     
     def _relate(self):
-        for i, item in enumerate(self.container):
+        for i, item in enumerate(self.items):
             if i:
-                item['prev'] = self.container[i - 1]
+                item['prev'] = self.items[i - 1]
             else:
                 item['prev'] = None
             
             try:
-                item['next'] = self.container[i + 1]
+                item['next'] = self.items[i + 1]
             except IndexError:
                 item['next'] = None
     
@@ -185,19 +185,19 @@ class Items(Container):
     
     
     def archive(self):
-        self._archive(self.container, self.archives)
+        self._archive(self.items, self.archives)
         
         for tag in self.tags.itervalues():
-            self._archive(tag['container'], tag['archives'])
+            self._archive(tag['items'], tag['archives'])
     
     def sort(self):
-        self._sort(self.container, self.config['sort'], self.config['order'])
+        self._sort(self.items, self.config['sort'], self.config['order'])
         self._relate()
     
     def tag(self):
         tags = []
         
-        for item in self.container:
+        for item in self.items:
             item['tags'].sort(key = unicode.lower)
             
             for tag in item['tags']:
@@ -206,12 +206,12 @@ class Items(Container):
                 
                 self.tags[tag].append(item)
         
-        for name, container in self.tags.iteritems():
+        for name, items in self.tags.iteritems():
             tags.append({
                 'archives': OrderedDict(),
-                'count': len(container),
+                'count': len(items),
                 'name': name,
-                'container': container,
+                'items': items,
                 'url': Url.from_format(self.config['tags_url'], name)
             })
         
