@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 
-{% set title = 'Blog &rsaquo; Archives  &rsaquo; ' ~ tag.name %}
+{% set title = tag.name ~ ' : Archives : Blog' %}
 
 {% block breadcrumbs %}
     <ul id="breadcrumbs">
@@ -16,7 +16,7 @@
         <dl class="archives">
             <dt class="archives-year"><a href="{{ get_url(archive.url) }}">{{ year }}</a></dt>
             <dd>
-                <dl class="archives">
+                <dl class="archives-records">
                     {% for month in archive.months|values %}
                         {% for post in month %}
                             <dt class="archives-post-date">{{ post.timestamp|date('%b %d') }}</dt>

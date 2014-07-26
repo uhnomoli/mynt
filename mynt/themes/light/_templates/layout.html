@@ -4,7 +4,7 @@
 <head>
     {% include 'page.header.html' %}
     
-    {% if site.title %}<title>{% if title %}{{ title }} &ndash; {% endif %}{{ site.title }}{% if not title and site.subtitle %} &ndash; {{ site.subtitle }}{% endif %}</title>{% endif %}
+    {% if site.title %}<title>{% if title %}{{ title }} – {% endif %}{{ site.title }}{% if not title and site.subtitle %} – {{ site.subtitle }}{% endif %}</title>{% endif %}
 </head>
 
 <body>
@@ -24,7 +24,7 @@
             <p><code>/_templates/layout.html#L22-24</code></p>
             
             <div id="footer">
-                <p>{% if site.author %}&copy; {{ none|date('%Y') }} {{ site.author }} &ndash; {% endif %}powered by <a href="http://mynt.uhnomoli.com/">mynt</a></p>
+                <p>{% if site.author %}&copy; {{ none|date('%Y') }} {{ site.author }} – {% endif %}powered by <a href="http://mynt.uhnomoli.com/">mynt</a></p>
             </div>
         </div>
         

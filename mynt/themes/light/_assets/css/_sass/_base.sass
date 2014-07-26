@@ -33,7 +33,6 @@ $content: $container - $offset
 //
 // MIXINS
 //
-
 @mixin compact-children
     & > :first-child
         margin-top: 0px
@@ -45,9 +44,9 @@ $content: $container - $offset
     & > a
         border-bottom-width: 0px
 
-@mixin inverted-links($color: $fg-d, $borderless: false)
+@mixin inverted-links($borderless: false)
     & > a
-        color: $color
+        color: $fg-d
         
         &:hover
             color: $hlt
