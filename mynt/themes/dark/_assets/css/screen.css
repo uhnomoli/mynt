@@ -63,16 +63,16 @@ blockquote {
   background-color: #1f1f1f;
 }
 
-dl.horizontal > dd, .archives > dd {
+dl.horizontal > dd, .archives > dd, .archives-records > dd {
   margin-left: 65px;
 }
-dl.horizontal > dd + dt, .archives > dd + dt {
+dl.horizontal > dd + dt, .archives > dd + dt, .archives-records > dd + dt {
   margin-top: 18px;
 }
-dl.horizontal > dd + dt + dd, .archives > dd + dt + dd {
+dl.horizontal > dd + dt + dd, .archives > dd + dt + dd, .archives-records > dd + dt + dd {
   margin-top: 18px;
 }
-dl.horizontal > dt, .archives > dt {
+dl.horizontal > dt, .archives > dt, .archives-records > dt {
   float: left;
   width: 50px;
 }
@@ -357,7 +357,8 @@ div.code > div {
 .archives {
   padding: 9px;
 }
-.archives .archives {
+
+.archives-records {
   margin: 0px;
   padding: 0px;
 }
