@@ -114,11 +114,6 @@ class Url(object):
         else:
             url = cls.join(format, slug)
         
-        if data is not None:
-            for attribute, value in data.iteritems():
-                if isinstance(value, basestring):
-                    url = url.replace('<{0}>'.format(attribute), cls.slugify(value))
-        
         if date is not None:
             subs = {
                 '<year>': '%Y',
@@ -134,6 +129,11 @@ class Url(object):
                 url = url.replace(match, replace)
             
             url = date.strftime(url).decode('utf-8')
+        
+        if data is not None:
+            for attribute, value in data.iteritems():
+                if isinstance(value, basestring):
+                    url = url.replace('<{0}>'.format(attribute), cls.slugify(value))
         
         if clean:
             return cls.join(url, '')
