@@ -125,6 +125,8 @@ li
     ol > &
         left: 22px
         
+        margin-right: 22px
+        
         counter-increment: item
         
         &:before
@@ -139,6 +141,8 @@ li
     ul > &
         left: 12px
         
+        margin-right: 12px
+        
         &:before
             left: -12px
             
@@ -146,9 +150,13 @@ li
     
     ul.unstyled > &
         position: static
+        left: auto
+        
+        margin-right: 0px
         
         &:before
             position: static
+            left: auto
             
             content: none
 
