@@ -50,8 +50,8 @@ class Mynt(object):
     container_defaults = {
         'archive_layout': None,
         'archives_url': '/',
-        'order': 'asc',
-        'sort': 'title',
+        'order': 'desc',
+        'sort': 'timestamp',
         'tag_layout': None,
         'tags_url': '/'
     }
