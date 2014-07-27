@@ -1,6 +1,6 @@
 # News
 
-### v0.3 (unreleased)
+### v0.3 (July 27th, 2014)
 
 + __New__
     + A mechanism for defining content containers.
