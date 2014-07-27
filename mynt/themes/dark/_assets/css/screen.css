@@ -120,6 +120,7 @@ ol > li:before, ul > li:before {
 }
 ol > li {
   left: 22px;
+  margin-right: 22px;
   counter-increment: item;
 }
 ol > li:before {
@@ -130,6 +131,7 @@ ol > li:before {
 }
 ul > li {
   left: 12px;
+  margin-right: 12px;
 }
 ul > li:before {
   left: -12px;
@@ -137,9 +139,12 @@ ul > li:before {
 }
 ul.unstyled > li, #nav > li, #breadcrumbs > li {
   position: static;
+  left: auto;
+  margin-right: 0px;
 }
 ul.unstyled > li:before, #nav > li:before, #breadcrumbs > li:before {
   position: static;
+  left: auto;
   content: none;
 }
 
