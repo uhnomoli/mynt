@@ -1,0 +1,825 @@
+@import base
+
+
+//
+// RESET
+//
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video
+    vertical-align: baseline
+    
+    margin: 0px
+    padding: 0px
+    
+    border-width: 0px
+    
+    font: inherit
+    font-size: 100%
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section
+    display: block
+
+blockquote, q
+    quotes: none
+
+blockquote:before, blockquote:after,
+q:before, q:after
+    content: ''
+    content: none
+
+ol, ul
+    list-style: none
+
+table
+    border-collapse: collapse
+
+
+//
+// BASE
+//
+body
+    background:
+        color: $bg
+        image: url('../images/bg.png')
+        position: left top
+        repeat: repeat
+    
+    color: $fg
+    font:
+        family: 'Open Sans', sans-serif
+        size: 13px
+    line-height: $baseline
+
+blockquote, dl, ol, p, pre, table, ul
+    margin: $baseline 0px
+
+blockquote
+    overflow: hidden
+    
+    padding: 0px $baseline
+    
+    background-color: $sbg-l
+
+dl.horizontal
+    & > dd
+        margin-left: 65px
+        
+        & + dt
+            margin-top: $baseline
+            
+            & + dd
+                margin-top: $baseline
+    
+    & > dt
+        float: left
+        
+        width: 50px
+
+h1, h2, h3, h4, h5, h6
+    color: $fg-d
+    font:
+        style: italic
+        weight: normal
+
+h1, h2
+    line-height: $baseline * 2
+
+h1
+    margin: ($baseline * 2) 0px
+    margin-bottom: $baseline * 1.5
+    padding-bottom: 8px
+    
+    border-bottom: 1px solid $sbg
+    
+    font-size: 28px
+
+h2
+    font-size: 22px
+
+h3
+    font-size: 18px
+
+h4
+    font-size: 14px
+
+h5
+    font-size: 12px
+
+h6
+    font-size: 10px
+
+li
+    position: relative
+    
+    ol > &:before, ul > &:before
+        position: absolute
+        
+        color: $hlt-l
+        font-family: 'Envy Code R', 'Ubuntu Mono', monospace
+    
+    ol > &
+        left: 22px
+        
+        margin-right: 22px
+        
+        counter-increment: item
+        
+        &:before
+            left: -22px
+            
+            width: 17px
+            
+            text-align: right
+            
+            content: counter(item, decimal) '.'
+    
+    ul > &
+        left: 12px
+        
+        margin-right: 12px
+        
+        &:before
+            left: -12px
+            
+            content: '\2022'
+    
+    ul.unstyled > &
+        position: static
+        left: auto
+        
+        margin-right: 0px
+        
+        &:before
+            position: static
+            left: auto
+            
+            content: none
+
+ol, ul
+    list-style:
+        image: none
+        position: inside
+        type: none
+    
+    ol, ul
+        margin: 0px
+        margin-left: $baseline
+
+ol
+    counter-reset: item
+
+p
+    text-align: justify
+
+pre
+    padding: 0px 3px
+    
+    background-color: $pygments
+    
+    font-family: 'Envy Code R', 'Ubuntu Mono', monospace
+
+table
+    background-color: $sbg-l
+    border-collapse: collapse
+
+td, th
+    padding: $baseline / 2
+
+td
+    +compact-children
+    
+    tr:nth-child(2n) > &
+        background-color: $bg-d
+
+th
+    background-color: $sbg
+    
+    font:
+        size: 12px
+        style: italic
+        weight: bold
+    text-align: left
+
+a
+    +transition(color 0.2s)
+    
+    border-bottom: 1px solid rgba(#000000, 0.1)
+    
+    color: $hlt
+    text-decoration: none
+    
+    &:hover
+        color: $hlt-l
+
+code
+    padding: 0px 3px
+    
+    background-color: $sbg
+    
+    color: $fg-d
+    font-family: 'Envy Code R', 'Ubuntu Mono', monospace
+    line-height: 17px
+    white-space: pre
+    
+    pre &
+        padding: 0px
+        
+        background-color: transparent
+        
+        color: $pygments-fg
+        line-height: $baseline
+    
+    table &
+        background-color: $sbg
+
+em
+    font-style: italic
+
+img
+    vertical-align: bottom
+    
+    a > &
+        margin-bottom: -1px
+        padding: 5px
+        
+        background-color: $sbg
+        border-bottom: 1px solid $bg
+
+strong
+    font:
+        size: 12px
+        weight: bold
+    line-height: 17px
+
+sub, sup
+    font-size: 11px
+    line-height: 0px
+
+sub
+    vertical-align: sub
+
+sup
+    vertical-align: super
+
+
+//
+// LAYOUT
+//
+#container
+    margin: $baseline auto
+    margin-bottom: 0px
+    
+    width: $container
+
+#sidebar
+    position: fixed
+    top: 0px
+    bottom: 0px
+    
+    width: $sidebar
+
+#title
+    margin: 0px
+    margin-top: $baseline
+    padding: 0px
+
+#subtitle
+    line-height: $baseline
+
+#nav
+    & > dt
+        margin: $baseline 0px
+        margin-bottom: $baseline / 2
+
+#toc
+    position: fixed
+    top: 0px
+    left: 50%
+    
+    margin: 72px 0px 0px ($container / 2) - $sidebar
+    padding: 9px
+    
+    width: $sidebar - 18px
+
+#breadcrumbs
+    overflow: hidden
+    
+    margin: $baseline $offset
+    padding: $baseline / 2
+    
+    width: $content - $baseline
+
+#content
+    +compact-children
+    
+    margin: $baseline $offset
+    
+    width: $content
+
+.notice
+    overflow: hidden
+    
+    margin: $baseline 0px
+    padding: 0px $baseline
+
+.api
+    & > dd
+        +compact-children
+        
+        margin: $baseline
+        margin-right: 0px
+    
+    & > dt
+        margin-top: $baseline
+        padding: $baseline / 2
+        
+        & > strong
+            line-height: $baseline
+
+#powering
+    & > li
+        overflow: hidden
+        
+        margin-top: $baseline
+        padding: $baseline / 2
+
+.powering-source
+    float: right
+    
+    padding: 0px 3px
+
+.post-list
+    & > .post-title, & > .post-meta
+        padding: $baseline / 2
+    
+    & > .post-title
+        padding-bottom: 0px
+        
+        line-height: $baseline
+    
+    & > .post-meta
+        padding-top: 0px
+
+.post-title, .post-meta
+    padding: 12px
+
+.post-title
+    margin: 0px
+    padding-bottom: 0px
+    
+    line-height: 30px
+
+.post-meta
+    margin-bottom: $baseline
+    padding-top: 0px
+    
+    line-height: $baseline
+
+div.code
+    margin: $baseline 0px
+    
+    & > div
+        overflow: auto
+        
+        max-height: $baseline * 27
+
+.highlighttable
+    margin: 0px
+
+.linenodiv, .highlight
+    & > pre
+        margin: 0px
+
+.archives, .archives-records
+    @extend dl.horizontal
+
+.archives
+    padding: $baseline / 2
+
+.archives-records
+    margin: 0px
+    padding: 0px
+
+#forkme
+    display: block
+    
+    position: fixed
+    top: 0px
+    right: 0px
+    
+    & > img
+        margin-bottom: 0px
+        padding: 0px
+
+
+//
+// STYLE
+//
+#sidebar
+    font-style: italic
+
+#title
+    +inverted-links($borderless: true)
+    
+    border-bottom-width: 0px
+    
+    font:
+        family: 'Ubuntu Mono', monospace
+        size: 36px
+
+#subtitle
+    color: $fg-l
+    font-size: 16px
+
+#nav
+    font:
+        family: 'Envy Code R', 'Ubuntu Mono', monospace
+        style: normal
+    
+    & > dd
+        +borderless-links
+
+#toc, .toc-section
+    @extend ul.unstyled
+    
+    & > li
+        overflow: hidden
+        
+        text-overflow: ellipsis
+        white-space: nowrap
+        
+        & > a
+            color: $fg-l
+            
+            &:hover
+                color: $fg-d
+
+#toc
+    +opacity(0.5)
+    +transition(opacity 0.35s)
+    
+    background-color: $sbg-l
+    
+    font:
+        size: 11px
+        style: italic
+    
+    &:hover
+        +opacity(1)
+
+#breadcrumbs
+    @extend ul.unstyled
+    
+    background-color: $sbg-l
+    
+    color: $fg-l
+    font-family: 'Envy Code R', 'Ubuntu Mono', monospace
+    font-style: italic
+    
+    & > li
+        +inverted-links
+        
+        float: left
+        
+        &:after
+            padding: 0px 6px
+            
+            color: $fg
+            font-style: normal
+            
+            content: '\203A'
+        
+        &:last-child:after
+            padding: 0px
+            
+            content: none
+
+.notice
+    font-style: italic
+    
+    & > div.code
+        font-style: normal
+    
+    a
+        color: $fg-d
+        
+        &:hover
+            color: $fg-d
+    
+    .linenos
+        background-color: #D5D5D5
+
+.notice-info
+    +notice($info-bg, $info-fg)
+
+.notice-success
+    +notice($success-bg, $success-fg)
+
+.notice-warning
+    +notice($warning-bg, $warning-fg)
+
+.notice-danger
+    +notice($danger-bg, $danger-fg)
+
+.api
+    & > dt
+        background-color: $sbg-l
+        
+        font-family: 'Envy Code R', 'Ubuntu Mono', monospace
+        
+        & > strong
+            font-size: 13px
+
+#powering
+    @extend ul.unstyled
+    
+    & > li
+        background-color: $sbg-l
+
+.powering-source
+    +transition(background-color 0.2s, color 0.2s)
+    
+    background-color: rgba($hlt, 0.2)
+    border-bottom-width: 0px
+    
+    color: $hlt-l
+    
+    &:hover
+        background-color: rgba($hlt, 0.15)
+        
+        color: $hlt
+
+.post-list
+    & > .post-title
+        font-size: 16px
+    
+    & > .post-meta
+        +inverted-links
+        
+        font-size: 10px
+
+.post-title, .post-meta
+    background-color: $sbg-l
+
+.post-title
+    +borderless-links
+    
+    border-bottom-width: 0px
+    
+    font-size: 24px
+
+.post-meta
+    +post-meta
+    
+    font-size: 11px
+
+div.code
+    & > div
+        background-color: $pygments
+
+.highlighttable
+    background-color: transparent
+
+.linenos
+    background-color: $sbg
+    
+    color: $fg-d
+
+.linenodiv, .highlight
+    & > pre
+        padding: 0px
+        
+        background-color: transparent
+
+.archives
+    background-color: $sbg-l
+    
+    font-style: italic
+    text-transform: uppercase
+
+.archives-year
+    +inverted-links($borderless: true)
+    
+    font-size: 18px
+
+.archives-post-date
+    color: $fg-l
+    font-size: 12px
+
+.archives-post-title
+    +borderless-links
+    
+    text-transform: none
+
+.archives-post-tags
+    +inverted-links
+    +post-meta
+    
+    font-size: 10px
+
+#forkme
+    +transition(all 0s ease 0s)
+    
+    border-bottom-width: 0px
+    
+    & > img
+        background-color: transparent
+        border-bottom-width: 0px
+
+
+//
+// PYGMENTS
+//
+.highlight
+    color: #F8F8F2
+
+.highlight .bp
+    color: #F8F8F2
+
+.highlight .c
+    color: #75715E
+
+.highlight .c1
+    color: #75715E
+
+.highlight .cm
+    color: #75715E
+
+.highlight .cp
+    color: #75715E
+
+.highlight .cs
+    color: #75715E
+
+.highlight .err
+    background-color: #1E0010
+    
+    color: #960050
+
+.highlight .ge
+    font-style: italic
+
+.highlight .gs
+    font-weight: bold
+
+.highlight .hll
+    background-color: #49483E
+
+.highlight .il
+    color: #AE81FF
+
+.highlight .k
+    color: #66D9EF
+
+.highlight .kc
+    color: #66D9EF
+
+.highlight .kd
+    color: #66D9EF
+
+.highlight .kn
+    color: #F92672
+
+.highlight .kp
+    color: #66D9EF
+
+.highlight .kr
+    color: #66D9EF
+
+.highlight .kt
+    color: #66D9EF
+
+.highlight .l
+    color: #AE81FF
+
+.highlight .ld
+    color: #E6DB74
+
+.highlight .m
+    color: #AE81FF
+
+.highlight .mf
+    color: #AE81FF
+
+.highlight .mh
+    color: #AE81FF
+
+.highlight .mi
+    color: #AE81FF
+
+.highlight .mo
+    color: #AE81FF
+
+.highlight .n
+    color: #F8F8F2
+
+.highlight .na
+    color: #A6E22E
+
+.highlight .nb
+    color: #F8F8F2
+
+.highlight .nc
+    color: #A6E22E
+
+.highlight .nd
+    color: #A6E22E
+
+.highlight .ne
+    color: #A6E22E
+
+.highlight .nf
+    color: #A6E22E
+
+.highlight .ni
+    color: #F8F8F2
+
+.highlight .nl
+    color: #F8F8F2
+
+.highlight .nn
+    color: #F8F8F2
+
+.highlight .no
+    color: #66D9EF
+
+.highlight .nt
+    color: #F92672
+
+.highlight .nv
+    color: #F8F8F2
+
+.highlight .nx
+    color: #A6E22E
+
+.highlight .o
+    color: #F92672
+
+.highlight .ow
+    color: #F92672
+
+.highlight .p
+    color: #F8F8F2
+
+.highlight .py
+    color: #F8F8F2
+
+.highlight .s
+    color: #E6DB74
+
+.highlight .s1
+    color: #E6DB74
+
+.highlight .s2
+    color: #E6DB74
+
+.highlight .sb
+    color: #E6DB74
+
+.highlight .sc
+    color: #E6DB74
+
+.highlight .sd
+    color: #E6DB74
+
+.highlight .se
+    color: #AE81FF
+
+.highlight .sh
+    color: #E6DB74
+
+.highlight .si
+    color: #E6DB74
+
+.highlight .sr
+    color: #E6DB74
+
+.highlight .ss
+    color: #E6DB74
+
+.highlight .sx
+    color: #E6DB74
+
+.highlight .vc
+    color: #F8F8F2
+
+.highlight .vg
+    color: #F8F8F2
+
+.highlight .vi
+    color: #F8F8F2
+
+.highlight .w
+    color: #F8F8F2
