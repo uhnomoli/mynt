@@ -4,7 +4,7 @@ title: 'What''s new in mynt v0.3'
 tags: ['Releases']
 ---
 
-It's been almost two and a half years since the last major release and a lot has changed. I'm happy to finally announce the release of mynt v0.3 and with it come a handful of new features and a lot of bug fixes.
+It's been almost two and a half years since the last major release and a lot has changed. I'm happy to finally announce the release of mynt v0.3 and with it comes a handful of new features and a lot of bug fixes.
 
 
 # Content containers
@@ -14,7 +14,7 @@ The headlining feature of v0.3 is the new content containers. With this new feat
 
 # Markup pages
 
-Also new in v0.3 is the ability to write pages in supported markup languages. All that's required to do so is a YAML frontmatter with the `layout` attribute set. Be sure to check out the new [pages][pages] section of the quickstart guide for more information.
+Also new in v0.3 is the ability to write pages in the supported markup languages. All that's required to do so is a YAML frontmatter with the `layout` attribute set. Be sure to check out the new [pages][pages] section of the quickstart guide for more information.
 
 
 # And more
