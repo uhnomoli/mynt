@@ -32,6 +32,23 @@ class _Renderer(h.Hoep):
         
         return '<pre><code{0}>{1}</code></pre>'.format(language, text)
     
+    def footnotes(self, text):
+        return '<div class="footnotes"><ol>{0}</ol></div>'.format(text)
+    
+    def footnote_def(self, text, number):
+        link = '&nbsp;<a href="#fnref{0}" rev="footnote">↩</a>'.format(number)
+        index = text.rfind('</p>')
+        
+        if index:
+            text = ''.join((text[:index], link, text[index:]))
+        else:
+            text = ''.join((text, link))
+        
+        return '<li id="fn{0}" class="footnotes-def">{1}</li>'.format(number, text)
+    
+    def footnote_ref(self, number):
+        return '<sup id="fnref{0}" class="footnotes-ref"><a href="#fn{0}" rel="footnote">{0}</a></sup>'.format(number)
+    
     def header(self, text, level):
         if self.render_flags & h.HTML_TOC:
             identifier = text.lower()

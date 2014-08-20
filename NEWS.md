@@ -2,7 +2,8 @@
 
 ### v0.3.1 (unreleased)
 
-_In development._
++ __Changed__
+    + Removed the `<hr>` from and added classes to the outputted markup for Markdown footnotes.
 
 
 ### v0.3 (July 27th, 2014)
