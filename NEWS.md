@@ -33,7 +33,6 @@ _In development._
     + A config setting for specifying directories and files to be copied over that would otherwise be ignored.
     + Localization and internationalization support.
 + __Changed__
-    + HTML escaping is now handled by Houdini.
     + The programming language of a code block is now stored in the `data-lang` attribute of the `<code>` tag instead of the `lang` attribute of the `<pre>` tag.
     + Tildes are no longer allowed in post slugs.
     + The `watch` subcommand now honors the configured log level.
