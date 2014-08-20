@@ -48,12 +48,12 @@
                             <pre><code data-lang="html+jinja">{% raw %}{% for archive in container.archives|values %}
     &lt;h1&gt;{{ archive.year }}&lt;/h1&gt;
     &lt;ul&gt;
-        {% for month, posts in archive.months|items %}
+        {% for month, items in archive.months|items %}
             &lt;li&gt;
                 &lt;h1&gt;{{ month }}&lt;/h1&gt;
                 &lt;ul&gt;
-                    {% for post in posts %}
-                        &lt;li&gt;{{ post.timestamp|date('%d') }} – &lt;a href=&quot;{{ get_url(post.url) }}&quot;&gt;{{ post.title }}&lt;/a&gt;&lt;/li&gt;
+                    {% for item in items %}
+                        &lt;li&gt;{{ item.timestamp|date('%d') }} – &lt;a href=&quot;{{ get_url(item.url) }}&quot;&gt;{{ item.title }}&lt;/a&gt;&lt;/li&gt;
                     {% endfor %}
                 &lt;/ul&gt;
             &lt;/li&gt;
@@ -155,7 +155,7 @@
             </div>
             <dl class="api">
                 <dt id="data.locals.tag.archives"><em>tag.</em><strong>archives</strong></dt>
-                <dd>An <a href="#data.globals.containers.container.archives">archive</a> containing only posts belonging to the tag.</dd>
+                <dd>An <a href="#data.globals.containers.container.archives">archive</a> containing only items belonging to the tag.</dd>
                 
                 <dt id="data.locals.tag.count"><em>tag.</em><strong>count</strong></dt>
                 <dd>The number of tagged items.</dd>
@@ -163,7 +163,7 @@
                 <dt id="data.locals.tag.name"><em>tag.</em><strong>name</strong></dt>
                 <dd>The name of the tag.</dd>
                 
-                <dt id="data.locals.tag.posts"><em>tag.</em><strong>posts</strong></dt>
+                <dt id="data.locals.tag.items"><em>tag.</em><strong>items</strong></dt>
                 <dd>A list of the tag's <a href="#data.locals.item">items</a>.</dd>
                 
                 <dt id="data.locals.tag.url"><em>tag.</em><strong>url</strong></dt>
@@ -190,7 +190,7 @@
         <dt id="filters.date"><strong>date(</strong><em>ts, format</em><strong>)</strong></dt>
         <dd>
             <p>Returns a formatted date based on the supplied timestamp and format.</p>
-            <pre><code data-lang="jinja">{{ '{{ post.timestamp|date(\'%d %b %Y\') }}' }}</code></pre>
+            <pre><code data-lang="jinja">{{ '{{ item.timestamp|date(\'%d %b %Y\') }}' }}</code></pre>
             <dl class="api">
                 <dt id="filters.date.ts"><strong>ts</strong></dt>
                 <dd>
@@ -228,7 +228,7 @@
         <dt id="helpers.get_url"><strong>get_url(</strong><em>url, absolute</em><strong>)</strong></dt>
         <dd>
             <p>Returns a URL based on the <code>base_url</code> config setting.</p>
-            <pre><code data-lang="html+jinja">&lt;a href=&quot;{{ '{{ get_url(post.url) }}' }}&quot;&gt;{{ '{{ post.title }}' }}&lt;/a&gt;</code></pre>
+            <pre><code data-lang="html+jinja">&lt;a href=&quot;{{ '{{ get_url(item.url) }}' }}&quot;&gt;{{ '{{ item.title }}' }}&lt;/a&gt;</code></pre>
             <dl class="api">
                 <dt id="helpers.get_url.url"><strong>url</strong></dt>
                 <dd>
