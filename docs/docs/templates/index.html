@@ -37,9 +37,9 @@
             <dl class="api">
                 <dt id="data.globals.containers.container"><em>containers[</em><strong>container</strong><em>]</em></dt>
                 <dd>
-                    <p>An object of the container's items as well as archives and tags dictionaries.</p>
+                    <p>A container object.</p>
                     <div class="notice notice-warning">
-                        <p>Iterating over the container yields it's <a href="#data.globals.containers.container.items">items</a>.</p>
+                        <p>Iterating over this object yields it's <a href="#data.globals.containers.container.items">items</a>.</p>
                     </div>
                     <dl class="api">
                         <dt id="data.globals.containers.container.archives"><em>container.</em><strong>archives</strong></dt>
@@ -149,9 +149,12 @@
         
         <dt id="data.locals.tag"><strong>tag</strong></dt>
         <dd>
-            <p>A dictionary of tag data.</p>
+            <p>A tag object.</p>
             <div class="notice notice-warning">
                 <p>This variable is only available in <code>tag_layout</code> templates.</p>
+            </div>
+            <div class="notice notice-warning">
+                <p>Iterating over this object yields it's <a href="#data.locals.tag.items">items</a>.</p>
             </div>
             <dl class="api">
                 <dt id="data.locals.tag.archives"><em>tag.</em><strong>archives</strong></dt>
