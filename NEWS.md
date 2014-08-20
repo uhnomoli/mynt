@@ -4,6 +4,7 @@
 
 + __Changed__
     + Removed the `<hr>` from and added classes to the outputted markup for Markdown footnotes.
+    + Tag data is now stored in an object instead of a dictionary.
 
 
 ### v0.3 (July 27th, 2014)
