@@ -12,7 +12,8 @@ import traceback
 
 from watchdog.events import FileSystemEventHandler
 
-from mynt.utils import abspath, get_logger, normpath
+from mynt.exceptions import FileSystemException
+from mynt.utils import abspath, get_logger, normpath, Timer
 
 
 logger = get_logger('mynt')
@@ -21,17 +22,26 @@ logger = get_logger('mynt')
 class Directory(object):
     def __init__(self, path):
         self.path = abspath(path)
+        
+        if self.is_root:
+            raise FileSystemException('Root is not an acceptible directory.')
     
     
-    def cp(self, dest):
-        dest = Directory(dest)
-        
-        if dest.exists:
-            dest.rm()
-        
-        logger.debug('..  cp: {0}\n..      dest: {1}'.format(self.path, dest.path))
-        
-        shutil.copytree(self.path, dest.path)
+    def _ignored(self, path, names):
+        return [name for name in names if name.startswith(('.', '_'))]
+    
+    
+    def cp(self, dest, ignore = True):
+        if self.exists:
+            dest = Directory(dest)
+            ignore = self._ignored if ignore else None
+            
+            if dest.exists:
+                dest.rm()
+            
+            logger.debug('..  cp: %s\n..      dest: %s', self.path, dest.path)
+            
+            shutil.copytree(self.path, dest.path, ignore = ignore)
     
     def empty(self):
         if self.exists:
@@ -48,20 +58,24 @@ class Directory(object):
     
     def mk(self):
         if not self.exists:
-            logger.debug('..  mk: {0}'.format(self.path))
+            logger.debug('..  mk: %s', self.path)
             
             makedirs(self.path)
     
     def rm(self):
         if self.exists:
-            logger.debug('..  rm: {0}'.format(self.path))
+            logger.debug('..  rm: %s', self.path)
             
             shutil.rmtree(self.path)
     
     
     @property
     def exists(self):
-        return op.exists(self.path) and op.isdir(self.path)
+        return op.isdir(self.path)
+    
+    @property
+    def is_root(self):
+        return op.dirname(self.path) == self.path
     
     
     def __eq__(self, other):
@@ -94,23 +108,35 @@ class EventHandler(FileSystemEventHandler):
         self._callback = callback
     
     
-    def on_any_event(self, event):
-        path = event.src_path.replace(self._src, '')
+    def _regenerate(self, path):
+        path = path.replace(self._src, '')
         
-        if search(r'/[._](?!assets|posts|templates)', path):
-            logger.debug('>> Skipping: {0}'.format(path))
+        if search(r'/[._](?!assets|containers|posts|templates)', path):
+            logger.debug('>> Skipping: %s', path)
         else:
-            logger.info('>> Change detected in: {0}'.format(path))
+            logger.info('>> Change detected in: %s', path)
             
             try:
+                Timer.start()
+                
                 self._callback()
+                
+                logger.info('Regenerated in %.3fs', Timer.stop())
             except:
                 t, v, tb = exc_info()
                 lc = traceback.extract_tb(tb)[-1:][0]
                 
-                logger.error('!! {0}\n..  file: {1}\n..  line: {2}\n..    in: {3}\n..    at: {4}'.format(v, *lc))
+                logger.error('!! %s\n..  file: %s\n..  line: %s\n..    in: %s\n..    at: %s', v, *lc)
                 
                 pass
+    
+    
+    def on_any_event(self, event):
+        if event.event_type != 'moved':
+            self._regenerate(event.src_path)
+    
+    def on_moved(self, event):
+        self._regenerate(event.dest_path)
 
 class File(object):
     def __init__(self, path, content = None):
@@ -121,22 +147,23 @@ class File(object):
     
     
     def cp(self, dest):
-        dest = File(dest)
-        
-        if self.path != dest.path:
-            if not dest.root.exists:
-                dest.root.mk()
+        if self.exists:
+            dest = File(dest)
             
-            logger.debug('..  cp: {0}{1}\n..      src:  {2}\n..      dest: {3}'.format(self.name, self.extension, self.root, dest.root))
-            
-            shutil.copyfile(self.path, dest.path)
+            if self.path != dest.path:
+                if not dest.root.exists:
+                    dest.root.mk()
+                
+                logger.debug('..  cp: %s%s\n..      src:  %s\n..      dest: %s', self.name, self.extension, self.root, dest.root)
+                
+                shutil.copyfile(self.path, dest.path)
     
     def mk(self):
         if not self.exists:
             if not self.root.exists:
                 self.root.mk()
             
-            logger.debug('..  mk: {0}'.format(self.path))
+            logger.debug('..  mk: %s', self.path)
             
             with open(self.path, 'w', encoding = 'utf-8') as f:
                 if self.content is None:
@@ -146,7 +173,7 @@ class File(object):
     
     def rm(self):
         if self.exists:
-            logger.debug('..  rm: {0}'.format(self.path))
+            logger.debug('..  rm: %s', self.path)
             
             remove(self.path)
     
@@ -165,7 +192,7 @@ class File(object):
     
     @property
     def exists(self):
-        return op.exists(self.path) and op.isfile(self.path)
+        return op.isfile(self.path)
     
     @property
     def mtime(self):

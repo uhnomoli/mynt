@@ -1,0 +1,107 @@
+//
+// IMPORTS
+//
+@import compass/css3/shared
+
+
+//
+// VARIABLES
+//
+
+// COLORS
+$bg-d: #EBEBEB
+$bg: #F2F2F2
+$sbg: #DEDEDE
+$sbg-l: #E6E6E6
+$fg-d: #262626
+$fg: #333333
+$fg-l: #808080
+$hlt: #708D14
+$hlt-l: #4F6800
+
+$pygments: #272727
+$pygments-fg: #F8F8F2
+
+$info-bg: #D4DEE6
+$info-fg: #176099
+$success-bg: #E0E6D3
+$success-fg: #5C800D
+$warning-bg: #E6E4D4
+$warning-fg: #80760D
+$danger-bg: #E6D4D4
+$danger-fg: #99171D
+
+// DIMENSIONS
+$baseline: 18px
+$container: 960px
+$sidebar: 146px
+
+$offset: $sidebar + $baseline
+$content: $container - (2 * $offset)
+
+
+//
+// MIXINS
+//
+@mixin compact-children
+    & > :first-child
+        margin-top: 0px
+    
+    & > :last-child
+        margin-bottom: 0px
+
+@mixin borderless-links
+    & > a
+        border-bottom-width: 0px
+
+@mixin inverted-links($color: $fg-d, $borderless: false)
+    & > a
+        color: $color
+        
+        &:hover
+            color: $hlt
+        
+        @if $borderless
+            border-bottom-width: 0px
+
+@mixin notice($bg, $fg)
+    background-color: $bg
+    
+    color: $fg
+    
+    code
+        background-color: rgba($fg, 0.2)
+        
+        color: $fg
+
+@mixin post-meta
+    color: $fg-l
+    font-style: normal
+    text-transform: uppercase
+    word-spacing: 2px
+    
+    & > span
+        position: relative
+        top: -1px
+
+// VENDOR PREFIXES
+@mixin border-radius($radius, $corner: false)
+    @if $corner
+        @include experimental(border-#{$corner}-radius, $radius, not -moz, -webkit, not -o, not -ms, not -khtml, official)
+    @else
+        @include experimental(border-radius, $radius, not -moz, -webkit, not -o, not -ms, not -khtml, official)
+
+@mixin box-shadow($one, $two: false, $three: false, $four: false, $five: false)
+    $shadows: compact($one, $two, $three, $four, $five)
+    
+    @include experimental(box-shadow, $shadows, not -moz, -webkit, not -o, not -ms, not -khtml, official)
+
+@mixin opacity($opacity)
+    -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=#{$opacity} * 100)'
+    filter: alpha(opacity=#{$opacity} * 100)
+    opacity: $opacity
+
+@mixin transition($one, $two: false, $three: false, $four: false, $five: false)
+    $transitions: compact($one, $two, $three, $four, $five)
+    
+    @include experimental(transition, $transitions, -moz, -webkit, -o, -ms, not -khtml, official)

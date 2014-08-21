@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+
+{% set crumbs = (('Community',), ('Powering',)) %}
+
+{% block content %}
+    <p>Below is a list of sites that are powered by mynt and their sources <em>(if available)</em> for people looking for some working examples of mynt sites or are just curious about how people are using mynt.</p>
+    <div class="notice notice-info">
+        <p>If you'd like your site added to this list, either message me (Anomareh) in the mynt <a href="http://webchat.freenode.net/?channels=mynt">IRC channel</a> or send me an <a href="mailto:{{ site.email }}">email</a> with the URL to the site as well as a link to it's source if it's publicly available somewhere.</p>
+    </div>
+    <ul id="powering">
+        {% for powered in site.powering %}
+            <li><a href="{{ powered.url }}">{{ powered.name }}</a>{% if powered.source %}<a class="powering-source" href="{{ powered.source }}">source</a>{% endif %}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
