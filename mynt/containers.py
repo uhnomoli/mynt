@@ -53,6 +53,18 @@ class Item(dict):
     def __unicode__(self):
         return self.__src
 
+class Tag(object):
+    def __init__(self, name, url, count, items, archives):
+        self.name = name
+        self.url = url
+        self.count = count
+        self.items = items
+        self.archives = archives
+    
+    
+    def __iter__(self):
+        return self.items.__iter__()
+
 
 class Container(object):
     def __init__(self, name, src, config):
@@ -153,7 +165,7 @@ class Items(Container):
                 pages.append((
                     self.config['tag_layout'],
                     {'tag': tag},
-                    tag['url']
+                    tag.url
                 ))
         
         return pages
@@ -174,7 +186,10 @@ class Items(Container):
         reverse = self._sort_order.get(order.lower(), False)
         
         def sort(item):
-            attribute = item.get(key, item)
+            try:
+                attribute = item.get(key, item)
+            except AttributeError:
+                attribute = getattr(item, key, item)
             
             if isinstance(attribute, basestring):
                 return attribute.lower()
@@ -188,7 +203,7 @@ class Items(Container):
         self._archive(self.items, self.archives)
         
         for tag in self.tags.itervalues():
-            self._archive(tag['items'], tag['archives'])
+            self._archive(tag.items, tag.archives)
     
     def sort(self):
         self._sort(self.items, self.config['sort'], self.config['order'])
@@ -207,13 +222,13 @@ class Items(Container):
                 self.tags[tag].append(item)
         
         for name, items in self.tags.iteritems():
-            tags.append({
-                'archives': OrderedDict(),
-                'count': len(items),
-                'name': name,
-                'items': items,
-                'url': Url.from_format(self.config['tags_url'], name)
-            })
+            tags.append(Tag(
+                name,
+                Url.from_format(self.config['tags_url'], name),
+                len(items),
+                items,
+                OrderedDict()
+            ))
         
         self._sort(tags, 'name')
         self._sort(tags, 'count', 'desc')
@@ -221,7 +236,7 @@ class Items(Container):
         self.tags.clear()
         
         for tag in tags:
-            self.tags[tag['name']] = tag
+            self.tags[tag.name] = tag
 
 
 class Posts(Items):

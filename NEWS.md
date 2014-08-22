@@ -1,5 +1,12 @@
 # News
 
+### v0.3.1 (August 20th, 2014)
+
++ __Changed__
+    + Removed the `<hr>` from and added classes to the outputted markup for Markdown footnotes.
+    + Tag data is now stored in an object instead of a dictionary.
+
+
 ### v0.3 (July 27th, 2014)
 
 + __New__
@@ -28,7 +35,6 @@
     + A config setting for specifying directories and files to be copied over that would otherwise be ignored.
     + Localization and internationalization support.
 + __Changed__
-    + HTML escaping is now handled by Houdini.
     + The programming language of a code block is now stored in the `data-lang` attribute of the `<code>` tag instead of the `lang` attribute of the `<pre>` tag.
     + Tildes are no longer allowed in post slugs.
     + The `watch` subcommand now honors the configured log level.
