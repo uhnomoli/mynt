@@ -1,0 +1,179 @@
+{% extends 'layout.html' %}
+
+
+{% set crumbs = (('Docs',), ('Command Line',)) %}
+{% set toc = (
+    ('mynt', (
+        ('gen',),
+        ('init',),
+        ('serve',),
+        ('watch',)
+    )),
+) %}
+
+{% block content %}
+    <dl class="api">
+        <dt id="mynt"><strong>mynt</strong></dt>
+        <dd>
+            <pre><code data-lang="text">$ mynt [-l {DEBUG,INFO,WARNING,ERROR} | -q | -v] [-V] {gen,init,serve,watch}</code></pre>
+            <p>The main command provided by mynt.</p>
+            <dl class="api">
+                <dt id="mynt.l"><strong>-l</strong> <em>{DEBUG,INFO,WARNING,ERROR}</em></dt>
+                <dt id="mynt.level"><strong>--level</strong> <em>{DEBUG,INFO,WARNING,ERROR}</em></dt>
+                <dd>
+                    <p>Sets mynt's log level.</p>
+                </dd>
+                
+                <dt id="mynt.q"><strong>-q</strong></dt>
+                <dt id="mynt.quiet"><strong>--quiet</strong></dt>
+                <dd>
+                    <p>Sets mynt's log level to <code>ERROR</code>.</p>
+                </dd>
+                
+                <dt id="mynt.v"><strong>-v</strong></dt>
+                <dt id="mynt.verbose"><strong>--verbose</strong></dt>
+                <dd>
+                    <p>Sets mynt's log level to <code>DEBUG</code>.</p>
+                </dd>
+                
+                <dt id="mynt.V"><strong>-V</strong></dt>
+                <dt id="mynt.version"><strong>--version</strong></dt>
+                <dd>
+                    <p>Prints mynt's version and exits.</p>
+                </dd>
+                
+                <dt id="mynt.subcommands"><em>{gen,init,serve,watch}</em></dt>
+                <dd>
+                    <p>The available subcommands.</p>
+                    <dl class="api">
+                        <dt id="mynt.gen"><strong>gen</strong></dt>
+                        <dd>
+                            <pre><code data-lang="text">$ mynt gen [-c | -f] [--base-url BASE_URL] [--locale LOCALE] [source] destination</code></pre>
+                            <p>Generates a mynt site.</p>
+                            <dl class="api">
+                                <dt id="mynt.gen.c"><strong>-c</strong></dt>
+                                <dt id="mynt.gen.clean"><strong>--clean</strong></dt>
+                                <dd>
+                                    <p>Forces generation by <strong>deleting</strong> the destination if it exists.</p>
+                                    <div class="notice notice-warning">
+                                        <p>If the destination exists and this flag is passed, mynt will <strong>delete</strong> the destination.</p>
+                                    </div>
+                                </dd>
+                                
+                                <dt id="mynt.gen.f"><strong>-f</strong></dt>
+                                <dt id="mynt.gen.force"><strong>--force</strong></dt>
+                                <dd>
+                                    <p>Forces generation by <strong>emptying</strong> the destination if it exists.</p>
+                                    <div class="notice notice-warning">
+                                        <p>If the destination exists and this flag is passed, mynt will <strong>delete</strong> any directory or file at the root of the destination that doesn't begin with an underscore or period.</p>
+                                    </div>
+                                </dd>
+                                
+                                <dt id="mynt.gen.base-url"><strong>--base-url</strong> <em>BASE_URL</em></dt>
+                                <dd>Sets the site's base URL overriding the config setting.</dd>
+                                
+                                <dt id="mynt.gen.locale"><strong>--locale</strong> <em>LOCALE</em></dt>
+                                <dd>Sets the locale used by the renderer.</dd>
+                                
+                                <dt id="mynt.gen.source"><strong>source</strong></dt>
+                                <dd>
+                                    <p>The directory mynt looks in for source files.</p>
+                                    <div class="notice notice-info">
+                                        <p>If not supplied, the current directory is used.</p>
+                                    </div>
+                                </dd>
+                                
+                                <dt id="mynt.gen.destination"><strong>destination</strong></dt>
+                                <dd>The directory mynt outputs to.</dd>
+                            </dl>
+                        </dd>
+                        
+                        <dt id="mynt.init"><strong>init</strong></dt>
+                        <dd>
+                            <pre><code data-lang="text">$ mynt init [-f] [-t THEME] [--bare] destination</code></pre>
+                            <p>Initializes a new mynt site.</p>
+                            <dl class="api">
+                                <dt id="mynt.init.f"><strong>-f</strong></dt>
+                                <dt id="mynt.init.force"><strong>--force</strong></dt>
+                                <dd>
+                                    <p>Forces initialization by <strong>deleting</strong> the destination if it exists.</p>
+                                    <div class="notice notice-warning">
+                                        <p>If the destination exists and this flag is passed, mynt will <strong>delete</strong> the destination.</p>
+                                    </div>
+                                </dd>
+                                
+                                <dt id="mynt.init.t"><strong>-t</strong> <em>THEME</em></dt>
+                                <dt id="mynt.init.theme"><strong>--theme</strong> <em>THEME</em></dt>
+                                <dd>Sets which theme will be used.</dd>
+                                
+                                <dt id="mynt.init.bare"><strong>--bare</strong></dt>
+                                <dd>Initializes a new site without using a theme.</dd>
+                                
+                                <dt id="mynt.init.destination"><strong>destination</strong></dt>
+                                <dd>The directory mynt outputs to.</dd>
+                            </dl>
+                        </dd>
+                        
+                        <dt id="mynt.serve"><strong>serve</strong></dt>
+                        <dd>
+                            <pre><code data-lang="text">$ mynt serve [-p PORT] [--base-url BASE_URL] [source]</code></pre>
+                            <p>Launches a local test server for displaying a generated mynt site.</p>
+                            <div class="notice notice-danger">
+                                <p>This subcommand should not be used to publicly host a site. It should only be used for local development and testing.</p>
+                            </div>
+                            <dl class="api">
+                                <dt id="mynt.serve.p"><strong>-p</strong> <em>PORT</em></dt>
+                                <dt id="mynt.serve.port"><strong>--port</strong> <em>PORT</em></dt>
+                                <dd>Sets the port used by the server.</dd>
+                                
+                                <dt id="mynt.serve.base-url"><strong>--base-url</strong> <em>BASE_URL</em></dt>
+                                <dd>Sets the site's base URL overriding the config setting.</dd>
+                                
+                                <dt id="mynt.serve.source"><strong>source</strong></dt>
+                                <dd>
+                                    <p>The directory mynt will serve.</p>
+                                    <div class="notice notice-info">
+                                        <p>If not supplied, the current directory is used.</p>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </dd>
+                        
+                        <dt id="mynt.watch"><strong>watch</strong></dt>
+                        <dd>
+                            <pre><code data-lang="text">$ mynt watch [-f] [--base-url BASE_URL] [--locale LOCALE] [source] destination</code></pre>
+                            <p>Watches a mynt site and automatically regenerates it when changes are made.</p>
+                            <dl class="api">
+                                <dt id="mynt.watch.f"><strong>-f</strong></dt>
+                                <dt id="mynt.watch.force"><strong>--force</strong></dt>
+                                <dd>
+                                    <p>Forces watching by <strong>emptying</strong> the destination every time a change is made if it exists.</p>
+                                    <div class="notice notice-warning">
+                                        <p>If the destination exists and this flag is passed, every time a change is made mynt will <strong>delete</strong> any directory or file at the root of the destination that doesn't begin with an underscore or period.</p>
+                                    </div>
+                                </dd>
+                                
+                                <dt id="mynt.watch.base-url"><strong>--base-url</strong> <em>BASE_URL</em></dt>
+                                <dd>Sets the site's base URL overriding the config setting.</dd>
+                                
+                                <dt id="mynt.watch.locale"><strong>--locale</strong> <em>LOCALE</em></dt>
+                                <dd>Sets the locale used by the renderer.</dd>
+                                
+                                <dt id="mynt.watch.source"><strong>source</strong></dt>
+                                <dd>
+                                    <p>The directory mynt looks in for source files.</p>
+                                    <div class="notice notice-info">
+                                        <p>If not supplied, the current directory is used.</p>
+                                    </div>
+                                </dd>
+                                
+                                <dt id="mynt.watch.destination"><strong>destination</strong></dt>
+                                <dd>The directory mynt outputs to.</dd>
+                            </dl>
+                        </dd>
+                    </dl>
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+{% endblock %}

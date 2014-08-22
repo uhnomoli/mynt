@@ -24,16 +24,19 @@ class MyntException(Exception):
         return message
 
 
-class OptionException(MyntException):
-    code = 2
-
 class ConfigException(MyntException):
     pass
 
-class ParserException(MyntException):
+class ContentException(MyntException):
     pass
 
-class PostException(MyntException):
+class FileSystemException(MyntException):
+    pass
+
+class OptionException(MyntException):
+    code = 2
+
+class ParserException(MyntException):
     pass
 
 class RendererException(MyntException):

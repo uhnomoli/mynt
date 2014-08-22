@@ -1,0 +1,303 @@
+{% extends 'layout.html' %}
+
+
+{% set crumbs = (('Docs',), ('Quickstart',)) %}
+{% set toc = (
+    ('Installation',),
+    ('Directory structure', (
+        ('The assets directory',),
+        ('The containers directory',),
+        ('The locales directory',),
+        ('The posts directory',),
+        ('The templates directory',)
+    )),
+    ('Configuration',),
+    ('Templates', (
+        ('Helper functions',),
+        ('Globals',),
+        ('Locals',)
+    )),
+    ('Posts', (
+        ('YAML frontmatter',),
+        ('Renderer functionality',)
+    )),
+    ('Tagging', (
+        ('Automatic tag pages',),
+    )),
+    ('Archives', (
+        ('Automatic archive pages',),
+    )),
+    ('Content containers', (
+        ('Configuration',),
+        ('File location',),
+        ('Tags and archives',),
+        ('Template data',)
+    )),
+    ('Pages',),
+    ('Generation',)
+) %}
+
+{% block content %}
+    <p>The goal of this guide is to get you up and running quickly with mynt. If after reading this guide you still have questions that aren't answered by the other doc pages or you run into any issues, feel free to open an issue on <a href="https://github.com/Anomareh/mynt/issues">GitHub</a> or hop in <a href="http://webchat.freenode.net/?channels=mynt">IRC</a>.</p>
+    
+    
+    {#
+     # INSTALLATION
+     #}
+    <h1 id="installation">Installation</h1>
+    <p>The recommended way to install mynt is via <a href="https://pip.pypa.io/en/latest/">pip</a>. If you already have pip installed, the below command is all you need. Otherwise, head on over to the pip site to get it <a href="https://pip.pypa.io/en/latest/installing.html">installed</a>.</p>
+    <pre><code data-lang="text">$ pip install mynt</code></pre>
+    <div class="notice notice-info">
+        <p>If you'd like support for reStructuredText install mynt using the following command:</p>
+        <pre><code data-lang="text">$ pip install mynt[reST]</code></pre>
+    </div>
+    <p>After mynt has been installed, run the mynt command with the <code>--version</code> flag to confirm everything completed successfully.</p>
+    <pre><code data-lang="text">$ mynt --version</code></pre>
+    
+    
+    {#
+     # DIRECTORY STRUCTURE
+     #}
+    <h1 id="directory-structure">Directory structure</h1>
+    <p>Let's start off by initializing a new site. This is done with the <code>init</code> subcommand.</p>
+    <pre><code data-lang="text">$ mynt init ~/projects/my-mynt-site/</code></pre>
+    <div class="notice notice-info">
+        <p>Throughout the rest of this guide, the directory you initialized your site in will be referred to as the project root. Given the above usage of <code>init</code>, the project root would be <code>~/projects/my-mynt-site/</code>.</p>
+    </div>
+    <div class="notice notice-danger">
+        <p>If the directory you want to initialize your site in already exists, you will have to pass the <code>-f</code> flag to force initialization.</p>
+        <pre><code data-lang="text">$ mynt init -f ~/projects/my-mynt-site/</code></pre>
+        <p>In doing so, mynt will <strong>delete</strong> that directory in the process. For example, if the directory <code>my-mynt-site</code> already exists in <code>~/projects/</code>, the above command will <strong>delete</strong> <code>my-mynt-site</code> before recreating it and initializing your site there.</p>
+    </div>
+    <p>Now that you have your site initialized, let's go over how mynt interacts with the directories and files of your site.</p>
+    <p>The first thing to go over is that any directory or file who's name begins with an underscore or period will be ignored. The one exception to this rule being the five special directories that we'll talk about shortly.</p>
+    <div class="notice notice-info">
+        <p>This behavior can be overridden by using the <code>include</code> config setting.</p>
+    </div>
+    <p>Beyond that rule, mynt will try to parse any file that isn't being ignored. It does this by looking for a parser that accepts the given file. If one is found it will be used to parse the file otherwise it will be ignored.</p>
+    <p>Now, onto those five special directories. In a mynt site there are five special directories: <code>_assets/</code>, <code>_containers/</code>, <code>_locales/</code>, <code>_posts/</code>, and <code>_templates/</code>. These five directories are located at the project root and are reserved for use by mynt.</p>
+    
+    <h2 id="directory-structure.the-assets-directory">The assets directory</h2>
+    <p>The assets directory is where all of your, well, assets live. CSS files, images, JavaScript libraries, file downloads, and so on.</p>
+    <div class="notice notice-info">
+        <p>One place ignored directories can be useful is in the assets directory. For example, if you are using a CSS preprocessor like SASS, you can put your SASS files in <code>_assets/css/_sass/</code>, have SASS output to <code>_assets/css/</code>, and all of your SASS files will be ignored by mynt.</p>
+    </div>
+    
+    <h2 id="directory-structure.the-containers-directory">The containers directory</h2>
+    <p>The containers directory is used for the content containers feature which we'll go over later. For now it's enough to know that it serves a role similar to that of the posts directory.</p>
+    
+    <h2 id="directory-structure.the-locales-directory">The locales directory</h2>
+    <p>The locales directory is used for localization. Localization is a bit of a complicated topic to get into here, so just know that this is where your <code>.mo</code> files would live if you were maintaining a site available in multiple languages.</p>
+    
+    <h2 id="directory-structure.the-posts-directory">The posts directory</h2>
+    <p>You likely guessed it, the posts directory is where all of your posts will live.</p>
+    <div class="notice notice-info">
+        <p>Ignored directories can also be put to use in the posts directory. For example, if you have some post ideas you are working on, but aren't ready to publish them, you can put them in <code>_posts/_drafts/</code> and mynt will ignore them.</p>
+    </div>
+    
+    <h2 id="directory-structure.the-templates-directory">The templates directory</h2>
+    <p>Lastly, there's the templates directory. The name of this directory can be a bit confusing for the sole reason that <strong>any</strong> HTML or XML file that isn't being ignored is a template. They are all processed by the configured renderer <em>(Jinja by default)</em>.</p>
+    <p>The difference between having a template in the templates directory and somewhere else in your site, is that templates in the templates directory are not actual pages. They are simply templates that get reused by other templates or are used by mynt internally <em>(like a post's <code>layout</code>)</em>.</p>
+    <div class="notice notice-info">
+        <p>It may help clear things up if you think of the templates directory as an includes directory.</p>
+    </div>
+    
+    
+    {#
+     # CONFIGURATION
+     #}
+    <h1 id="configuration">Configuration</h1>
+    <p>The configuration of mynt is handled by a single file at the root of your project: <code>config.yml</code>. If the file doesn't exist a set of defaults will be used, but if you wish to change any settings you'll have to create it. All of the settings are rather straight forward, so I won't go over them in detail here, but if that's what you're looking for, check out the <a href="{{ get_url('docs/config/') }}">config</a> documentation.</p>
+    <p>One powerful thing about mynt's configuration file, is that <strong>everything</strong> in it, mynt setting or not, is made available to templates. This can be taken advantage of in many ways. For example, you could add a title or author attribute for use in templates and then if you ever need to change that information, all you have to do is update it in your site's config rather than in every template.</p>
+    
+    
+    {#
+     # TEMPLATES
+     #}
+    <h1 id="templates">Templates</h1>
+    <p>With your site set up and a general sense of how a mynt site is structured, let's move on to templates.</p>
+    <p>In the case of this guide <em>(and also by default)</em> the renderer used is <a href="http://jinja.pocoo.org/">Jinja</a>. If you're not already familiar with Jinja, head on over and give the <a href="http://jinja.pocoo.org/docs/templates/">Jinja documentation</a> a quick read.</p>
+    <p>For the most part a template in mynt is no different from any other Jinja template. However, there are three things worth mentioning. The first being two mynt specific helper functions and the second as well as the third being the available globals and locals.</p>
+    
+    <h2 id="templates.helper-functions">Helper functions</h2>
+    <p>Two mynt specific helper functions are provided to make retrieving URLs within your site easier. They do this by taking into account how your site is configured. Specifically the <code>assets_url</code>, <code>base_url</code>, and <code>domain</code> config settings.</p>
+    <p>The first helper function is <code>get_asset()</code>. You should use it whenever you need a URL to anything living in the assets directory. The second helper function is <code>get_url()</code> and it should be used whenever you need a URL to anywhere else in your site.</p>
+    <div class="notice notice-info">
+        <p>Whenever you need a link internal to your site, you should use these two helper functions. The reason being, if you ever decide to move it, you'll only need to update the relevant config settings.</p>
+    </div>
+    
+    <h2 id="templates.globals">Globals</h2>
+    <p>Template globals are variables containing site data that are available in every template. There are three template globals: <code>site</code>, <code>posts</code>, and <code>containers</code>. The first, <code>site</code>, is a dictionary of everything in your site's config file. The other two contain your site's content, <code>posts</code> for your posts and <code>containers</code> for your content containers <em>(a feature that we'll take a look at in a bit)</em>.</p>
+    <div class="notice notice-info">
+        <p>For a detailed look at the structure of the template globals, check out the <a href="{{ get_url('docs/templates/#data.globals') }}">globals</a> section of the templates documentation.</p>
+    </div>
+    
+    <h2 id="templates.locals">Locals</h2>
+    <p>Template locals are very similar to the globals we just discussed with the one exception that they are only available in specific templates. There are three template locals: <code>item</code>, <code>archive</code>, and <code>tag</code>.</p>
+    <p>Each local contains the data for a single member of it's respective global. In turn, they are only available in templates defined by their respective layout config settings. For example, <code>item</code> is only available in <code>layout</code> templates, <code>archive</code> in <code>archive_layout</code> templates, and <code>tag</code> in <code>tag_layout</code> templates.</p>
+    <div class="notice notice-info">
+        <p>For a detailed look at the structure of the template locals, check out the <a href="{{ get_url('docs/templates/#data.locals') }}">locals</a> section of the templates documentation.</p>
+    </div>
+    
+    
+    {#
+     # POSTS
+     #}
+    <h1 id="posts">Posts</h1>
+    <p>Now with templates out of the way, let's move on to posts.</p>
+    <p>The first thing you need to know about posts is that a post's filename is very important. The first of which being, in order to specify a post's date, the filename needs to be formatted in a specific way:</p>
+    <pre><code data-lang="text">[YYYY-MM-DD[-HH-MM]-]An-example-post.md</code></pre>
+    <p>If you don't specify a date in the filename following the above format <em>(hour and minute optional)</em>, the post's date will be set to when the file was last edited.</p>
+    <p>Also important is the file extension. The file extension determines which parser will be used. For example, files with the <code>.md</code> extension will be parsed by the Markdown parser. If you installed mynt with reStructuredText support, files with the <code>.rst</code> extension will be parsed by the reStructuredText parser.</p>
+    <p>Now let's take a look at how posts need to be formatted themselves.</p>
+    <p>There are only two things that differentiate a post from an ordinary document of the markup language being used. The first being the YAML frontmatter and the second being the ability to use the features of the configured renderer.</p>
+    
+    <h2 id="posts.yaml-frontmatter">YAML frontmatter</h2>
+    <p>The YAML frontmatter is a block of YAML fenced by three dashes at the start of a post containing post metadata. It looks like the following:</p>
+    <pre><code data-lang="YAML">---
+layout: post.html
+---</code></pre>
+    <p>Every post <strong>requires</strong> a YAML frontmater with the <code>layout</code> attribute set. The <code>layout</code> attribute tells mynt which template in the templates directory it should use to render the post.</p>
+    <p>There are only two other attributes that have a special meaning in the YAML frontmatter. The first, <code>parser</code>, provides a way to explicitly set which parser will be used. The second, though it's <strong>optional</strong>, is <code>tags</code>. The <code>tags</code> attribute is used by the tagging feature mynt provide which we'll talk about later.</p>
+    <p>You are free to add whatever data you want to a post's YAML frontmatter and it will be available in templates when accessing that specific post. A common example of this is using an attribute to store the formatted version of a post's title.</p>
+    <div class="notice notice-info">
+        <p>There are many ways to make use of the YAML frontmatter. For example, you can implement simple multiple author support by adding an author attribute to every post. Then a specific author's posts can be grabbed by filtering a <code>for</code> loop or using the <code>groupby</code> filter.</p>
+        <pre><code data-lang="jinja">{{ "{% for post in posts if post.author == 'Author' %} ... {% endfor %}" }}</code></pre>
+        <pre><code data-lang="jinja">{{ "{% for author, posts in posts|groupby('author') %} ... {% endfor %}" }}</code></pre>
+    </div>
+    
+    <h2 id="posts.renderer-functionality">Renderer functionality</h2>
+    <p>All of the features of the configured renderer are also available for use in posts with the exception of what data is available. The only template data available to posts is the YAML frontmatter of the post itself and the <code>site</code> template global.</p>
+    <pre><code data-lang="jinja">---
+layout: post.html
+title: An example post.
+---
+
+# {{ '{{ title }}' }}
+
+![image]({{ '{{ get_asset(\'images/image.jpg\') }}' }})</code></pre>
+    <p>For example, in the above post, Jinja functionality is used to create a header containing the value of the title attribute from the YAML frontmatter as well as a template helper to grab a link to an image.</p>
+    
+    
+    {#
+     # TAGGING
+     #}
+    <h1 id="tagging">Tagging</h1>
+    <p>With templates and posts covered, let's move on to how mynt handles tagging.</p>
+    <p>To tag a post, simply add the <code>tags</code> attribute to the YAML frontmatter containing a list of the desired tags.</p>
+    <pre><code data-lang="yaml">---
+layout: post.html
+title: An example post
+tags: [Foo, Bar]
+---</code></pre>
+    <div class="notice notice-warning">
+        <p>Tags are <strong>case-sensitive</strong>. <em>"Foo"</em> and <em>"foo"</em> are two different tags.</p>
+    </div>
+    <p>Once a post has been tagged, this change is reflected in a couple of ways. First, all of a post's tags will be available via a <code>tags</code> attribute. Second, that post will be added to each tag in the <code>tags</code> property of the <code>posts</code> global.</p>
+    
+    <h2 id="tagging.automatic-tag-pages">Automatic tag pages</h2>
+    <p>If your site has a lot of tagged posts it may be desirable to have a separate page for each tag. One of mynt's key features is the ability to do just that.</p>
+    <p>To enable it, <code>tag_layout</code> must be set in your site's config. This setting tells mynt which template in the templates directory to use when rendering these pages. Once it is set, a page will be rendered for each tag using that template.</p>
+    
+    
+    {#
+     # ARCHIVES
+     #}
+    <h1 id="archives">Archives</h1>
+    <p>We've gone over posts and tagging so now let's talk about archives.</p>
+    <p>For the most part, how you want to handle post archives is up to you. To give you as much flexibility post data is available in a handful of different ways, most notably the <code>archives</code> property of the <code>posts</code> global which is a dictionary of your site's posts organized by year and month.</p>
+    <h2 id="archives.automatic-archive-pages">Automatic archive pages</h2>
+    <p>Just like with tags, another key feature of mynt is the ability to automatically generate archive pages. If your site has a lot of posts or if you want to provide an alternate more compact way of browsing all of your site's posts, such a feature may be of use to you.</p>
+    <p>Enabling this feature is done very much in the same way as enabling automatic tag pages. In your site's config, set <code>archive_layout</code> in the same manner as <code>tag_layout</code>. In doing so a page will be rendered for each year a post was made using that template.</p>
+    
+    
+    {#
+     # Content containers
+     #}
+    <h1 id="content-containers">Content containers</h1>
+    <p>It's come up a couple of times already so now let's go over the content containers feature.</p>
+    <p>The content containers feature allows you to define containers that are handled exactly like posts, but are separate. For example, say you have a personal site with a blog, but you want a separate section of your site for the talks you've given. Let's walk through how we'd use a content container to accomplish that.</p>
+    
+    <h2 id="content-containers.configuration">Configuration</h2>
+    <p>The first step is creating a content container. This is done by putting the following in your site's config:</p>
+    <pre><code data-lang="yaml">containers:
+    talks:
+        url: /talks/&lt;slug&gt;/</code></pre>
+    <p>What's happening here is pretty straightforward. We're defining a container named <em>talks</em> and setting the URL for that container to <code>/talks/&lt;slug&gt;/</code>. The <code>url</code> config setting for content containers behaves identically to the <code>posts_url</code> config setting with the one exception that the <code>url</code> config setting must be set for each content container.</p>
+    <div class="notice notice-info">
+        <p>For a list of the config settings available to content containers, check out the <a href="{{ get_url('docs/config/#containers') }}">config</a> documentation.</p>
+    </div>
+    
+    <h2 id="content-containers.file-location">File location</h2>
+    <p>So where do you put your files? Remember the <code>_containers</code> special directory that was mentioned earlier? A container's files live in a directory with the same name as the container in that special directory. In this case that'd be <code>_containers/talks/</code>.</p>
+    
+    <h2 id="content-containers.tags-and-archives">Tags and archives</h2>
+    <p>The similarities between content containers and posts doesn't end there. The tagging and archives features available to posts are also available to content containers and are enabled in the same way. For example, to automatically generate tag pages for the talks container set the <code>tag_layout</code>:</p>
+    <pre><code data-lang="yaml">containers:
+    talks:
+        url: /talks/&lt;slug&gt;/
+        tag_layout: tag.talks.html
+        tags_url: /talks/tag/</code></pre>
+    
+    <h2 id="content-containers.template-data">Template data</h2>
+    <p>All that's left to go over is the <code>containers</code> template global. For posts there's the <code>posts</code> global, but how do you access content container data in your templates? The answer is the <code>containers</code> template global.</p>
+    <pre><code data-lang="jinja">{{ '{% for talk in containers.talks %} ... {% endfor %}' }}</code></pre>
+    <p>A container's tag and archive data can be accessed the same as with posts:</p>
+    <pre><code data-lang="jinja">{{ '{% for tag in containers.talks.tags|values %} ... {% endfor %}
+{% for archive in containers.talks.archives|values %} ... {% endfor %}' }}</code></pre>
+    <p>Now you can use your preferred markup language to post your talks and even have tag and archive pages generated for them.</p>
+    
+    
+    {#
+     # PAGES
+     #}
+    <h1 id="pages">Pages</h1>
+    <p>Lastly, we have pages. Any file outside of the special directories is considered a page by mynt.</p>
+    <p>All pages will be in the same location after generation as in the source tree. For example, an <code>index.html</code> at the project root will be the site's index page after generation.</p>
+    <p>The simplest pages are plain HTML files and are processed by the configured renderer. However, it is also possible to create pages using a supported markup language. Such pages behave very similar to posts and as such <strong>require</strong> a YAML frontmatter with the <code>layout</code> attribute set.</p>
+    <p>For example, assuming <code>_templates/page.html</code> contains the following:</p>
+    <pre><code data-lang="html+jinja">{% raw %}&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{{ item.title }}&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    {{ item.content }}
+&lt;/body&gt;
+&lt;/html&gt;{% endraw %}</code></pre>
+    <p>You could write the index page in Markdown by saving the following as <code>index.md</code> at root of the project:</p>
+    <pre><code data-lang="yaml">---
+layout: page.html
+title: It works!
+---
+
+It really does!</code></pre>
+    <p>However, there is one disadvantage to be aware of when creating pages in this manner. The <code>posts</code> and <code>containers</code> template globals are only available to HTML pages. Other than that, the choice between HTML and markup pages is down to preference.</p>
+    
+    
+    {#
+     # GENERATION
+     #}
+    <h1 id="generation">Generation</h1>
+    <p>Now that we have the basics covered, it's time to generate your site.</p>
+    <p>Generating a mynt site is handled by two different subcommands: <code>gen</code> and <code>watch</code>. If you just need to make a quick change, <code>gen</code> is best for the job. It will generate your site and then exit.</p>
+    <pre><code data-lang="text">$ mynt gen &lt;source&gt; &lt;destination&gt;</code></pre>
+    <p>If you're going to be making a bunch of changes to your site, constantly reusing <code>gen</code> will quickly become a hassle. Instead you can use the <code>watch</code> subcommand.</p>
+    <pre><code data-lang="text">$ mynt watch &lt;source&gt; &lt;destination&gt;</code></pre>
+    <p>For the most part it is identical to <code>gen</code>, however, with <code>watch</code>, every time you make a change to your site it will automatically regenerate.</p>
+    <div class="notice notice-danger">
+        <p>When using either subcommand, if the destination already exists, you will have to pass the <code>-f</code> flag to force generation.</p>
+        <pre><code data-lang="text">$ mynt {gen,watch} -f &lt;source&gt; &lt;destination&gt;</code></pre>
+        <p>In doing so, mynt will <strong>delete</strong> any directory or file at the root of the destination that doesn't begin with an underscore or period.</p>
+    </div>
+    <p>Now that you've generated your site, I'm sure you want to check it out. If you have a local server setup you're good to go, but if you don't, mynt's got you covered. The last subcommand we're going to talk about is <code>serve</code>.</p>
+    <pre><code data-lang="text">$ mynt serve &lt;source&gt;</code></pre>
+    <div class="notice notice-danger">
+        <p>This subcommand should not be used to publicly host your site. It should only be used for local development and testing.</p>
+    </div>
+    <p>To start up the server pass the directory containing your generated site to the <code>serve</code> subcommand. Then, to view your site open your browser to <a href="http://localhost:8080/">http://localhost:8080/</a>.</p>
+    <div class="notice notice-info">
+        <p>For a more detailed look at the commands mynt provides, check out the <a href="{{ get_url('docs/command-line/') }}">command line</a> documentation.</p>
+    </div>
+    <p>Once you're happy with your site, you're good to upload it to the host of your preference, whether that be <a href="https://pages.github.com">GitHub Pages</a> or your own VPS.</p>
+{% endblock %}

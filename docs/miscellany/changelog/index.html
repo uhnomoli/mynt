@@ -1,0 +1,315 @@
+{% extends 'layout.html' %}
+
+
+{% set crumbs = (('Miscellany',), ('Changelog',)) %}
+{% set toc = (
+    ('v0.3.1',),
+    ('v0.3',),
+    ('v0.2.3',),
+    ('v0.2.2',),
+    ('v0.2.1',),
+    ('v0.2',),
+    ('v0.1.9',),
+    ('v0.1.8',),
+    ('v0.1.7',),
+    ('v0.1.6',),
+    ('v0.1.5',),
+    ('v0.1.4',),
+    ('v0.1.3',),
+    ('v0.1.2',),
+    ('v0.1.1',),
+    ('v0.1',)
+) %}
+
+{% block content %}
+    <p>This page is a comprehensive list of all user-visible changes between versions. If you are upgrading be sure to check out the <a href="{{ get_url('miscellany/upgrading/') }}">upgrading</a> page for any backwards incompatible changes.</p>
+    
+    <h1 id="v0.3.1">v0.3.1 (August 20th, 2014)</h1>
+    <ul>
+        <li>
+            <strong>Changed</strong>
+            <ul>
+                <li>Removed the <code>&lt;hr&gt;</code> from and added classes to the outputted markup for Markdown footnotes.</li>
+                <li>Tag data is now stored in an object instead of a dictionary.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.3">v0.3 (July 27th, 2014)</h1>
+    <ul>
+        <li>
+            <strong>New</strong>
+            <ul>
+                <li>A mechanism for defining content containers.</li>
+                <li>Two new filters for the Jinja renderer, <code>items</code> and <code>values</code>, that act as syntactic sugar for <code>iteritems()</code> and <code>itervalues()</code>.</li>
+                <li>A reStructuredText parser.</li>
+                <li>Two new <code>item</code> properties, <code>prev</code> and <code>next</code>, that store the previous and next items in the container.</li>
+                <li>Files outside of ignored directories will now be parsed if a parser is available.</li>
+                <li>Two config settings for controlling how posts are sorted: <code>posts_order</code> and <code>posts_sort</code>.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Changed</strong>
+            <ul>
+                <li>Global and local dictionaries no longer behave different from ordinary Python dictionaries when iterating over them.</li>
+                <li>The <code>archives</code> and <code>tags</code> globals are now properties of the <code>posts</code> global to maintain consistency between content containers.</li>
+                <li>The <code>post</code> local has been renamed <code>item</code> to maintain consistency between content containers.</li>
+                <li>The <code>&lt;title&gt;</code> variable in URL formats has been renamed to <code>&lt;slug&gt;</code>.</li>
+                <li>Frontmatter attributes that contain string values can now be used in URL formats.</li>
+                <li>The <code>markup</code> and <code>parser</code> config settings have been removed.</li>
+                <li>Which parser used is now determined by <em>(in order of precedence)</em> the <code>parser</code> frontmatter attribute, the <code>parser</code> container config setting, and lastly the file extension.</li>
+                <li>In Markdown, the bracket fenced code block syntax is no longer supported.</li>
+                <li>The <code>layout</code> frontmatter attribute can now be set to <code>None</code> to skip rendering.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.2.3">v0.2.3 (June 13th, 2013)</h1>
+    <ul>
+        <li>
+            <strong>New</strong>
+            <ul>
+                <li>A new default theme with dark <em>(default)</em> and light versions.</li>
+                <li>A config setting for specifying directories and files to be copied over that would otherwise be ignored.</li>
+                <li>Localization and internationalization support.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Changed</strong>
+            <ul>
+                <li>The programming language of a code block is now stored in the <code>data-lang</code> attribute of the <code>&lt;code&gt;</code> tag instead of the <code>lang</code> attribute of the <code>&lt;pre&gt;</code> tag.</li>
+                <li>Tildes are no longer allowed in post slugs.</li>
+                <li>The <code>watch</code> subcommand now honors the configured log level.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Upgraded</strong>
+            <ul>
+                <li>Jinja 2.7</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Fixed</strong>
+            <ul>
+                <li>A bug in the handling of log messages in the <code>serve</code> subcommand.</li>
+                <li>A bug in the misaka parser with SmartyPants.</li>
+                <li>A bug in the <code>serve</code> subcommand when handling paths containing Unicode characters.</li>
+                <li>A bug in the <code>watch</code> subcommand when a file is moved into the directory that is being watched.</li>
+                <li>A bug when handling an empty config file.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.2.2">v0.2.2 (April 11th, 2012)</h1>
+    <ul>
+        <li>
+            <strong>Upgraded</strong>
+            <ul>
+                <li>misaka 1.0.2</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Fixed</strong>
+            <ul>
+                <li>A bug in the <code>absolutize</code> filter of the Jinja renderer.</li>
+                <li>A bug in the <code>get_url</code> template helper where it was appending a forward slash when it shouldn't.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.2.1">v0.2.1 (March 20th, 2012)</h1>
+    <ul>
+        <li>
+            <strong>Fixed</strong>
+            <ul>
+                <li>The default theme not getting installed.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.2">v0.2 (March 20th, 2012)</h1>
+    <ul>
+        <li>
+            <strong>New</strong>
+            <ul>
+                <li>An archive property is now available for tags in the tags global.</li>
+                <li>A default theme.</li>
+                <li>Four new subcommands: <code>init</code>, <code>gen</code>, <code>watch</code>, and <code>serve</code>.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Changed</strong>
+            <ul>
+                <li>Archive years and tag names are always available in their respective globals.</li>
+                <li>When the destination already exists on generation, it is now emptied by default instead of deleted.</li>
+                <li>Generation is now done via the <code>gen</code> subcommand.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Fixed</strong>
+            <ul>
+                <li>A bug when retrieving the URL for an archive page.</li>
+                <li>A regression in the misaka renderer when generating semantic identifiers.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.1.9">v0.1.9 (March 12th, 2012)</h1>
+    <ul>
+        <li>
+            <strong>New</strong>
+            <ul>
+                <li>An absolute URL can now be retrieved via the <code>get_url</code> template helper if the <code>domain</code> config setting has been set.</li>
+                <li>A filter for the Jinja render that attempts to convert all relative URLs to absolute URLs.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Changed</strong>
+            <ul>
+                <li>The misaka parser now automatically escapes code blocks.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Fixed</strong>
+            <ul>
+                <li>A Unicode issue in the misaka parser.</li>
+                <li>An escaping issue with code highlighting.</li>
+                <li>A bug in the Jinja renderer when handling Windows paths.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.1.8">v0.1.8 (February 8th, 2012)</h1>
+    <ul>
+        <li>
+            <strong>Upgraded</strong>
+            <ul>
+                <li>miaska 1.0</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.1.7">v0.1.7 (January 30th, 2012)</h1>
+    <ul>
+        <li>
+            <strong>Changed</strong>
+            <ul>
+                <li>The <code>excerpt</code> post property is no longer wrapped in a <code>&lt;p&gt;</code> tag.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Fixed</strong>
+            <ul>
+                <li>A bug in the misaka parser when the Markdown source parses out to nothing.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.1.6">v0.1.6 (January 25th, 2012)</h1>
+    <ul>
+        <li>
+            <strong>Fixed</strong>
+            <ul>
+                <li>An import issue preventing installation.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.1.5">v0.1.5 (January 25th, 2012)</h1>
+    <ul>
+        <li>
+            <strong>Fixed</strong>
+            <ul>
+                <li>An import issue preventing installation.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.1.4">v0.1.4 (January 2nd, 2012)</h1>
+    <ul>
+        <li>
+            <strong>Fixed</strong>
+            <ul>
+                <li>A type issue in <code>setup.py</code>.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.1.3">v0.1.3 (January 2nd, 2012)</h1>
+    <ul>
+        <li>
+            <strong>New</strong>
+            <ul>
+                <li>A version flag.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Changed</strong>
+            <ul>
+                <li>Removed the <code>year</code> and <code>name</code> properties from archives and tags respectively.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.1.2">v0.1.2 (December 27th, 2011)</h1>
+    <ul>
+        <li>
+            <strong>New</strong>
+            <ul>
+                <li>Posts are now partially rendered before being parsed enabling renderer functionality within posts.</li>
+                <li>The hour and minute of a post can now be set with it defaulting to the file's <code>mtime</code>.</li>
+                <li>Archive pages can now be automatically generated.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Changed</strong>
+            <ul>
+                <li>Identifiers will now be semantic when using misaka's TOC render flag.</li>
+                <li>Removed the <code>slug</code> property from posts.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Fixed</strong>
+            <ul>
+                <li>A bug when parsing posts with no content.</li>
+                <li>Post and tag URLs not being properly slugified.</li>
+                <li>A Unicode issue with dates.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.1.1">v0.1.1 (December 4th, 2011)</h1>
+    <ul>
+        <li>
+            <strong>Changed</strong>
+            <ul>
+                <li>Added a <code>name</code> attribute to tags.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Fixed</strong>
+            <ul>
+                <li>A bug with extensionless files.</li>
+                <li>A bug when using the <code>-qv</code> flags.</li>
+            </ul>
+        </li>
+    </ul>
+    
+    
+    <h1 id="v0.1">v0.1 (December 4th, 2011)</h1>
+    <p><em>Initial release.</em></p>
+{% endblock %}

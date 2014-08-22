@@ -1,0 +1,187 @@
+{% extends 'layout.html' %}
+
+
+{% set crumbs = (('Docs',), ('Config',)) %}
+{% set toc = (
+    ('archive_layout',),
+    ('archives_url',),
+    ('assets_url',),
+    ('base_url',),
+    ('containers',),
+    ('date_format',),
+    ('domain',),
+    ('include',),
+    ('locale',),
+    ('posts_order',),
+    ('posts_sort',),
+    ('posts_url',),
+    ('pygmentize',),
+    ('renderer',),
+    ('tag_layout',),
+    ('tags_url',)
+) %}
+
+{% block content %}
+    <dl class="api">
+        <dt id="archive_layout"><strong>archive_layout:</strong> <em>None</em></dt>
+        <dd>
+            <p>The template used to generate archive pages.</p>
+            <div class="notice notice-warning">
+                <p>Must be set to enable automatic archive page generation.</p>
+            </div>
+        </dd>
+        
+        <dt id="archives_url"><strong>archives_url:</strong> <em>/</em></dt>
+        <dd>The base URL for archive pages.</dd>
+        
+        <dt id="assets_url"><strong>assets_url:</strong> <em>/assets/</em></dt>
+        <dd>The URL, from <code>base_url</code>, assets will be served from after generation.</dd>
+        
+        <dt id="base_url"><strong>base_url:</strong> <em>/</em></dt>
+        <dd>The URL the site will be served from after generation.</dd>
+        
+        <dt id="containers"><strong>containers:</strong> <em>{}</em></dt>
+        <dd>
+            <p>A dictionary of content containers and their settings. The container's name is stored in the key while it's settings in the value as a dictionary. They have the following settings available:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Setting</th>
+                        <th>Default</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr>
+                        <td>archive_layout</td>
+                        <td><em>None</em></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>archives_url</td>
+                        <td><em>/</em></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>order</td>
+                        <td><em>desc</em></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>sort</td>
+                        <td><em>timestamp</em></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>tag_layout</td>
+                        <td><em>None</em></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>tags_url</td>
+                        <td><em>/</em></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>url</td>
+                        <td><em>None</em></td>
+                    </tr>
+                </tbody>
+            </table>
+        </dd>
+        
+        <dt id="date_format"><strong>date_format:</strong> <em>%A, %B %d, %Y</em></dt>
+        <dd>The <a href="https://docs.python.org/library/datetime.html#strftime-and-strptime-behavior">format</a> of <code>post.date</code>.</dd>
+        
+        <dt id="domain"><strong>domain:</strong> <em>None</em></dt>
+        <dd>The domain the site will be served from after generation.</dd>
+        
+        <dt id="include"><strong>include:</strong> <em>[]</em></dt>
+        <dd>A list of <a href="https://docs.python.org/2/library/fnmatch.html#module-fnmatch">glob</a> patterns specifying directories and files to be copied over that would otherwise be ignored.</dd>
+        
+        <dt id="locale"><strong>locale:</strong> <em>None</em></dt>
+        <dd>The locale used by the renderer.</dd>
+        
+        <dt id="posts_order"><strong>posts_order:</strong> <em>desc</em></dt>
+        <dd>The order in which posts are sorted. Can be set to <code>asc</code> or <code>desc</code>.</dd>
+        
+        <dt id="posts_sort"><strong>posts_sort:</strong> <em>timestamp</em></dt>
+        <dd>The attribute posts are sorted by.</dd>
+        
+        <dt id="posts_url"><strong>posts_url:</strong> <em>/&lt;year&gt;/&lt;month&gt;/&lt;day&gt;/&lt;slug&gt;/</em></dt>
+        <dd>
+            <p>The format of <code>posts.url</code>.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr>
+                        <td><em>&lt;day&gt;</em></td>
+                        <td>Day of the post as a decimal.</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><em>&lt;i_day&gt;</em></td>
+                        <td>Day of the post as an integer without leading zeros.</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><em>&lt;i_month&gt;</em></td>
+                        <td>Month of the post as an integer without leading zeros.</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><em>&lt;month&gt;</em></td>
+                        <td>Month of the post as a decimal.</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><em>&lt;slug&gt;</em></td>
+                        <td>The slugified title of the post.</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><em>&lt;year&gt;</em></td>
+                        <td>Year of the post with century.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="notice notice-info">
+                <p>Frontmatter attributes containing string values can be used in URL formats. For example, if all of your posts have an <code>author</code> attribute you could use it in your URL format like so: <code>/&lt;author&gt;/&lt;slug&gt;/</code>.</p>
+            </div>
+        </dd>
+        
+        <dt id="pygmentize"><strong>pygmentize:</strong> <em>True</em></dt>
+        <dd>
+            <p>Whether or not code highlighting is enabled.</p>
+            <p>You can highlight code in Markdown by using fenced code blocks.</p>
+            <pre><code data-lang="markdown">```html
+&lt;p&gt;highlight me&lt;/p&gt;
+```</code></pre>
+            <p>Or you can highlight code in HTML by simply setting the <code>data-lang</code> attribute of the <code>&lt;code&gt;</code> tag.</p>
+            <pre><code data-lang="html">&lt;pre&gt;&lt;code data-lang=&quot;html&quot;&gt;highlight me&lt;/code&gt;&lt;/pre&gt;</code></pre>
+            <div class="notice notice-info">
+                <p>You'll probably want a stylesheet for your highlighted code. You can read more about styles in Pygments <a href="http://pygments.org/docs/styles/">here</a> if you want to make your own, or you can grab one of the stylesheets included with Pygments from <a href="https://github.com/Anomareh/pygments-styles-dump">here</a>.</p>
+            </div>
+        </dd>
+        
+        <dt id="renderer"><strong>renderer:</strong> <em>jinja</em></dt>
+        <dd>The renderer used.</dd>
+        
+        <dt id="tag_layout"><strong>tag_layout:</strong> <em>None</em></dt>
+        <dd>
+            <p>The template used to generate tag pages.</p>
+            <div class="notice notice-warning">
+                <p>Must be set to enable automatic tag page generation.</p>
+            </div>
+        </dd>
+        
+        <dt id="tags_url"><strong>tags_url:</strong> <em>/</em></dt>
+        <dd>The base URL for tag pages.</dd>
+    </dl>
+{% endblock %}
