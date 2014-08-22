@@ -142,17 +142,18 @@ class Reader(object):
                 'src: {0}'.format(f.path),
                 'layout must be set')
 
-        frontmatter.pop('url', None)
-
         parser = self._get_parser(f, frontmatter.get('parser', config.get('parser', None)))
 
         text, date = self._parse_filename(f)
+
+        frontmatter.pop('url', None)
+        frontmatter['slug'] = text
+
         content = parser.parse(self._writer.from_string(bodymatter, frontmatter))
 
         item['content'] = content
         item['date'] = date.strftime(self.site['date_format']).decode('utf-8')
         item['timestamp'] = timegm(date.utctimetuple())
-        item['slug'] = text
 
         if simple:
             item['url'] = Url.from_path(f.root.path.replace(self.src.path, ''), text)
