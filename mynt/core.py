@@ -36,7 +36,6 @@ class Mynt(object):
         'containers': {},
         'date_format': '%A, %B %d, %Y',
         'domain': None,
-      # 'markup': 'markdown',
       # 'parser': 'misaka',
         'include': [],
         'locale': None,
