@@ -149,6 +149,9 @@ class Reader(object):
         text, date = self._parse_filename(f)
         content = parser.parse(self._writer.from_string(bodymatter, frontmatter))
         
+        if parser.has_toc:
+            item['toc'] = parser.toc_tree
+        
         item['content'] = content
         item['date'] = date.strftime(self.site['date_format']).decode('utf-8')
         item['timestamp'] = timegm(date.utctimetuple())
