@@ -147,14 +147,17 @@ class Reader(object):
         parser = self._get_parser(f, frontmatter.get('parser', config.get('parser', None)))
         
         text, date = self._parse_filename(f)
-        content = parser.parse(self._writer.from_string(bodymatter, frontmatter))
         
-        if parser.has_toc:
-            item['toc'] = parser.toc_tree
+        result = parser.parse(self._writer.from_string(bodymatter, frontmatter))
+        
+        content, toc = result if isinstance(result, tuple) else (result, None)
         
         item['content'] = content
         item['date'] = date.strftime(self.site['date_format']).decode('utf-8')
         item['timestamp'] = timegm(date.utctimetuple())
+        
+        if toc is not None:
+            item['toc'] = toc
         
         if simple:
             item['url'] = Url.from_path(f.root.path.replace(self.src.path, ''), text)

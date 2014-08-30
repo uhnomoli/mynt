@@ -27,8 +27,6 @@ class _Renderer(h.Hoep):
     def __init__(self, extensions = 0, render_flags = 0):
         super(_Renderer, self).__init__(extensions, render_flags)
 
-        self.has_toc = False
-
         if self.render_flags & h.HTML_TOC:
             self._toc_ids = {}
             self._toc_patterns = (
@@ -100,15 +98,17 @@ class _Renderer(h.Hoep):
 
     def preprocess(self, markdown):
 
-        self.has_toc = False
-
         if self.render_flags & h.HTML_TOC:
+            self._toc_ids.clear()
+
             self.toc_tree = _TOCLeaf()
             self._toc_leaf = self.toc_tree
-            self._toc_ids.clear()
-            self.has_toc = True
 
         return markdown
+
+    def render(self, markdown):
+        html = super(_Renderer, self).render(markdown)
+        return html if (not self.render_flags & h.HTML_TOC) else (html, self.toc_tree)
 
 
 class Parser(_Parser):
@@ -162,16 +162,11 @@ class Parser(_Parser):
 
 
     def parse(self, markdown):
-        result = self._md.render(markdown)
-        self.has_toc = self._md.has_toc
-        if self.has_toc:
-            self.toc_tree = self._md.toc_tree
-        return result
+        return self._md.render(markdown)
 
     def setup(self):
         self.flags = {}
         self.config = deepcopy(self.defaults)
-        self.has_toc = False
 
         for k, v in self.options.iteritems():
             self.config[k].update(v)
