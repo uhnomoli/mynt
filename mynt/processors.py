@@ -149,25 +149,16 @@ class Reader(object):
         frontmatter.pop('url', None)
         frontmatter['slug'] = text
 
-        content = parser.parse(self._writer.from_string(bodymatter, frontmatter))
+        result = parser.parse(self._writer.from_string(bodymatter, frontmatter))
 
-        if parser.has_toc:
-            item['toc'] = parser.toc_tree
-
-            # def print_leaf(leaf, prefix = ''):
-            #     print '-----'
-            #     print(prefix + 'level:' + str(leaf.level))
-            #     print(prefix + 'hlevel:' + str(leaf.hlevel))
-            #     print(prefix + 'text:' + (leaf.text or 'None'))
-            #     print(prefix + 'identifier:' + (leaf.identifier or 'None'))
-            #     for child_leaf in leaf.children:
-            #         print_leaf(child_leaf, '  ' + prefix)
-            #
-            # print_leaf(parser.toc_tree)
+        content, toc = result if isinstance(result, tuple) else (result, None)
 
         item['content'] = content
         item['date'] = date.strftime(self.site['date_format']).decode('utf-8')
         item['timestamp'] = timegm(date.utctimetuple())
+
+        if toc is not None:
+            item['toc'] = toc
 
         if simple:
             item['url'] = Url.from_path(f.root.path.replace(self.src.path, ''), text)
