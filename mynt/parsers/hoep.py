@@ -36,46 +36,46 @@ class _Renderer(h.Hoep):
                 (r'^[^a-z]+', ''),
                 (r'^$', 'section')
             )
-
-
+    
+    
     def block_code(self, text, language):
         text = escape(text)
         language = ' data-lang="{0}"'.format(language) if language else ''
-
+        
         return '<pre><code{0}>{1}</code></pre>'.format(language, text)
-
+    
     def footnotes(self, text):
         return '<div class="footnotes"><ol>{0}</ol></div>'.format(text)
-
+    
     def footnote_def(self, text, number):
         link = '&nbsp;<a href="#fnref{0}" rev="footnote">↩</a>'.format(number)
         index = text.rfind('</p>')
-
+        
         if index:
             text = ''.join((text[:index], link, text[index:]))
         else:
             text = ''.join((text, link))
-
+        
         return '<li id="fn{0}" class="footnotes-def">{1}</li>'.format(number, text)
-
+    
     def footnote_ref(self, number):
         return '<sup id="fnref{0}" class="footnotes-ref"><a href="#fn{0}" rel="footnote">{0}</a></sup>'.format(number)
-
+    
     def header(self, text, hlevel):
         if self.render_flags & h.HTML_TOC:
             identifier = text.lower()
-
+            
             for pattern, replace in self._toc_patterns:
                 identifier = re.sub(pattern, replace, identifier)
-
+            
             if identifier in self._toc_ids:
                 self._toc_ids[identifier] += 1
                 identifier = '{0}-{1}'.format(identifier, self._toc_ids[identifier])
             else:
                 self._toc_ids[identifier] = 1
-
+            
             new_leaf = _TOCLeaf(hlevel, identifier, text)
-
+            
             if hlevel > self._toc_leaf.hlevel:
                 new_leaf.parent = self._toc_leaf
                 new_leaf.level = (self._toc_leaf.level + 1)
@@ -85,27 +85,27 @@ class _Renderer(h.Hoep):
             elif hlevel == self._toc_leaf.hlevel:
                 new_leaf.parent = self._toc_leaf.parent
                 new_leaf.level = self._toc_leaf.level
-
+            
             if new_leaf.parent:
                 new_leaf.parent.children.append(new_leaf)
-
+            
             self._toc_leaf = new_leaf
-
+            
             return '<h{0} id="{1}">{2}</h{0}>'.format(hlevel, identifier, text)
         else:
             return '<h{0}>{1}</h{0}>'.format(hlevel, text)
-
-
+    
+    
     def preprocess(self, markdown):
-
+        
         if self.render_flags & h.HTML_TOC:
             self._toc_ids.clear()
-
+            
             self.toc_tree = _TOCLeaf()
             self._toc_leaf = self.toc_tree
-
+        
         return markdown
-
+    
     def render(self, markdown):
         html = super(_Renderer, self).render(markdown)
         return html if (not self.render_flags & h.HTML_TOC) else (html, self.toc_tree)
@@ -113,8 +113,8 @@ class _Renderer(h.Hoep):
 
 class Parser(_Parser):
     accepts = ('.md', '.markdown')
-
-
+    
+    
     lookup = {
         'extensions': {
             'autolink': h.EXT_AUTOLINK,
@@ -145,7 +145,7 @@ class Parser(_Parser):
             'use_xhtml': h.HTML_USE_XHTML
         }
     }
-
+    
     defaults = {
         'extensions': {
             'autolink': True,
@@ -159,21 +159,21 @@ class Parser(_Parser):
             'smartypants': True
         }
     }
-
-
+    
+    
     def parse(self, markdown):
         return self._md.render(markdown)
-
+    
     def setup(self):
         self.flags = {}
         self.config = deepcopy(self.defaults)
-
+        
         for k, v in self.options.iteritems():
             self.config[k].update(v)
-
+        
         for group, options in self.config.iteritems():
             flags = [self.lookup[group][k] for k, v in options.iteritems() if v]
-
+            
             self.flags[group] = reduce(or_, flags, 0)
-
+        
         self._md = _Renderer(**self.flags)
