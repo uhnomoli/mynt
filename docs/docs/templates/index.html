@@ -133,9 +133,21 @@
                 
                 <dt id="data.locals.item.tags"><em>item.</em><strong>tags</strong></dt>
                 <dd>
-                    <p>A list of the item's tags.</p>
+                    <p>A list of the names of the item's tags.</p>
                     <div class="notice notice-warning">
                         <p>Only available for container items.</p>
+                    </div>
+                    <div class="notice notice-info">
+                        <p>If you want to get the data for a specific tag, you can get it from the container's <a href="{{ get_url('docs/templates/#data.globals.containers.container.tags') }}">tags</a>:</p>
+                        <pre><code data-lang="html+jinja">{% raw %}{% for tag in item.tags %}
+    {#
+        for posts: posts.tags
+        for containers: containers.<container name>.tags
+    #}
+    {% set data = posts.tags[tag] %}
+    
+    &lt;a href="{{ get_url(data.url) }}"&gt;{{ tag }} &lt;em&gt;({{ data.count }})&lt;/em&gt;&lt;/a&gt;{% if not loop.last %}, {% endif %}
+{% endfor %}{% endraw %}</code></pre>
                     </div>
                 </dd>
                 
@@ -163,11 +175,11 @@
                 <dt id="data.locals.tag.count"><em>tag.</em><strong>count</strong></dt>
                 <dd>The number of tagged items.</dd>
                 
-                <dt id="data.locals.tag.name"><em>tag.</em><strong>name</strong></dt>
-                <dd>The name of the tag.</dd>
-                
                 <dt id="data.locals.tag.items"><em>tag.</em><strong>items</strong></dt>
                 <dd>A list of the tag's <a href="#data.locals.item">items</a>.</dd>
+                
+                <dt id="data.locals.tag.name"><em>tag.</em><strong>name</strong></dt>
+                <dd>The name of the tag.</dd>
                 
                 <dt id="data.locals.tag.url"><em>tag.</em><strong>url</strong></dt>
                 <dd>The URL to the tag page based on the <code>tags_url</code> config setting.</dd>
