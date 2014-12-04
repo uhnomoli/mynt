@@ -76,4 +76,6 @@ powering:
     - name: python.org.tw
       url: http://www.python.org.tw/
       source: https://github.com/lucemia/taiwan.py
+    - name: blog.pedesen.de
+      url: http://blog.pedesen.de/
 
