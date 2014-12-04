@@ -200,13 +200,9 @@ th {
 }
 
 a {
-  -webkit-transition: color 0.2s;
-  -moz-transition: color 0.2s;
-  -ms-transition: color 0.2s;
-  -o-transition: color 0.2s;
-  transition: color 0.2s;
   color: #a6ca48;
   text-decoration: none;
+  transition: color 0.2s;
 }
 a:hover {
   color: #e6db74;
