@@ -213,12 +213,12 @@ th
     text-align: left
 
 a
-    +transition(color 0.2s)
-    
     border-bottom: 1px solid rgba(#000000, 0.1)
     
     color: $hlt
     text-decoration: none
+    
+    transition: color 0.2s
     
     &:hover
         color: $hlt-l
@@ -467,17 +467,17 @@ div.code
                 color: $fg-d
 
 #toc
-    +opacity(0.5)
-    +transition(opacity 0.35s)
-    
     background-color: $sbg-l
     
     font:
         size: 11px
         style: italic
     
+    opacity: 0.5
+    transition: opacity 0.35s
+    
     &:hover
-        +opacity(1)
+        opacity: 1
 
 #breadcrumbs
     @extend ul.unstyled
@@ -549,12 +549,12 @@ div.code
         background-color: $sbg-l
 
 .powering-source
-    +transition(background-color 0.2s, color 0.2s)
-    
     background-color: rgba($hlt, 0.2)
     border-bottom-width: 0px
     
     color: $hlt-l
+    
+    transition: background-color 0.2s, color 0.2s
     
     &:hover
         background-color: rgba($hlt, 0.15)
@@ -630,9 +630,9 @@ div.code
     font-size: 10px
 
 #forkme
-    +transition(all 0s ease 0s)
-    
     border-bottom-width: 0px
+    
+    transition: all 0s ease 0s
     
     & > img
         background-color: transparent
