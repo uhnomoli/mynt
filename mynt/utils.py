@@ -110,7 +110,8 @@ class Url(object):
         slug = cls.slugify(text)
 
         if data is not None and "title" in data:
-            slug = cls.slugify(data["title"])
+	    title = data["title"]
+            slug = cls.slugify(title.lower())
 
         if '<slug>' in format:
             url = format.replace('<slug>', slug)
