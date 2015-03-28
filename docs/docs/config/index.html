@@ -195,4 +195,22 @@
         <dt id="tags_url"><strong>tags_url:</strong> <em>/</em></dt>
         <dd>The base URL for tag pages.</dd>
     </dl>
+        
+    <h2 id="parser_options">Parser-specific Options</h2>
+    <p>Most parsers support optional features. To configure these, add a section with the parser's name, followed by a dictionary of options.</p>
+    <p>For example, to disable footnotes, and enable the underline extension for the default parser:</p>
+    <pre><code data-lang="yaml">hoep:
+  extensions:
+    footnotes: False
+    underline: True</code></pre>
+    <p>To tell the Python-Markdown parser to output HTML5, and disable line numbers in code blocks:</p>
+    <pre><code data-lang="yaml">markdown:
+  output_format: html5
+  extensions:
+    - extra
+    - codehilite
+  extension_configs:
+    codehilite:
+      linenums: False</code></pre>
+    <p>See the documentation for your chosen parser for available options.</p>
 {% endblock %}
