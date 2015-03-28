@@ -173,6 +173,17 @@
         <dt id="renderer"><strong>renderer:</strong> <em>jinja</em></dt>
         <dd>The renderer used.</dd>
         
+        <dt id="filetypes"><strong>filetypes:</strong> <em>{}</em></dt>
+        <dd>
+            <p>A mapping of parsers to extensions. If more than one available parser supports an extension, you can explicitly define which is used here. The key is the name of the parser and the value is a list of extensions.</p>
+            <p>For example, to use the Python-Markdown parser over the default (Hoep):</p>
+            <pre><code data-lang="yaml">filetypes:
+  markdown:
+    - md
+    - markdown
+</code></pre>
+        </dd>
+        
         <dt id="tag_layout"><strong>tag_layout:</strong> <em>None</em></dt>
         <dd>
             <p>The template used to generate tag pages.</p>

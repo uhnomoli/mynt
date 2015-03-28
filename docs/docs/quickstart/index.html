@@ -48,6 +48,9 @@
     <p>The recommended way to install mynt is via <a href="https://pip.pypa.io/en/latest/">pip</a>. If you already have pip installed, the below command is all you need. Otherwise, head on over to the pip site to get it <a href="https://pip.pypa.io/en/latest/installing.html">installed</a>.</p>
     <pre><code data-lang="text">$ pip install mynt</code></pre>
     <div class="notice notice-info">
+        <p>Mynt uses a wrapper around the Hoedown library by default. You can optionally add Python-Markdown support by installing with the following command:</p>
+        <pre><code data-lang="text">$ pip install mynt[Markdown]</code></pre>
+        <p>Use the <code>filetypes</code> config setting to enable it.</p>
         <p>If you'd like support for reStructuredText install mynt using the following command:</p>
         <pre><code data-lang="text">$ pip install mynt[reST]</code></pre>
     </div>
