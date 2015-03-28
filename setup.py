@@ -78,6 +78,7 @@ setup(
     entry_points = {
         'mynt.parsers' : [
             'docutils = mynt.parsers.docutils:Parser [reST]',
+            'markdown = mynt.parsers.pymd:Parser [Markdown]',
             'hoep = mynt.parsers.hoep:Parser'
         ],
         'mynt.renderers': [
@@ -93,6 +94,7 @@ setup(
         'watchdog'
     ],
     extras_require = {
+        'Markdown': 'Markdown',
         'reST': 'docutils>=0.10'
     },
     classifiers = [
