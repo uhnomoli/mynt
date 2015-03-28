@@ -44,6 +44,7 @@ class Mynt(object):
         'renderer': 'jinja',
         'tag_layout': None,
         'tags_url': '/',
+        'filetypes': {},
         'version': __version__
     }
     

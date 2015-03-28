@@ -56,6 +56,12 @@ class Reader(object):
                     self._extensions[extension] = [name]
             
             self._parsers[name] = Parser
+
+        # user-preferred parsers take precedence
+        for parser, extensions in self.site['filetypes'].items():
+            dot_ext = ['.' + ext for ext in extensions]
+            for ext in dot_ext:
+                self._extensions[ext] = [parser]
         
         for parsers in self._extensions.itervalues():
             parsers.sort(key = unicode.lower)
