@@ -1,3 +1,11 @@
+A slightly modified version of [Original mynt](orig_mynt), by [Anomareh][anomareh].
+
+Provided features: Support for post-related figures, TOC support.
+
+[Compare to original](compare).
+
+Below is original README.
+
 # mynt
 
 _Another static site generator?_
@@ -40,6 +48,9 @@ After installing mynt head on over and give the [quickstart][quickstart] page an
 
 If you run into any issues or have any questions, either open an [issue][issues] or hop in #mynt on irc.freenode.net.
 
+[orig_mynt]: https://github.com/Anomareh/mynt
+[anomareh]: https://github.com/Anomareh
+[compare]: https://github.com/shamansir/mynt/compare/Anomareh:master...master?w=1
 
 [docs]: http://mynt.uhnomoli.com/
 [docutils]: http://docutils.sourceforge.net/
