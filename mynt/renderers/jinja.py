@@ -69,9 +69,6 @@ class Renderer(_Renderer):
         domain = self.globals['site']['domain']
 
         if absolute and domain:
-            if not domain.startswith(('http://', 'https://')):
-                domain = 'http://' + domain
-
             parts.insert(0, domain)
 
         return URL.join(*parts)

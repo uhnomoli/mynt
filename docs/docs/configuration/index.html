@@ -94,7 +94,12 @@
         <dd>The <a href="https://docs.python.org/library/datetime.html#strftime-and-strptime-behavior">format</a> of <code>post.date</code>.</dd>
 
         <dt id="domain"><strong>domain:</strong> <em>None</em></dt>
-        <dd>The domain the site will be served from after generation.</dd>
+        <dd>
+            <p>The domain the site will be served from after generation.</p>
+            <div class="notice notice-warning">
+                <p>Should include the protocol, for example: <code>https://mynt.uhnomoli.com</code>. If the protocol is missing, mynt will default to <code>https://</code>.</p>
+            </div>
+        </dd>
 
         <dt id="include"><strong>include:</strong> <em>[]</em></dt>
         <dd>A list of <a href="https://docs.python.org/library/fnmatch.html#module-fnmatch">glob</a> patterns specifying directories and files to be copied over that would otherwise be ignored.</dd>

@@ -6,12 +6,12 @@
 # `domain` is used to generate absolute URLs. (required to generate a valid feed)
 #
 #   Example:
-#       http://my-site.com/
+#       https://my-site.com/
 #           base_url: /
-#           domain: my-site.com
+#           domain: https://my-site.com
 #       http://my-site.com/my-blog/
 #           base_url: /my-blog/
-#           domain: my-site.com
+#           domain: http://my-site.com
 base_url: /
 domain:
 
