@@ -3,6 +3,7 @@
 from argparse import ArgumentParser
 from copy import deepcopy
 from glob import iglob
+from itertools import product
 import locale
 import logging
 from os import chdir, getcwd, path as op
@@ -269,82 +270,89 @@ class Mynt:
     def _update_configuration(self):
         self.configuration = deepcopy(self.defaults)
 
-        logger.debug('>> Searching for configuration file')
+        logger.info('>> Searching for configuration file')
 
-        for extension in ('.yml', '.yaml'):
-            f = File(normpath(self.source.path, 'config{0}'.format(extension)))
-            if not f.exists:
+        for configuration in product(('mynt', 'config'), ('.yml', '.yaml')):
+            configuration = ''.join(configuration)
+            configuration = File(normpath(self.source.path, configuration))
+            if not configuration.exists:
                 continue
 
-            logger.debug('..  found: %s', f.path)
+            logger.debug('..  found: %s', configuration.path)
 
-            try:
-                self.configuration.update(Configuration(f.content))
-            except ConfigurationException as error:
-                raise ConfigurationException(error.message,
-                    'source: {0}'.format(f.path))
-
-            self.configuration['base_url'] = self.options.get('base_url')
-            self.configuration['locale'] = self.options.get('locale')
-
-            options = (
-                'archives_url',
-                'assets_url',
-                'base_url',
-                'posts_url',
-                'tags_url')
-
-            for option in options:
-                url = URL.join(self.configuration[option], '')
-                if re.search(r'(?:^\.{2}/|/\.{2}$|/\.{2}/)', url):
-                    raise ConfigurationException(
-                        'Invalid configuration option',
-                        'option: {0}'.format(self.configuration[option]),
-                        'path traversal is not allowed')
-
-            containers_source = normpath(self.source.path, '_containers')
-
-            for name, options in self.configuration['containers'].items():
-                prefix = op.commonprefix((
-                    containers_source, normpath(containers_source, name)))
-                if prefix != containers_source:
-                    raise ConfigurationException(
-                        'Invalid configuration option',
-                        'setting: containers:{0}'.format(name),
-                        'container name contains illegal characters')
-
-                try:
-                    url = URL.join(options['url'])
-                except KeyError:
-                    raise ConfigurationException(
-                        'Invalid configuration option',
-                        'setting: containers:{0}'.format(name),
-                        'url must be set for all containers')
-
-                if re.search(r'(?:^\.{2}/|/\.{2}$|/\.{2}/)', url):
-                    raise ConfigurationException(
-                        'Invalid configuration option',
-                        'setting: containers:{0}:url'.format(name),
-                        'path traversal is not allowed')
-
-                for name, value in self.container_defaults.items():
-                    if name not in options:
-                        options[name] = value
-
-                options['url'] = url
-
-            for pattern in self.configuration['include']:
-                prefix = op.commonprefix((
-                    self.source.path, normpath(self.source.path, pattern)))
-                if prefix != self.source.path:
-                    raise ConfigurationException(
-                        'Invalid include path',
-                        'path: {0}'.format(pattern),
-                        'path traversal is not allowed')
+            if configuration.name == 'config':
+                logger.warn('@@ Deprecated configuration file found')
+                logger.warn('..  rename config.yml to mynt.yml')
 
             break
         else:
             logger.debug('..  no configuration file found')
+
+            return
+
+        try:
+            self.configuration.update(Configuration(configuration.content))
+        except ConfigurationException as error:
+            raise ConfigurationException(error.message,
+                'source: {0}'.format(configuration.path))
+
+        self.configuration['base_url'] = self.options.get('base_url')
+        self.configuration['locale'] = self.options.get('locale')
+
+        options = (
+            'archives_url',
+            'assets_url',
+            'base_url',
+            'posts_url',
+            'tags_url')
+
+        for option in options:
+            url = URL.join(self.configuration[option], '')
+            if re.search(r'(?:^\.{2}/|/\.{2}$|/\.{2}/)', url):
+                raise ConfigurationException(
+                    'Invalid configuration option',
+                    'option: {0}'.format(self.configuration[option]),
+                    'path traversal is not allowed')
+
+        containers_source = normpath(self.source.path, '_containers')
+
+        for name, options in self.configuration['containers'].items():
+            prefix = op.commonprefix((
+                containers_source, normpath(containers_source, name)))
+            if prefix != containers_source:
+                raise ConfigurationException(
+                    'Invalid configuration option',
+                    'setting: containers:{0}'.format(name),
+                    'container name contains illegal characters')
+
+            try:
+                url = URL.join(options['url'])
+            except KeyError:
+                raise ConfigurationException(
+                    'Invalid configuration option',
+                    'setting: containers:{0}'.format(name),
+                    'url must be set for all containers')
+
+            if re.search(r'(?:^\.{2}/|/\.{2}$|/\.{2}/)', url):
+                raise ConfigurationException(
+                    'Invalid configuration option',
+                    'setting: containers:{0}:url'.format(name),
+                    'path traversal is not allowed')
+
+            for name, value in self.container_defaults.items():
+                if name not in options:
+                    options[name] = value
+
+            options['url'] = url
+
+        for pattern in self.configuration['include']:
+            prefix = op.commonprefix((
+                self.source.path, normpath(self.source.path, pattern)))
+            if prefix != self.source.path:
+                raise ConfigurationException(
+                    'Invalid include path',
+                    'path: {0}'.format(pattern),
+                    'path traversal is not allowed')
 
 
     def generate(self):
@@ -399,7 +407,7 @@ class Mynt:
             for d in directories:
                 Directory(normpath(self.destination.path, d)).mk()
 
-            File(normpath(self.destination.path, 'config.yml')).mk()
+            File(normpath(self.destination.path, 'mynt.yml')).mk()
         else:
             self.source.cp(self.destination.path, False)
 
