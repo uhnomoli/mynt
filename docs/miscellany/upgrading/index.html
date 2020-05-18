@@ -3,11 +3,25 @@
 
 {% set crumbs = (('Miscellany',), ('Upgrading',)) %}
 {% set toc = (
+    ('v0.3.x to v0.4.x',),
     ('v0.2.x to v0.3.x',),
 ) %}
 
 {% block content %}
     <p>This page lists all backwards incompatible changes between versions and is intended to ease the process of upgrading. If you are looking for a more comprehensive list of changes check out the <a href="{{ get_url('miscellany/changelog/') }}">changelog</a>.</p>
+
+    <h1 id="v0.2.x-to-v0.3.x">v0.3.x to v0.4.x</h1>
+
+    <h2>Python 3 support</h2>
+    <p>With v0.4 comes Python 3 support and with it Python 2 support has been dropped. Python 3.5 is now the minimum supported version, though older versions may work.</p>
+
+    <h2>Configuration filename change</h2>
+    <p>The preferred configuration filename is now <code>mynt.yml</code>. While <code>config.yml</code> is still supported as of v0.4, renaming the configuration file is recommended.</p>
+    <pre><code data-lang="text">$ mv config.yml mynt.yml</code></pre>
+
+    <h2>Configuring the domain</h2>
+    <p>A protocol is now expected to be specified in the <code>domain</code> configuration setting. If a protocol is not specified, <code>https</code> is assumed.</p>
+
 
     <h1 id="v0.2.x-to-v0.3.x">v0.2.x to v0.3.x</h1>
 

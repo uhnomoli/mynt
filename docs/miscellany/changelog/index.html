@@ -3,6 +3,7 @@
 
 {% set crumbs = (('Miscellany',), ('Changelog',)) %}
 {% set toc = (
+    ('v0.4',),
     ('v0.3.1',),
     ('v0.3',),
     ('v0.2.3',),
@@ -23,6 +24,35 @@
 
 {% block content %}
     <p>This page is a comprehensive list of all user-visible changes between versions. If you are upgrading be sure to check out the <a href="{{ get_url('miscellany/upgrading/') }}">upgrading</a> page for any backwards incompatible changes.</p>
+
+    <h1 id="v0.4">v0.4 (May 18th, 2020)</h1>
+    <ul>
+        <li>
+            <strong>Breaking</strong>
+            <ul>
+                <li>Upgraded to Python 3, Python 3.5 is now the minimum supported version.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Changed</strong>
+            <ul>
+                <li>If a protocol is not specified in the <code>domain</code> configuration setting, it defaults to <code>https</code>.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Deprecated</strong>
+            <ul>
+                <li>The prefered configuration filename is now <code>mynt.yml</code>. Support for <code>config.yml</code> will be removed in a future release.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Fixed</strong>
+            <ul>
+                <li>Files that fail to parse are now skipped.</li>
+            </ul>
+        </li>
+    </ul>
+
 
     <h1 id="v0.3.1">v0.3.1 (August 20th, 2014)</h1>
     <ul>
