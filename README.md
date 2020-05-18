@@ -41,12 +41,13 @@ After installing mynt head on over and give the [quickstart][quickstart] page an
 If you run into any issues or have any questions, either open an [issue][issues] or hop in #mynt on irc.freenode.net.
 
 
-[docs]: http://mynt.uhnomoli.com/
-[docutils]: http://docutils.sourceforge.net/
+[docs]: https://mynt.uhnomoli.com/
+[docutils]: https://docutils.sourceforge.net/
 [hoep]: https://github.com/Anomareh/Hoep
 [issues]: https://github.com/Anomareh/mynt/issues
-[jinja]: http://jinja.pocoo.org/
-[pygments]: http://pygments.org/
-[pyyaml]: http://pyyaml.org/
-[quickstart]: http://mynt.uhnomoli.com/docs/quickstart/
-[watchdog]: http://packages.python.org/watchdog/
+[jinja]: https://jinja.palletsprojects.com/
+[pygments]: https://pygments.org/
+[pyyaml]: https://pyyaml.org/
+[quickstart]: https://mynt.uhnomoli.com/docs/quickstart/
+[watchdog]: https://github.com/gorakhargosh/watchdog
+

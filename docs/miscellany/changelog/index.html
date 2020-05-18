@@ -23,7 +23,7 @@
 
 {% block content %}
     <p>This page is a comprehensive list of all user-visible changes between versions. If you are upgrading be sure to check out the <a href="{{ get_url('miscellany/upgrading/') }}">upgrading</a> page for any backwards incompatible changes.</p>
-    
+
     <h1 id="v0.3.1">v0.3.1 (August 20th, 2014)</h1>
     <ul>
         <li>
@@ -34,8 +34,8 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.3">v0.3 (July 27th, 2014)</h1>
     <ul>
         <li>
@@ -46,7 +46,7 @@
                 <li>A reStructuredText parser.</li>
                 <li>Two new <code>item</code> properties, <code>prev</code> and <code>next</code>, that store the previous and next items in the container.</li>
                 <li>Files outside of ignored directories will now be parsed if a parser is available.</li>
-                <li>Two config settings for controlling how posts are sorted: <code>posts_order</code> and <code>posts_sort</code>.</li>
+                <li>Two configuration settings for controlling how posts are sorted: <code>posts_order</code> and <code>posts_sort</code>.</li>
             </ul>
         </li>
         <li>
@@ -57,22 +57,22 @@
                 <li>The <code>post</code> local has been renamed <code>item</code> to maintain consistency between content containers.</li>
                 <li>The <code>&lt;title&gt;</code> variable in URL formats has been renamed to <code>&lt;slug&gt;</code>.</li>
                 <li>Frontmatter attributes that contain string values can now be used in URL formats.</li>
-                <li>The <code>markup</code> and <code>parser</code> config settings have been removed.</li>
-                <li>Which parser used is now determined by <em>(in order of precedence)</em> the <code>parser</code> frontmatter attribute, the <code>parser</code> container config setting, and lastly the file extension.</li>
+                <li>The <code>markup</code> and <code>parser</code> configuration settings have been removed.</li>
+                <li>Which parser used is now determined by <em>(in order of precedence)</em> the <code>parser</code> frontmatter attribute, the <code>parser</code> container configuration setting, and lastly the file extension.</li>
                 <li>In Markdown, the bracket fenced code block syntax is no longer supported.</li>
                 <li>The <code>layout</code> frontmatter attribute can now be set to <code>None</code> to skip rendering.</li>
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.2.3">v0.2.3 (June 13th, 2013)</h1>
     <ul>
         <li>
             <strong>New</strong>
             <ul>
                 <li>A new default theme with dark <em>(default)</em> and light versions.</li>
-                <li>A config setting for specifying directories and files to be copied over that would otherwise be ignored.</li>
+                <li>A configuration setting for specifying directories and files to be copied over that would otherwise be ignored.</li>
                 <li>Localization and internationalization support.</li>
             </ul>
         </li>
@@ -97,12 +97,12 @@
                 <li>A bug in the misaka parser with SmartyPants.</li>
                 <li>A bug in the <code>serve</code> subcommand when handling paths containing Unicode characters.</li>
                 <li>A bug in the <code>watch</code> subcommand when a file is moved into the directory that is being watched.</li>
-                <li>A bug when handling an empty config file.</li>
+                <li>A bug when handling an empty configuration file.</li>
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.2.2">v0.2.2 (April 11th, 2012)</h1>
     <ul>
         <li>
@@ -119,8 +119,8 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.2.1">v0.2.1 (March 20th, 2012)</h1>
     <ul>
         <li>
@@ -130,8 +130,8 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.2">v0.2 (March 20th, 2012)</h1>
     <ul>
         <li>
@@ -158,14 +158,14 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.1.9">v0.1.9 (March 12th, 2012)</h1>
     <ul>
         <li>
             <strong>New</strong>
             <ul>
-                <li>An absolute URL can now be retrieved via the <code>get_url</code> template helper if the <code>domain</code> config setting has been set.</li>
+                <li>An absolute URL can now be retrieved via the <code>get_url</code> template helper if the <code>domain</code> configuration setting has been set.</li>
                 <li>A filter for the Jinja render that attempts to convert all relative URLs to absolute URLs.</li>
             </ul>
         </li>
@@ -184,8 +184,8 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.1.8">v0.1.8 (February 8th, 2012)</h1>
     <ul>
         <li>
@@ -195,8 +195,8 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.1.7">v0.1.7 (January 30th, 2012)</h1>
     <ul>
         <li>
@@ -212,8 +212,8 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.1.6">v0.1.6 (January 25th, 2012)</h1>
     <ul>
         <li>
@@ -223,8 +223,8 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.1.5">v0.1.5 (January 25th, 2012)</h1>
     <ul>
         <li>
@@ -234,8 +234,8 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.1.4">v0.1.4 (January 2nd, 2012)</h1>
     <ul>
         <li>
@@ -245,8 +245,8 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.1.3">v0.1.3 (January 2nd, 2012)</h1>
     <ul>
         <li>
@@ -262,8 +262,8 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.1.2">v0.1.2 (December 27th, 2011)</h1>
     <ul>
         <li>
@@ -290,8 +290,8 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.1.1">v0.1.1 (December 4th, 2011)</h1>
     <ul>
         <li>
@@ -308,8 +308,9 @@
             </ul>
         </li>
     </ul>
-    
-    
+
+
     <h1 id="v0.1">v0.1 (December 4th, 2011)</h1>
     <p><em>Initial release.</em></p>
 {% endblock %}
+

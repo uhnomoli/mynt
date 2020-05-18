@@ -18,12 +18,12 @@ figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video
     vertical-align: baseline
-    
+
     margin: 0px
     padding: 0px
-    
+
     border-width: 0px
-    
+
     font: inherit
     font-size: 100%
 
@@ -55,7 +55,7 @@ body
         image: url('../images/bg.png')
         position: left top
         repeat: repeat
-    
+
     color: $fg
     font:
         family: 'Open Sans', sans-serif
@@ -67,24 +67,24 @@ blockquote, dl, ol, p, pre, table, ul
 
 blockquote
     overflow: hidden
-    
+
     padding: 0px $baseline
-    
+
     background-color: $sbg-l
 
 dl.horizontal
     & > dd
         margin-left: 65px
-        
+
         & + dt
             margin-top: $baseline
-            
+
             & + dd
                 margin-top: $baseline
-    
+
     & > dt
         float: left
-        
+
         width: 50px
 
 h1, h2, h3, h4, h5, h6
@@ -100,9 +100,9 @@ h1
     margin: ($baseline * 2) 0px
     margin-bottom: $baseline * 1.5
     padding-bottom: 8px
-    
+
     border-bottom: 1px solid $sbg
-    
+
     font-size: 28px
 
 h2
@@ -122,49 +122,49 @@ h6
 
 li
     position: relative
-    
+
     ol > &:before, ul > &:before
         position: absolute
-        
+
         color: $hlt-l
         font-family: 'Envy Code R', 'Ubuntu Mono', monospace
-    
+
     ol > &
         left: 22px
-        
+
         margin-right: 22px
-        
+
         counter-increment: item
-        
+
         &:before
             left: -22px
-            
+
             width: 17px
-            
+
             text-align: right
-            
+
             content: counter(item, decimal) '.'
-    
+
     ul > &
         left: 12px
-        
+
         margin-right: 12px
-        
+
         &:before
             left: -12px
-            
+
             content: '\2022'
-    
+
     ul.unstyled > &
         position: static
         left: auto
-        
+
         margin-right: 0px
-        
+
         &:before
             position: static
             left: auto
-            
+
             content: none
 
 ol, ul
@@ -172,7 +172,7 @@ ol, ul
         image: none
         position: inside
         type: none
-    
+
     ol, ul
         margin: 0px
         margin-left: $baseline
@@ -185,9 +185,9 @@ p
 
 pre
     padding: 0px 3px
-    
+
     background-color: $pygments
-    
+
     font-family: 'Envy Code R', 'Ubuntu Mono', monospace
 
 table
@@ -199,13 +199,13 @@ td, th
 
 td
     +compact-children
-    
+
     tr:nth-child(2n) > &
         background-color: $bg-d
 
 th
     background-color: $sbg
-    
+
     font:
         size: 12px
         style: italic
@@ -214,33 +214,33 @@ th
 
 a
     border-bottom: 1px solid rgba(#000000, 0.1)
-    
+
     color: $hlt
     text-decoration: none
-    
+
     transition: color 0.2s
-    
+
     &:hover
         color: $hlt-l
 
 code
     padding: 0px 3px
-    
+
     background-color: $sbg
-    
+
     color: $fg-d
     font-family: 'Envy Code R', 'Ubuntu Mono', monospace
     line-height: 17px
     white-space: pre
-    
+
     pre &
         padding: 0px
-        
+
         background-color: transparent
-        
+
         color: $pygments-fg
         line-height: $baseline
-    
+
     table &
         background-color: $sbg
 
@@ -249,11 +249,11 @@ em
 
 img
     vertical-align: bottom
-    
+
     a > &
         margin-bottom: -1px
         padding: 5px
-        
+
         background-color: $sbg
         border-bottom: 1px solid $bg
 
@@ -280,14 +280,14 @@ sup
 #container
     margin: $baseline auto
     margin-bottom: 0px
-    
+
     width: $container
 
 #sidebar
     position: fixed
     top: 0px
     bottom: 0px
-    
+
     width: $sidebar
 
 #title
@@ -307,68 +307,68 @@ sup
     position: fixed
     top: 0px
     left: 50%
-    
+
     margin: 72px 0px 0px ($container / 2) - $sidebar
     padding: 9px
-    
+
     width: $sidebar - 18px
 
 #breadcrumbs
     overflow: hidden
-    
+
     margin: $baseline $offset
     padding: $baseline / 2
-    
+
     width: $content - $baseline
 
 #content
     +compact-children
-    
+
     margin: $baseline $offset
-    
+
     width: $content
 
 .notice
     overflow: hidden
-    
+
     margin: $baseline 0px
     padding: 0px $baseline
 
 .api
     & > dd
         +compact-children
-        
+
         margin: $baseline
         margin-right: 0px
-    
+
     & > dt
         margin-top: $baseline
         padding: $baseline / 2
-        
+
         & > strong
             line-height: $baseline
 
 #powering
     & > li
         overflow: hidden
-        
+
         margin-top: $baseline
         padding: $baseline / 2
 
 .powering-source
     float: right
-    
+
     padding: 0px 3px
 
 .post-list
     & > .post-title, & > .post-meta
         padding: $baseline / 2
-    
+
     & > .post-title
         padding-bottom: 0px
-        
+
         line-height: $baseline
-    
+
     & > .post-meta
         padding-top: 0px
 
@@ -378,21 +378,21 @@ sup
 .post-title
     margin: 0px
     padding-bottom: 0px
-    
+
     line-height: 30px
 
 .post-meta
     margin-bottom: $baseline
     padding-top: 0px
-    
+
     line-height: $baseline
 
 div.code
     margin: $baseline 0px
-    
+
     & > div
         overflow: auto
-        
+
         max-height: $baseline * 27
 
 .highlighttable
@@ -414,11 +414,11 @@ div.code
 
 #forkme
     display: block
-    
+
     position: fixed
     top: 0px
     right: 0px
-    
+
     & > img
         margin-bottom: 0px
         padding: 0px
@@ -432,9 +432,9 @@ div.code
 
 #title
     +inverted-links($borderless: true)
-    
+
     border-bottom-width: 0px
-    
+
     font:
         family: 'Ubuntu Mono', monospace
         size: 36px
@@ -447,77 +447,77 @@ div.code
     font:
         family: 'Envy Code R', 'Ubuntu Mono', monospace
         style: normal
-    
+
     & > dd
         +borderless-links
 
 #toc, .toc-section
     @extend ul.unstyled
-    
+
     & > li
         overflow: hidden
-        
+
         text-overflow: ellipsis
         white-space: nowrap
-        
+
         & > a
             color: $fg-l
-            
+
             &:hover
                 color: $fg-d
 
 #toc
     background-color: $sbg-l
-    
+
     font:
         size: 11px
         style: italic
-    
+
     opacity: 0.5
     transition: opacity 0.35s
-    
+
     &:hover
         opacity: 1
 
 #breadcrumbs
     @extend ul.unstyled
-    
+
     background-color: $sbg-l
-    
+
     color: $fg-l
     font-family: 'Envy Code R', 'Ubuntu Mono', monospace
     font-style: italic
-    
+
     & > li
         +inverted-links
-        
+
         float: left
-        
+
         &:after
             padding: 0px 6px
-            
+
             color: $fg
             font-style: normal
-            
+
             content: '\203A'
-        
+
         &:last-child:after
             padding: 0px
-            
+
             content: none
 
 .notice
     font-style: italic
-    
+
     & > div.code
         font-style: normal
-    
+
     a
         color: $fg-d
-        
+
         &:hover
             color: $fg-d
-    
+
     .linenos
         background-color: #D5D5D5
 
@@ -536,38 +536,38 @@ div.code
 .api
     & > dt
         background-color: $sbg-l
-        
+
         font-family: 'Envy Code R', 'Ubuntu Mono', monospace
-        
+
         & > strong
             font-size: 13px
 
 #powering
     @extend ul.unstyled
-    
+
     & > li
         background-color: $sbg-l
 
 .powering-source
     background-color: rgba($hlt, 0.2)
     border-bottom-width: 0px
-    
+
     color: $hlt-l
-    
+
     transition: background-color 0.2s, color 0.2s
-    
+
     &:hover
         background-color: rgba($hlt, 0.15)
-        
+
         color: $hlt
 
 .post-list
     & > .post-title
         font-size: 16px
-    
+
     & > .post-meta
         +inverted-links
-        
+
         font-size: 10px
 
 .post-title, .post-meta
@@ -575,14 +575,14 @@ div.code
 
 .post-title
     +borderless-links
-    
+
     border-bottom-width: 0px
-    
+
     font-size: 24px
 
 .post-meta
     +post-meta
-    
+
     font-size: 11px
 
 div.code
@@ -594,24 +594,24 @@ div.code
 
 .linenos
     background-color: $sbg
-    
+
     color: $fg-d
 
 .linenodiv, .highlight
     & > pre
         padding: 0px
-        
+
         background-color: transparent
 
 .archives
     background-color: $sbg-l
-    
+
     font-style: italic
     text-transform: uppercase
 
 .archives-year
     +inverted-links($borderless: true)
-    
+
     font-size: 18px
 
 .archives-post-date
@@ -620,20 +620,20 @@ div.code
 
 .archives-post-title
     +borderless-links
-    
+
     text-transform: none
 
 .archives-post-tags
     +inverted-links
     +post-meta
-    
+
     font-size: 10px
 
 #forkme
     border-bottom-width: 0px
-    
+
     transition: all 0s ease 0s
-    
+
     & > img
         background-color: transparent
         border-bottom-width: 0px
@@ -665,7 +665,7 @@ div.code
 
 .highlight .err
     background-color: #1E0010
-    
+
     color: #960050
 
 .highlight .ge
@@ -823,3 +823,4 @@ div.code
 
 .highlight .w
     color: #F8F8F2
+

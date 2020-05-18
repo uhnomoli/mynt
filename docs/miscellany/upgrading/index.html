@@ -8,15 +8,15 @@
 
 {% block content %}
     <p>This page lists all backwards incompatible changes between versions and is intended to ease the process of upgrading. If you are looking for a more comprehensive list of changes check out the <a href="{{ get_url('miscellany/changelog/') }}">changelog</a>.</p>
-    
+
     <h1 id="v0.2.x-to-v0.3.x">v0.2.x to v0.3.x</h1>
-    
+
     <h2>A change to URL formats</h2>
     <p>The <code>&lt;title&gt;</code> variable in URL formats has been renamed to <code>&lt;slug&gt;</code>. Also note, you can no longer manually set an item's URL via the <code>url</code> frontmatter attribute.</p>
-    
+
     <h2>Parser selection has changed</h2>
-    <p>In v0.2.x the parser was determined based on the <code>markup</code> and <code>parser</code> config settings. These two config settings have been removed in v0.3.x and now the parser is largely determined by the file extension. It is possible to override this behavior by setting the <code>parser</code> frontmatter attribute to the desired parser.</p>
-    
+    <p>In v0.2.x the parser was determined based on the <code>markup</code> and <code>parser</code> configuration settings. These two configuration settings have been removed in v0.3.x and now the parser is largely determined by the file extension. It is possible to override this behavior by setting the <code>parser</code> frontmatter attribute to the desired parser.</p>
+
     <h2>Files outside of ignored directories will now be parsed if possible</h2>
     <p>In v0.2.x the only files that were rendered outside of ignored directories were those that had an HTML or XML extension. In v0.3.x if a parser is available for the given file it will now be parsed and rendered.</p>
     <p>This is being mentioned here as it is common to have a <code>README.md</code> at the root of a site and in v0.3.x this will cause an error. To upgrade you will need to do one of the following:</p>
@@ -26,7 +26,7 @@
         <li>Prefix the filename with <code>_</code> or <code>.</code>.</li>
         <li>Remove the file extension.</li>
     </ul>
-    
+
     <h2>Several globals and locals have moved</h2>
     <p>In v0.3.x the <code>archives</code> and <code>tags</code> globals are now properties of the <code>posts</code> global and the <code>post</code> local has been renamed <code>item</code>. This was done to maintain consistency between the <code>posts</code> global and the new content containers.</p>
     <pre><code data-lang="jinja">{{ '{# v0.2.x #}
@@ -37,14 +37,14 @@
 {{ get_url(posts.archives[year].url) }}
 {{ get_url(posts.tags[tag].url) }}
 {{ item.content }}' }}</code></pre>
-    
+
     <h2>Global and local dictionary behavior has changed</h2>
     <p>In v0.2.x iterating over the <code>archives</code> and <code>tags</code> globals as well as the <code>archive.months</code> local would yield a tuple instead of behaving like ordinary Python dictionaries. This is no longer the case in v0.3.x. All dictionaries in mynt now behave just as they would in Python. To upgrade, use the new <a href="{{ get_url('docs/templates/#filters.items') }}">items</a> filter.</p>
     <pre><code data-lang="jinja">{{ '{# v0.2.x #}
 {% for year, archive in archives %} ... {% endfor %}' }}</code></pre>
     <pre><code data-lang="jinja">{{ '{# v0.3.x #}
 {% for year, archive in posts.archives|items %} ... {% endfor %}' }}</code></pre>
-    
+
     <h2>A Markdown syntax change</h2>
     <p>In Markdown, the bracket fenced code block syntax is no longer supported. To upgrade, remove the brackets and any trailing whitespace.</p>
     <pre><code data-lang="markdown">&lt;!-- v0.2.x --&gt;
@@ -56,3 +56,4 @@ import this
 import this
 ~~~</code></pre>
 {% endblock %}
+

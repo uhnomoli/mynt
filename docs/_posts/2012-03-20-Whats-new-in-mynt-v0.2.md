@@ -15,12 +15,12 @@ Next is the `watch` command. Now instead of having to manually regenerate your s
 
 Lastly, there is the `serve` command. If you don't have a local server setup, you can now use the `serve` command to quickly host your site locally for developing and testing.
 
-To read more on the new commands and how to use them, check out the [directory structure][directory-structure] and [commands][commands] sections of the quickstart guide.
+To read more on the new commands and how to use them, check out the [directory structure][directory-structure] and [generation][generation] sections of the quickstart guide.
 
 
 # Default theme
 
-Now included with mynt is a default theme. The default theme comes with an annotated config file and a handful of useful built-in features, such as an Atom feed and the easy addition of profile links to various social sites.
+Now included with mynt is a default theme. The default theme comes with an annotated configuration file and a handful of useful built-in features, such as an Atom feed and the easy addition of profile links to various social sites.
 
 To get started with the new default theme, use the new `init` command.
 
@@ -42,6 +42,7 @@ $ pip install mynt
 ```
 
 
-[commands]: {{ get_url('docs/quickstart/#commands') }}
+[generation]: {{ get_url('docs/quickstart/#generation') }}
 [directory-structure]: {{ get_url('docs/quickstart/#directory-structure') }}
 [quickstart]: {{ get_url('docs/quickstart/') }}
+

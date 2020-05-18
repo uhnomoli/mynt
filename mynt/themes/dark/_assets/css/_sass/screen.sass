@@ -18,12 +18,12 @@ figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video
     vertical-align: baseline
-    
+
     margin: 0px
     padding: 0px
-    
+
     border-width: 0px
-    
+
     font: inherit
     font-size: 100%
 
@@ -55,7 +55,7 @@ body
         image: url('../images/bg.png')
         position: left top
         repeat: repeat
-    
+
     color: $fg
     font:
         family: 'Ubuntu', sans-serif
@@ -67,24 +67,24 @@ blockquote, dl, ol, p, pre, table, ul
 
 blockquote
     overflow: hidden
-    
+
     padding: 0px $baseline
-    
+
     background-color: $sbg-l
 
 dl.horizontal
     & > dd
         margin-left: 65px
-        
+
         & + dt
             margin-top: $baseline
-            
+
             & + dd
                 margin-top: $baseline
-    
+
     & > dt
         float: left
-        
+
         width: 50px
 
 h1, h2, h3, h4, h5, h6
@@ -116,48 +116,48 @@ h6
 
 li
     position: relative
-    
+
     ol > &:before, ul > &:before
         position: absolute
-        
+
         color: $hlt-l
-    
+
     ol > &
         left: 22px
-        
+
         margin-right: 22px
-        
+
         counter-increment: item
-        
+
         &:before
             left: -22px
-            
+
             width: 17px
-            
+
             text-align: right
-            
+
             content: counter(item, decimal) '.'
-    
+
     ul > &
         left: 12px
-        
+
         margin-right: 12px
-        
+
         &:before
             left: -12px
-            
+
             content: '\2022'
-    
+
     ul.unstyled > &
         position: static
         left: auto
-        
+
         margin-right: 0px
-        
+
         &:before
             position: static
             left: auto
-            
+
             content: none
 
 ol, ul
@@ -165,7 +165,7 @@ ol, ul
         image: none
         position: inside
         type: none
-    
+
     ol, ul
         margin: 0px
         margin-left: 20px
@@ -178,9 +178,9 @@ p
 
 pre
     padding: 0px 3px
-    
+
     background-color: $sbg-l
-    
+
     font-family: 'Envy Code R', 'Ubuntu Mono', monospace
 
 table
@@ -192,13 +192,13 @@ td, th
 
 td
     +compact-children
-    
+
     tr:nth-child(2n) > &
         background-color: $bg-d
 
 th
     background-color: $sbg
-    
+
     color: $hlt-l
     font:
         style: italic
@@ -208,30 +208,30 @@ th
 a
     color: $hlt
     text-decoration: none
-    
+
     transition: color 0.2s
-    
+
     &:hover
         color: $hlt-l
 
 code
     padding: 0px 3px
-    
+
     background-color: $sbg-l
-    
+
     color: $fg-d
     font-family: 'Envy Code R', 'Ubuntu Mono', monospace
     line-height: 17px
     white-space: pre
-    
+
     pre &
         padding: 0px
-        
+
         background-color: transparent
-        
+
         color: $pygments-fg
         line-height: $baseline
-    
+
     table &
         background-color: $sbg
 
@@ -240,10 +240,10 @@ em
 
 img
     vertical-align: bottom
-    
+
     a > &
         padding: 5px
-        
+
         background-color: $sbg-l
 
 strong
@@ -265,7 +265,7 @@ sup
 //
 #container
     margin-top: $baseline
-    
+
     width: $container
 
 #sidebar
@@ -273,9 +273,9 @@ sup
     top: 0px
     bottom: 0px
     left: 0px
-    
+
     padding: 0px $baseline
-    
+
     width: $sidebar
 
 #title
@@ -291,41 +291,41 @@ sup
     position: absolute
     bottom: 0px
     left: 0px
-    
+
     padding: 0px $baseline
-    
+
     width: $sidebar
 
 #breadcrumbs
     position: fixed
     top: $baseline
     left: $offset
-    
+
     margin: 0px
     padding: $baseline / 2
-    
+
     width: $content - $baseline
 
 #content
     +compact-children
-    
+
     margin: $baseline 0px
     margin-left: $offset
-    
+
     width: $content
-    
+
     #breadcrumbs + &
         margin-top: $baseline * 4
 
 .post-list
     & > .post-title, & > .post-meta
         padding: $baseline / 2
-    
+
     & > .post-title
         padding-bottom: 0px
-        
+
         line-height: $baseline
-    
+
     & > .post-meta
         padding-top: 0px
 
@@ -334,21 +334,21 @@ sup
 
 .post-title
     padding-bottom: 0px
-    
+
     line-height: 30px
 
 .post-meta
     margin-bottom: $baseline
     padding-top: 0px
-    
+
     line-height: $baseline
 
 div.code
     margin: $baseline 0px
-    
+
     & > div
         overflow: auto
-        
+
         max-height: $baseline * 27
 
 .highlighttable
@@ -378,23 +378,23 @@ div.code
         image: url('../images/sbg.png')
         position: left top
         repeat: repeat
-    
+
     font-style: italic
 
 #title
     +inverted-links
-    
+
     font:
         family: 'Ubuntu Mono', sans-serif
         size: 36px
-    
+
 #subtitle
     color: $fg-d
     font-size: 16px
 
 #nav
     @extend ul.unstyled
-    
+
     font:
         family: 'Ubuntu Mono', sans-serif
         style: normal
@@ -408,36 +408,36 @@ div.code
 
 #breadcrumbs
     @extend ul.unstyled
-    
+
     background-color: $sbg
-    
+
     color: $fg-d
     font-family: 'Ubuntu Mono', sans-serif
     font-style: italic
-    
+
     & > li
         float: left
-        
+
         &:after
             padding: 0px 6px
-            
+
             color: $fg
             font-style: normal
-            
+
             content: '\203A'
-        
+
         &:last-child:after
             padding: 0px
-            
+
             content: none
 
 .post-list
     & > .post-title
         font-size: 16px
-    
+
     & > .post-meta
         +inverted-links
-        
+
         font-size: 10px
 
 .post-title, .post-meta
@@ -448,7 +448,7 @@ div.code
 
 .post-meta
     +post-meta
-    
+
     font-size: 11px
 
 div.code
@@ -460,24 +460,24 @@ div.code
 
 .linenos
     background-color: $sbg
-    
+
     color: $fg-d
 
 .linenodiv, .highlight
     & > pre
         padding: 0px
-        
+
         background-color: transparent
 
 .archives
     background-color: $sbg-l
-    
+
     font-style: italic
     text-transform: uppercase
 
 .archives-year
     +inverted-links
-    
+
     font-size: 18px
 
 .archives-post-date
@@ -490,5 +490,6 @@ div.code
 .archives-post-tags
     +inverted-links
     +post-meta
-    
+
     font-size: 10px
+

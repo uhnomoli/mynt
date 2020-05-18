@@ -9,7 +9,7 @@ It's been almost two and a half years since the last major release and a lot has
 
 # Content containers
 
-The headlining feature of v0.3 is the new content containers. With this new feature you can define containers that are handled exactly like posts, but are separate. They also support the same tagging and archives features as posts all the while allowing you to use a supported markup language to write your content. To learn more check out the relevant sections of the [quickstart][quickstart] guide and [config][config] documentation.
+The headlining feature of v0.3 is the new content containers. With this new feature you can define containers that are handled exactly like posts, but are separate. They also support the same tagging and archives features as posts all the while allowing you to use a supported markup language to write your content. To learn more check out the relevant sections of the [quickstart][quickstart] guide and [configuration][configuration] documentation.
 
 
 # Markup pages
@@ -23,7 +23,8 @@ Be sure to check out the [changelog][changelog] for a comprehensive list of chan
 
 
 [changelog]: {{ get_url('miscellany/changelog/#v0.3') }}
-[config]: {{ get_url('docs/config/#containers') }}
+[configuration]: {{ get_url('docs/configuration/#containers') }}
 [pages]: {{ get_url('docs/quickstart/#pages') }}
 [quickstart]: {{ get_url('docs/quickstart/#content-containers') }}
 [upgrading]: {{ get_url('miscellany/upgrading/#v0.2.x-to-v0.3.x') }}
+
