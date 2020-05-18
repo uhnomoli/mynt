@@ -296,6 +296,13 @@ class Mynt:
             raise ConfigurationException(error.message,
                 'source: {0}'.format(configuration.path))
 
+        domain = self.configuration['domain']
+        if domain and not domain.startswith(('https://', 'http://', '//')):
+            logger.warn('@@ Configuration setting `domain` missing protocol')
+            logger.warn('..  defaulting to `https`')
+
+            self.configuration['domain'] = 'https://{0}'.format(domain)
+
         self.configuration['base_url'] = self.options.get('base_url')
         self.configuration['locale'] = self.options.get('locale')
 
