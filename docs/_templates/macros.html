@@ -2,12 +2,12 @@
     {% for crumb in crumbs %}
         {% set link = crumb[0] %}
         {% set url = crumb[1]|default(none) %}
-        
+
         <li>{% if url %}<a href="{{ get_url(url) }}">{{ link }}</a>{% else %}{{ link }}{% endif %}</li>
     {% endfor %}
 {% endmacro %}
 
-{% macro title(crumbs = none, ignore = false) %}
+{% macro title(crumbs=none, ignore=false) %}
     <title>
         {% if crumbs and not ignore %}
             {{ crumbs|reverse|join(' : ', 0) }} – {{ site.title }}
@@ -17,15 +17,15 @@
     </title>
 {% endmacro %}
 
-{% macro toc(tree, parent = none) %}
+{% macro toc(tree, parent=none) %}
     {% for node in tree %}
         {% set name = node[0] %}
         {% set anchor = name|lower|replace(' ', '-') %}
         {% set children = node[1]|default(none) %}
-        
+
         <li>
             <a href="#{% if parent %}{{ parent }}.{% endif %}{{ anchor }}">{{ name }}</a>
-            
+
             {% if children %}
                 <ul class="toc-section">
                     {{ toc(children, '%s.%s'|format(parent, anchor) if parent else anchor) }}
@@ -34,3 +34,4 @@
         </li>
     {% endfor %}
 {% endmacro %}
+

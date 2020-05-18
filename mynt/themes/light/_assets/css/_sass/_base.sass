@@ -36,7 +36,7 @@ $content: $container - $offset
 @mixin compact-children
     & > :first-child
         margin-top: 0px
-    
+
     & > :last-child
         margin-bottom: 0px
 
@@ -47,10 +47,10 @@ $content: $container - $offset
 @mixin inverted-links($borderless: false)
     & > a
         color: $fg-d
-        
+
         &:hover
             color: $hlt
-        
+
         @if $borderless
             border-bottom-width: 0px
 
@@ -59,7 +59,8 @@ $content: $container - $offset
     font-style: normal
     text-transform: uppercase
     word-spacing: 2px
-    
+
     & > span
         position: relative
         top: -1px
+

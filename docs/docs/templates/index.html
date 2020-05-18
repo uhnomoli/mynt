@@ -61,10 +61,10 @@
     &lt;/ul&gt;
 {% endfor %}{% endraw %}</code></pre>
                         </dd>
-                        
+
                         <dt id="data.globals.containers.container.items"><em>container.</em><strong>items</strong></dt>
                         <dd>A list of the container's <a href="#data.locals.item">items</a>.</dd>
-                        
+
                         <dt id="data.globals.containers.container.tags"><em>container.</em><strong>tags</strong></dt>
                         <dd>
                             <p>A dictionary of the container's <a href="#data.locals.tag">tags</a>.</p>
@@ -76,14 +76,14 @@
                 </dd>
             </dl>
         </dd>
-        
+
         <dt id="data.globals.posts"><strong>posts</strong></dt>
         <dd>A <a href="#data.globals.containers.container">container</a> object of the site's posts.</dd>
-        
+
         <dt id="data.globals.site"><strong>site</strong></dt>
-        <dd>A dictionary of the site's <a href="{{ get_url('docs/config/') }}">config</a> data.</dd>
+        <dd>A dictionary of the site's <a href="{{ get_url('docs/configuration/') }}">configuration</a> data.</dd>
     </dl>
-    
+
     <h2 id="data.locals">Locals</h1>
     <dl class="api">
         <dt id="data.locals.archive"><strong>archive</strong></dt>
@@ -95,15 +95,15 @@
             <dl class="api">
                 <dt id="data.locals.archive.months"><em>archive.</em><strong>months</strong></dt>
                 <dd>A dictionary of <a href="#data.locals.item">items</a> sorted by month in reverse chronological order.</dd>
-                
+
                 <dt id="data.locals.archive.url"><em>archive.</em><strong>url</strong></dt>
-                <dd>The URL to the year's archive page based on the <code>archives_url</code> config setting.</dd>
-                
+                <dd>The URL to the year's archive page based on the <code>archives_url</code> configuration setting.</dd>
+
                 <dt id="data.locals.archive.year"><em>archive.</em><strong>year</strong></dt>
                 <dd>The year of the archive.</dd>
             </dl>
         </dd>
-        
+
         <dt id="data.locals.item"><strong>item</strong></dt>
         <dd>
             <p>A dictionary of item data.</p>
@@ -113,10 +113,10 @@
             <dl class="api">
                 <dt id="data.locals.item.content"><em>item.</em><strong>content</strong></dt>
                 <dd>The body of the item.</dd>
-                
+
                 <dt id="data.locals.item.date"><em>item.</em><strong>date</strong></dt>
-                <dd>The date of the item formatted according to the <code>date_format</code> config setting.</dd>
-                
+                <dd>The date of the item formatted according to the <code>date_format</code> configuration setting.</dd>
+
                 <dt id="data.locals.item.excerpt"><em>item.</em><strong>excerpt</strong></dt>
                 <dd>
                     <p>The contents of the first <code>&lt;p&gt;</code> of <a href="#data.locals.item.content">content</a>.</p>
@@ -124,13 +124,13 @@
                         <p>Only available for container items.</p>
                     </div>
                 </dd>
-                
+
                 <dt id="data.locals.item.prev"><em>item.</em><strong>prev</strong></dt>
                 <dd>The previous item in the container.</dd>
-                
+
                 <dt id="data.locals.item.next"><em>item.</em><strong>next</strong></dt>
                 <dd>The next item in the container.</dd>
-                
+
                 <dt id="data.locals.item.tags"><em>item.</em><strong>tags</strong></dt>
                 <dd>
                     <p>A list of the names of the item's tags.</p>
@@ -145,20 +145,20 @@
         for containers: containers.<container name>.tags
     #}
     {% set data = posts.tags[tag] %}
-    
+
     &lt;a href="{{ get_url(data.url) }}"&gt;{{ tag }} &lt;em&gt;({{ data.count }})&lt;/em&gt;&lt;/a&gt;{% if not loop.last %}, {% endif %}
 {% endfor %}{% endraw %}</code></pre>
                     </div>
                 </dd>
-                
+
                 <dt id="data.locals.item.timestamp"><em>item.</em><strong>timestamp</strong></dt>
                 <dd>The timestamp of the item.</dd>
-                
+
                 <dt id="data.locals.item.url"><em>item.</em><strong>url</strong></dt>
                 <dd>The URL of the item formatted according to the appropriate URL format.</dd>
             </dl>
         </dd>
-        
+
         <dt id="data.locals.tag"><strong>tag</strong></dt>
         <dd>
             <p>A tag object.</p>
@@ -171,37 +171,37 @@
             <dl class="api">
                 <dt id="data.locals.tag.archives"><em>tag.</em><strong>archives</strong></dt>
                 <dd>An <a href="#data.globals.containers.container.archives">archive</a> containing only items belonging to the tag.</dd>
-                
+
                 <dt id="data.locals.tag.count"><em>tag.</em><strong>count</strong></dt>
                 <dd>The number of tagged items.</dd>
-                
+
                 <dt id="data.locals.tag.items"><em>tag.</em><strong>items</strong></dt>
                 <dd>A list of the tag's <a href="#data.locals.item">items</a>.</dd>
-                
+
                 <dt id="data.locals.tag.name"><em>tag.</em><strong>name</strong></dt>
                 <dd>The name of the tag.</dd>
-                
+
                 <dt id="data.locals.tag.url"><em>tag.</em><strong>url</strong></dt>
-                <dd>The URL to the tag page based on the <code>tags_url</code> config setting.</dd>
+                <dd>The URL to the tag page based on the <code>tags_url</code> configuration setting.</dd>
             </dl>
         </dd>
     </dl>
-    
-    
+
+
     <h1 id="filters">Filters</h1>
     <dl class="api">
         <dt id="filters.absolutize"><strong>absolutize(</strong><em>html</em><strong>)</strong></dt>
         <dd>
             <p>Attempts to convert all URLs in the supplied HTML to absolute URLs.</p>
             <div class="notice notice-warning">
-                <p>This filter depends on the <a href="#"><code>domain</code></a> config setting.</p>
+                <p>This filter depends on the <code>domain</code> configuration setting.</p>
             </div>
             <dl class="api">
                 <dt id="filters.absolutize.html"><strong>html</strong></dt>
                 <dd>The chunk of HTML to convert.</dd>
             </dl>
         </dd>
-        
+
         <dt id="filters.date"><strong>date(</strong><em>ts, format</em><strong>)</strong></dt>
         <dd>
             <p>Returns a formatted date based on the supplied timestamp and format.</p>
@@ -214,53 +214,54 @@
                         <p>If <code>None</code>, the current date and time will be used.</p>
                     </div>
                 </dd>
-                
+
                 <dt id="filters.date.format"><strong>format</strong></dt>
                 <dd>The desired <a href="https://docs.python.org/library/datetime.html#strftime-and-strptime-behavior">format</a> of <code>ts</code>.</dd>
             </dl>
         </dd>
-        
+
         <dt id="filters.items"><strong>items(</strong><em>dict</em><strong>)</strong></dt>
-        <dd>Syntactic sugar for <a href="https://docs.python.org/2/library/stdtypes.html#dict.iteritems">dict.iteritems()</a>.</dd>
-        
+        <dd>Alias for <a href="https://docs.python.org/library/stdtypes.html#dict.items">dict.items()</a>.</dd>
+
         <dt id="filters.values"><strong>values(</strong><em>dict</em><strong>)</strong></dt>
-        <dd>Syntactic sugar for <a href="https://docs.python.org/2/library/stdtypes.html#dict.itervalues">dict.itervalues()</a>.</dd>
+        <dd>Alias for <a href="https://docs.python.org/library/stdtypes.html#dict.values">dict.values()</a>.</dd>
     </dl>
-    
-    
+
+
     <h1 id="helpers">Helpers</h1>
     <dl class="api">
         <dt id="helpers.get_asset"><strong>get_asset(</strong><em>asset</em><strong>)</strong></dt>
         <dd>
-            <p>Returns the URL to the asset based on the <code>base_url</code> and <code>assets_url</code> config settings.</p>
-            <pre><code data-lang="html+jinja">&lt;link rel=&quot;stylesheet&quot; href=&quot;{{ '{{ get_asset(\'css/screen.css\') }}' }}&quot; type=&quot;text/css&quot;&gt;</code></pre>
+            <p>Returns the URL to the asset based on the <code>base_url</code> and <code>assets_url</code> configuration settings.</p>
+            <pre><code data-lang="html+jinja">&lt;link rel=&quot;stylesheet&quot; href=&quot;{{ '{{ get_asset(\'css/screen.css\') }}' }}&quot;&gt;</code></pre>
             <dl class="api">
                 <dt id="helpers.get_asset.asset"><strong>asset</strong></dt>
                 <dd>The requested asset.</dd>
             </dl>
         </dd>
-        
+
         <dt id="helpers.get_url"><strong>get_url(</strong><em>url, absolute</em><strong>)</strong></dt>
         <dd>
-            <p>Returns a URL based on the <code>base_url</code> config setting.</p>
+            <p>Returns a URL based on the <code>base_url</code> configuration setting.</p>
             <pre><code data-lang="html+jinja">&lt;a href=&quot;{{ '{{ get_url(item.url) }}' }}&quot;&gt;{{ '{{ item.title }}' }}&lt;/a&gt;</code></pre>
             <dl class="api">
                 <dt id="helpers.get_url.url"><strong>url</strong></dt>
                 <dd>
                     <p>The requested URL.</p>
                     <div class="notice notice-info">
-                        <p>This parameter is optional. If not supplied, the <code>base_url</code> config setting will be returned.</p>
+                        <p>This parameter is optional. If not supplied, the <code>base_url</code> configuration setting will be returned.</p>
                     </div>
                 </dd>
-                
+
                 <dt id="helpers.get_url.absolute"><strong>absolute</strong></dt>
                 <dd>
                     <p>Whether or not the returned URL should be an absolute URL.</p>
                     <div class="notice notice-warning">
-                        <p>This depends on the <code>domain</code> config setting.</p>
+                        <p>This depends on the <code>domain</code> configuration setting.</p>
                     </div>
                 </dd>
             </dl>
         </dd>
     </dl>
 {% endblock %}
+

@@ -6,7 +6,7 @@
 <html>
 <head>
     {% include 'page.header.html' %}
-    
+
     {{ _m.title(crumbs, ignore) }}
 </head>
 
@@ -15,47 +15,48 @@
         <div id="sidebar">
             <h1 id="title"><a href="{{ get_url() }}">{{ site.title }}</a></h1>
             <h2 id="subtitle">{{ site.subtitle }}</h2>
-            
+
             <dl id="nav">
                 <dt>Docs</dt>
                 <dd><a href="{{ get_url('docs/quickstart/') }}">Quickstart</a></dd>
                 <dd><a href="{{ get_url('docs/command-line/') }}">Command Line</a></dd>
-                <dd><a href="{{ get_url('docs/config/') }}">Config</a></dd>
+                <dd><a href="{{ get_url('docs/configuration/') }}">Configuration</a></dd>
                 <dd><a href="{{ get_url('docs/templates/') }}">Templates</a></dd>
-                
+
                 <dt>Miscellany</dt>
                 <dd><a href="{{ get_url('miscellany/changelog/') }}">Changelog</a></dd>
                 <dd><a href="{{ get_url('miscellany/upgrading/') }}">Upgrading</a></dd>
-                
+
                 <dt>Community</dt>
                 <dd><a href="https://github.com/Anomareh/mynt">GitHub</a></dd>
-                <dd><a href="http://webchat.freenode.net/?channels=mynt">IRC</a></dd>
+                <dd><a href="https://webchat.freenode.net/?channels=mynt">IRC</a></dd>
                 <dd><a href="{{ get_url('community/powering/') }}">Powering</a></dd>
-                
+
                 <dt>News</dt>
                 <dd><a href="{{ get_url('news/') }}">Latest</a></dd>
                 <dd><a href="{{ get_url('news/archives/') }}">Archives</a></dd>
                 <dd><a href="{{ get_url('news/feed.xml') }}">Feed</a></dd>
             </dl>
         </div>
-        
+
         {% if crumbs %}
             <ul id="breadcrumbs">
                 {{ _m.breadcrumbs(crumbs) }}
             </ul>
         {% endif %}
-        
+
         {% if toc %}
             <ul id="toc">
                 {{ _m.toc(toc) }}
             </ul>
         {% endif %}
-        
+
         <div id="content">
             {% block content %}{% endblock %}
         </div>
     </div>
-    
+
     <a id="forkme" href="https://github.com/Anomareh/mynt"><img src="{{ get_asset('images/forkme.png') }}" width="149" height="149" alt="Fork me on Github"></a>
 </body>
 </html>
+

@@ -46,7 +46,7 @@ $content: $container - (2 * $offset)
 @mixin compact-children
     & > :first-child
         margin-top: 0px
-    
+
     & > :last-child
         margin-bottom: 0px
 
@@ -57,21 +57,21 @@ $content: $container - (2 * $offset)
 @mixin inverted-links($color: $fg-d, $borderless: false)
     & > a
         color: $color
-        
+
         &:hover
             color: $hlt
-        
+
         @if $borderless
             border-bottom-width: 0px
 
 @mixin notice($bg, $fg)
     background-color: $bg
-    
+
     color: $fg
-    
+
     code
         background-color: rgba($fg, 0.2)
-        
+
         color: $fg
 
 @mixin post-meta
@@ -79,7 +79,8 @@ $content: $container - (2 * $offset)
     font-style: normal
     text-transform: uppercase
     word-spacing: 2px
-    
+
     & > span
         position: relative
         top: -1px
+

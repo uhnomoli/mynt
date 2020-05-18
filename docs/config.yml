@@ -47,26 +47,24 @@ tags_url: /news/archives/
 #
 powering:
     - name: mynt.uhnomoli.com
-      url: http://mynt.uhnomoli.com/
+      url: https://mynt.uhnomoli.com/
       source: https://github.com/Anomareh/mynt/tree/master/docs
     - name: uhnomoli.com
-      url: http://uhnomoli.com/
+      url: https://uhnomoli.com/
       source: https://github.com/Anomareh/uh.nom.o.li
-    - name: samesake.com
-      url: http://samesake.com/
     - name: hynek.me
-      url: http://hynek.me/
+      url: https://hynek.me/
       source: https://github.com/hynek/homepage
     - name: shamansir.github.com/blog/
-      url: http://shamansir.github.io/blog/
+      url: https://shamansir.github.io/blog/
       source: https://github.com/shamansir/blog
     - name: roguelynn.com
-      url: http://www.roguelynn.com/
+      url: https://www.roguelynn.com/
       source: https://github.com/econchick/roguelynn
     - name: tummy.com
-      url: http://www.tummy.com/
+      url: https://www.tummy.com/
     - name: pyladies.com
-      url: http://www.pyladies.com/
+      url: https://www.pyladies.com/
       source: https://github.com/pyladies/pyladies
     - name: newcoder.io
       url: http://newcoder.io/
@@ -76,6 +74,4 @@ powering:
     - name: python.org.tw
       url: http://www.python.org.tw/
       source: https://github.com/lucemia/taiwan.py
-    - name: blog.pedesen.de
-      url: http://blog.pedesen.de/
 
