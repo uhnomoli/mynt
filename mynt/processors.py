@@ -115,7 +115,11 @@ class Reader:
 
     def _parse_container(self, container):
         for f in container.path:
-            container.add(self._parse_item(container.configuration, f))
+            try:
+                container.add(self._parse_item(container.configuration, f))
+            except ParserException as error:
+                logger.warn('@@ Error parsing file, skipping: %s', f.path)
+                logger.debug(error)
 
         container.sort()
         container.tag()
