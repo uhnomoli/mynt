@@ -22,6 +22,9 @@
 
             {% if post.excerpt %}<summary type="html">{{ post.excerpt|absolutize|escape }}</summary>{% endif %}
             <content type="html">{{ post.content|absolutize|escape }}</content>
+            {% for tag in post.tags %}
+                <category term="{{ tag }}" />
+            {% endfor %}
         </entry>
     {% endfor %}
 </feed>
