@@ -20,7 +20,7 @@ setup(
     url='https://mynt.uhnomoli.com/',
     project_urls={
         'Documentation': 'https://mynt.uhnomoli.com/docs/quickstart/',
-        'Source': 'https://github.com/Anomareh/mynt'},
+        'Source': 'https://github.com/uhnomoli/mynt'},
     description='A static site generator.',
     long_description=long_description,
     long_description_content_type='text/markdown',

@@ -15,7 +15,7 @@ From PyPI:
 
 Latest trunk:
 
-    $ pip install git+https://github.com/Anomareh/mynt.git
+    $ pip install git+https://github.com/uhnomoli/mynt.git
 
 
 ### Getting started
@@ -43,8 +43,8 @@ If you run into any issues or have any questions, either open an [issue][issues]
 
 [docs]: https://mynt.uhnomoli.com/
 [docutils]: https://docutils.sourceforge.net/
-[hoep]: https://github.com/Anomareh/Hoep
-[issues]: https://github.com/Anomareh/mynt/issues
+[hoep]: https://github.com/uhnomoli/Hoep
+[issues]: https://github.com/uhnomoli/mynt/issues
 [jinja]: https://jinja.palletsprojects.com/
 [pygments]: https://pygments.org/
 [pyyaml]: https://pyyaml.org/

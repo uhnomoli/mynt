@@ -48,10 +48,10 @@ tags_url: /news/archives/
 powering:
     - name: mynt.uhnomoli.com
       url: https://mynt.uhnomoli.com/
-      source: https://github.com/Anomareh/mynt/tree/master/docs
+      source: https://github.com/uhnomoli/mynt/tree/master/docs
     - name: uhnomoli.com
       url: https://uhnomoli.com/
-      source: https://github.com/Anomareh/uh.nom.o.li
+      source: https://github.com/uhnomoli/uh.nom.o.li
     - name: hynek.me
       url: https://hynek.me/
       source: https://github.com/hynek/homepage
